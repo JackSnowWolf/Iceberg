@@ -1,4 +1,4 @@
-package com.iceburg.service;
+package com.iceberg.service;
 
 public interface UserInfoService {
 }

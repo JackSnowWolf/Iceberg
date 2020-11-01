@@ -8,10 +8,10 @@
         <version>2.1.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.iceburg</groupId>
+    <groupId>com.iceberg</groupId>
     <artifactId>reimbursement management</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>cwgl</name>
+    <name>iceberg</name>
     <description>project for coms4156</description>
 
     <properties>

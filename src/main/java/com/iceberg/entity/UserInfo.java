@@ -1,4 +1,4 @@
-package com.iceburg.entity;
+package com.iceberg.entity;
 
 public class UserInfo {
     private Integer id;
