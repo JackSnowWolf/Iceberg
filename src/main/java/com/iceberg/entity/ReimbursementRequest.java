@@ -1,12 +1,20 @@
 package com.iceberg.entity;
 
 public class ReimbursementRequest {
+    // basic fields discussed before
     private Integer id;
     private Integer userid;
     private String requestdate;
     private String requesttype;
     private String requststatus;
     private String picid;
+    // fields synchronized with previous project
+    private String title;
+    private Float money;
+    private String remark;
+    private String groupid;
+
+    // typeid, realname, paywayid, payway, starttime, endtime
 
     public Integer getId() {
         return id;
@@ -54,5 +62,37 @@ public class ReimbursementRequest {
 
     public void setPicid(String picid) {
         this.picid = picid;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Float getMoney() {
+        return money;
+    }
+
+    public void setMoney(Float money) {
+        this.money = money;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getGroupid() {
+        return groupid;
+    }
+
+    public void setGroupid(String groupid) {
+        this.groupid = groupid;
     }
 }
