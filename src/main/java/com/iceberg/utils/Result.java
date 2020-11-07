@@ -4,11 +4,11 @@ import java.util.List;
 
 public class Result<T> {
 
-    private int code;   //状态码
-    private String msg; //提示信息
-    private T data; //数据
-    private List<T> datas;  //多条数据
-    private int total;  //分页获取数据时，存储符合程序条件的数据总量
+    private int code;   //status code
+    private String msg; //reminder information
+    private T data; //data
+    private List<T> datas;  //data collections
+    private int total;  //total information number
 
 
     public int getCode() {

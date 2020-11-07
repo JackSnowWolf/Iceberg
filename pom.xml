@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.iceberg</groupId>
-    <artifactId>reimbursement management</artifactId>
+    <artifactId>reimbursement</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>iceberg</name>
     <description>project for coms4156</description>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
+<!--            <scope>provided</scope>-->
         </dependency>
 
         <dependency>

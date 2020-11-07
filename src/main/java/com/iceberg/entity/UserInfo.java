@@ -1,13 +1,16 @@
 package com.iceberg.entity;
 
+import java.util.List;
+
 public class UserInfo {
     private Integer id;
     private String username;
     private String password;
     private String realname;
-    private Integer roleid;
+    private Integer roleid;  //
     private String rolename;
     private String groupid;
+    private List<Privilege> privileges;
 
     public Integer getId() {
         return id;
@@ -25,6 +28,7 @@ public class UserInfo {
         if("".equals(username.trim())) return;
         this.username = username;
     }
+
 
     public String getPassword() {
         return password;
@@ -64,6 +68,14 @@ public class UserInfo {
 
     public void setGroupid(String groupid) {
         this.groupid = groupid;
+    }
+
+    public List<Privilege> getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(List<Privilege> privileges) {
+        this.privileges = privileges;
     }
 
     @Override

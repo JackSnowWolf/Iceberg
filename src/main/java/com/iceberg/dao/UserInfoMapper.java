@@ -5,10 +5,11 @@ import com.iceberg.entity.Role;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.utils.PageModel;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Repository
+@Service("UserInfoMapper")
 public interface UserInfoMapper {
 
     /**

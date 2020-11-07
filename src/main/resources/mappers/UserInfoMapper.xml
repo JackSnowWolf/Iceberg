@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!-- 设置为IUserDao接口方法提供sql语句配置 -->
+<!-- configuration for UserDao Interface -->
 <mapper namespace="com.iceberg.dao.UserInfoMapper">
 
     <select id="getUserInfo" resultType="com.iceberg.entity.UserInfo" parameterType="com.iceberg.entity.UserInfo">
@@ -42,7 +42,7 @@
         select * from role
     </select>
 
-    <insert id="add" parameterType="com.example.cwgl.entity.UserInfo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="add" parameterType="com.iceberg.entity.UserInfo" useGeneratedKeys="true" keyProperty="id">
         insert into user(id,username,password,roleid,realname,groupid,photo)
           values(#{id},#{username},#{password},#{roleid},#{realname},#{groupid},#{iconUrl})
     </insert>
