@@ -133,7 +133,4 @@ public class UserInfoController {
         cookie.setMaxAge(-1);
         response.addCookie(cookie);
     }
-    private UserInfo getUserInfo(UserInfo userInfo) {
-        return userInfoService.getUserInfo(userInfo);
-    }
 }
