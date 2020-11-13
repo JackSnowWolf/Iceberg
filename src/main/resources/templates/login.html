@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns: sec = "https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Reimbursement Management System</title>
@@ -29,7 +29,11 @@
         <hr class="hr15">
         <input value="login" lay-submit lay-filter="login" style="width:100%;" type="submit">
         <hr class="hr20" >
+        <div>
+            <h4><a th:href="@{/oauth2/authorization/google}">Login with Google</a></h4>
+        </div>
     </form>
+
 </div>
 
 <script>

@@ -22,38 +22,40 @@
     </style>
 </head>
 <body>
-<!-- top part begin -->
+<!-- top -->
 <div class="container">
     <div class="logo"><a href="index">Reimbursement Management System</a></div>
     <div class="left_open">
-        <i title="展开左侧栏" class="iconfont">&#xe697;</i>
+        <i title="open left navigation" class="iconfont">&#xe697;</i>
     </div>
     <ul class="layui-nav left fast-add" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;"><i title="new" class="iconfont">&#xe6b9;</i> New</a>
-            <dl class="layui-nav-child" id="fast_add"> <!-- sub-level menu -->
-                <dd><a onclick="x_admin_show('New Reimbursement Application','/pages/income_add','460px','70%')"><i class="iconfont">&#xe702;</i>Reimbursement Application</a></dd>
-                <dd><a onclick="x_admin_show('New User Information','/pages/sys_useradd','460px','70%')"><i class="iconfont">&#xe6b8;</i>User Information</a></dd>
+            <a href="javascript:;"><i title="New" class="iconfont">&#xe6b9;</i> New</a>
+            <dl class="layui-nav-child" id="fast_add"> <!-- 二级菜单 -->
+                <dd><a onclick="x_admin_show('new income','/pages/income_add','460px','70%')"><i class="iconfont">&#xe702;</i>new income</a></dd>
+                <dd><a onclick="x_admin_show('new outcome','/pages/pay_add','460px','70%')"><i class="iconfont">&#xe698;</i>new outcome</a></dd>
+                <dd><a onclick="x_admin_show('new user','/pages/sys_useradd','460px','70%')"><i class="iconfont">&#xe6b8;</i>new user</a></dd>
             </dl>
         </li>
     </ul>
     <ul class="layui-nav right" style="margin-right: 20px" lay-filter="">
-        <li class="layui-nav-item"><span id="role">Your role is：</span></li>
+        <li class="layui-nav-item"><span id="role">Your role is: </span></li>
         <li class="layui-nav-item">
             <a href="javascript:;" id="username" style="color:#FFB800;"></a>
-            <dl class="layui-nav-child"> <!-- sub level -->
-                <dd><a href=javascript:; onclick="layer.confirm('EXIT？',{title: false, closeBtn: false, skin: 'layui-layer-molv'}, function(index) {
+            <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                <!--<dd><a onclick="x_admin_show('个人信息','http://www.baidu.com')">-->
+                <!--<i title="个人信息" class="iconfont">&#xe6b8;</i>个人信息</a></dd>-->
+                <dd><a href=javascript:; onclick="layer.confirm('Logout？',{title: false, closeBtn: false, skin: 'layui-layer-molv'}, function(index) {
                 location.href='/logout';
-              })"><i title="Safely Exit" class="iconfont">&#xe718;</i>Safely Exit</a></dd>
+              })"><i title="safely exit" class="iconfont">&#xe718;</i>safely exit</a></dd>
             </dl>
         </li>
     </ul>
 
 </div>
-</div>
-<!-- top part begin -->
-<!-- middle part begin -->
-<!-- left nav begin -->
+<!-- top -->
+<!-- mid -->
+<!-- left -->
 <div class="left-nav">
     <div id="side-nav">
         <ul id="nav">
@@ -62,8 +64,8 @@
     </div>
 </div>
 <!-- <div class="x-slide_left"></div> -->
-<!-- left nav over-->
-<!-- right part begin -->
+<!-- left -->
+<!-- right -->
 <div class="page-content">
     <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
         <ul class="layui-tab-title">
@@ -77,16 +79,15 @@
     </div>
 </div>
 <div class="page-content-bg"></div>
-<!-- right part over -->
-<!-- middle part over -->
-<!-- bottom part begin -->
+<!-- right -->
+<!-- mid -->
+<!-- bot -->
 <div class="footer">
-    <div class="copyright">Copyright ©2020 Reimbursement Management System COMS 4156 ICEBERG</div>
+    <div class="copyright">Copyright ©2020 Reimbursement Management System COMS4156 Iceberg</div>
 </div>
-<!-- bottom part over -->
-
-
+<!-- bot -->
 </body>
+
 <script>
     var sessionUser;
     $(function () {
@@ -105,16 +106,15 @@
         $("#username").append(sessionUser.realname);
 
         if (sessionUser.roleid == 1) {
-            $("#role").append("Administrator");
+            $("#role").append("administrator");
         } else if (sessionUser.roleid == 2) {
-            $("#role").append("Group Manager");
+            $("#role").append("group manager");
         }  else if(sessionUser.roleid == 3){
-            $("#role").append("Normal users");
+            $("#role").append("normal user");
             $("#fast_add :nth-child(3)").css("display","none");
         }
 
-        //loading navigation
-        //loading primary nav
+        //primary menu
         var privileges = sessionUser.privileges;
         var htmlOne="";
         for (var i = 0; i < privileges.length; i++) {
@@ -132,7 +132,7 @@
         }
         $("#nav").html(htmlOne);
 
-        //secondary nav
+        //secondary menu
         $("#nav li").each(function () {
             var htmlTwo = '<ul class="sub-menu">';
             var id = this.id;
@@ -155,9 +155,5 @@
     }
 </script>
 <script type="text/javascript" src="/static/js/xadmin.js"></script>
-
-
-</body>
-
 
 </html>
