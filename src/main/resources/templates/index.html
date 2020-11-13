@@ -50,6 +50,114 @@
     </ul>
 
 </div>
+</div>
+<!-- top part begin -->
+<!-- middle part begin -->
+<!-- left nav begin -->
+<div class="left-nav">
+    <div id="side-nav">
+        <ul id="nav">
+
+        </ul>
+    </div>
+</div>
+<!-- <div class="x-slide_left"></div> -->
+<!-- left nav over-->
+<!-- right part begin -->
+<div class="page-content">
+    <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+        <ul class="layui-tab-title">
+            <li class="home"><i class="layui-icon">&#xe68e;</i>My Dashboard</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <iframe id="home" src='welcome' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="page-content-bg"></div>
+<!-- right part over -->
+<!-- middle part over -->
+<!-- bottom part begin -->
+<div class="footer">
+    <div class="copyright">Copyright ©2020 Reimbursement Management System COMS 4156 ICEBERG</div>
+</div>
+<!-- bottom part over -->
+
+
 </body>
+<script>
+    var sessionUser;
+    $(function () {
+        $.ajaxSettings.async = false;
+        $.get("/getSessionUser", function (data) {
+            sessionUser = data;
+        })
+        $.ajaxSettings.async = false;
+        initData();
+        $("li.home").click(function () {
+            $("#home").attr("src","welcome");
+        });
+    });
+
+    function initData() {
+        $("#username").append(sessionUser.realname);
+
+        if (sessionUser.roleid == 1) {
+            $("#role").append("Administrator");
+        } else if (sessionUser.roleid == 2) {
+            $("#role").append("Group Manager");
+        }  else if(sessionUser.roleid == 3){
+            $("#role").append("Normal users");
+            $("#fast_add :nth-child(3)").css("display","none");
+        }
+
+        //loading navigation
+        //loading primary nav
+        var privileges = sessionUser.privileges;
+        var htmlOne="";
+        for (var i = 0; i < privileges.length; i++) {
+            var privilege = privileges[i];
+            if (privilege.privilegeTipflag == 0){
+                htmlOne +=
+                    '<li id = '+privilege.privilegeNumber+' >' +
+                    '   <a href="javascript:;">' +
+                    '       <i class="iconfont">'+privilege.icon+'</i>' +
+                    '       <cite>'+privilege.privilegeName+'</cite>\n' +
+                    '       <i class="iconfont nav_right">&#xe6a7;</i>' +
+                    '   </a>' +
+                    '</li>';
+            }
+        }
+        $("#nav").html(htmlOne);
+
+        //secondary nav
+        $("#nav li").each(function () {
+            var htmlTwo = '<ul class="sub-menu">';
+            var id = this.id;
+            $.each(privileges,function (i,item) {
+                if (item.privilegeTipflag==1 && item.privilegeNumber.substring(0,3) == id){
+                    // console.log(item);
+                    htmlTwo +=
+                        '<li>' +
+                        '    <a _href='+item.privilegeUrl+'.html >' +
+                        '        <i class="iconfont">'+item.icon+'</i>' +
+                        '        <cite>'+item.privilegeName+'</cite>' +
+                        '    </a>' +
+                        '</li>';
+                }
+            });
+            htmlTwo += "</ul>";
+            // console.log(htmlTwo);
+            $("#"+id).append(htmlTwo);
+        });
+    }
+</script>
+<script type="text/javascript" src="/static/js/xadmin.js"></script>
+
+
+</body>
+
 
 </html>

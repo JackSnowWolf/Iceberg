@@ -9,11 +9,11 @@ public class Config {
     public static String CURRENT_USERNAME = "currentUser";
 
     //Result
-    public static int SUCCESS=200; //成功
-    public static int UNSUCCESS=400;   //失败
-    public static int ERROR=500;   //异常
+    public static int SUCCESS=200; //success
+    public static int UNSUCCESS=400;   //failure
+    public static int ERROR=500;   //exception
 
-    //启用自定义日志打印
+    //enable customeized log
     public static boolean ENABLE_CUSTOMEIZE_LOG = true;
 
 
