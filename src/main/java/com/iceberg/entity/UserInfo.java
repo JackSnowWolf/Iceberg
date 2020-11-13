@@ -4,13 +4,43 @@ import java.util.List;
 
 public class UserInfo {
     private Integer id;
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
     private String username;
     private String password;
     private String realname;
     private Integer roleid;  //
     private String rolename;
     private String groupid;
+    private String iconUrl;     //icon path
+    private String signature;   //self-defined signature
     private List<Privilege> privileges;
+
+//    public AuthenticationProvider getAuthenticationProvider() {
+//        return authenticationProvider;
+//    }
+//
+//    public void setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
+//        this.authenticationProvider = authenticationProvider;
+//    }
+//
+//    //OAuth2 provider info
+//    private AuthenticationProvider authenticationProvider;
 
     public Integer getId() {
         return id;

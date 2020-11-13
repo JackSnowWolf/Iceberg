@@ -47,7 +47,6 @@ public class UserInfoController {
             }
             return null;
         }
-
     }
 
     @RequestMapping(value = "/login.do")
@@ -77,6 +76,15 @@ public class UserInfoController {
         UserInfo sessionUser = (UserInfo) session.getAttribute(Config.CURRENT_USERNAME);
         sessionUser.setPassword(null);
         return sessionUser;
+    }
+
+
+
+    @RequestMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response){
+        delCookieUser(request, response);
+        request.getSession().removeAttribute(Config.CURRENT_USERNAME);
+        return "login";
     }
 
     @RequestMapping("/pages/{page}")
@@ -110,7 +118,19 @@ public class UserInfoController {
         response.addCookie(cookie);
     }
 
-    private UserInfo getUserInfo(UserInfo userInfo) {
+    public UserInfo getUserInfo(UserInfo userInfo) {
         return userInfoService.getUserInfo(userInfo);
+    }
+
+    /**
+     * delete cookie info while logout
+     * @param request
+     * @param response
+     */
+    private void delCookieUser(HttpServletRequest request, HttpServletResponse response){
+        UserInfo user = getSessionUser(request.getSession());
+        Cookie cookie = new Cookie(Config.CURRENT_USERNAME,user.getUsername()+"_"+user.getId());
+        cookie.setMaxAge(-1);
+        response.addCookie(cookie);
     }
 }
