@@ -1,12 +1,11 @@
 package com.iceberg.controller;
 
 import com.iceberg.entity.Privilege;
+import com.iceberg.entity.Role;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.service.PrivilegeService;
 import com.iceberg.service.UserInfoService;
-import com.iceberg.utils.Config;
-import com.iceberg.utils.Result;
-import com.iceberg.utils.ResultUtil;
+import com.iceberg.utils.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,6 +69,63 @@ public class UserInfoController {
         }
     }
 
+    @RequestMapping("/users/getUsersByWhere/{pageNo}/{pageSize}")
+    public @ResponseBody Result getUsersByWhere(UserInfo userInfo, @PathVariable int pageNo, @PathVariable int pageSize, HttpSession session){
+        if ("".equals(userInfo.getGroupid())){
+            userInfo.setGroupid(null);
+        }
+        if (userInfo.getRoleid() == -1){
+            userInfo.setRoleid(Config.getSessionUser(session).getRoleid());
+        }
+        Utils.log(userInfo.toString());
+        PageModel model = new PageModel<>(pageNo,userInfo);
+        model.setPageSize(pageSize);
+        return userInfoService.getUsersByWhere(model);
+    }
+
+    @RequestMapping("/user/add")
+    public @ResponseBody Result addUser(UserInfo userInfo){
+        System.out.println(userInfo);
+        try {
+            int num = userInfoService.add(userInfo);
+            if(num>0){
+                return ResultUtil.success();
+            }else {
+                return ResultUtil.unSuccess();
+            }
+        }catch (Exception e){
+            return ResultUtil.error(e);
+        }
+    }
+
+    @RequestMapping("/user/update")
+    public @ResponseBody Result updateUser(UserInfo userInfo){
+        try {
+            int num = userInfoService.update(userInfo);
+            if(num>0){
+                return ResultUtil.success();
+            }else {
+                return ResultUtil.unSuccess();
+            }
+        }catch (Exception e){
+            return ResultUtil.error(e);
+        }
+    }
+
+    @RequestMapping("/user/del/{id}")
+    public @ResponseBody Result deleteUser(@PathVariable String id){
+        try {
+            int num = userInfoService.delete(id);
+            if(num>0){
+                return ResultUtil.success();
+            }else {
+                return ResultUtil.unSuccess();
+            }
+        }catch (Exception e){
+            return ResultUtil.error(e);
+        }
+    }
+
     @RequestMapping("/getSessionUser")
     @ResponseBody
     public UserInfo getSessionUser(HttpSession session){
@@ -77,8 +133,6 @@ public class UserInfoController {
         sessionUser.setPassword(null);
         return sessionUser;
     }
-
-
 
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
@@ -92,6 +146,78 @@ public class UserInfoController {
         return page.replace("_", "/");
     }
 
+    @RequestMapping("/getAllRoles")
+    public @ResponseBody Result<Role> getAllRoles(){
+        try {
+            List<Role> roles = userInfoService.getAllRoles();
+            if (roles.size()>0){
+                return ResultUtil.success(roles);
+            }else {
+                return ResultUtil.unSuccess();
+            }
+        }catch (Exception e){
+            return ResultUtil.error(e);
+        }
+    }
+
+    @RequestMapping("/role/add")
+    public @ResponseBody Result addRole(Role role){
+        try {
+            int num = userInfoService.addRole(role);
+            if(num>0){
+                privilegeService.addDefaultPrivilegesWhenAddRole(role.getRoleid().toString());
+                return ResultUtil.success();
+            }else {
+                return ResultUtil.unSuccess();
+            }
+        }catch (Exception e){
+            return ResultUtil.error(e);
+        }
+    }
+
+    @RequestMapping("/role/update")
+    public @ResponseBody Result updateRole(Role role){
+        try {
+            int num = userInfoService.updateRole(role);
+            if(num>0){
+                return ResultUtil.success();
+            }else {
+                return ResultUtil.unSuccess();
+            }
+        }catch (Exception e){
+            return ResultUtil.error(e);
+        }
+    }
+
+    @RequestMapping("/role/del/{roleid}")
+    public @ResponseBody Result deleteRole(@PathVariable String roleid){
+        try {
+            privilegeService.delPrivilegesWenDelRole(roleid);
+            int num = userInfoService.deleteRole(roleid);
+            if(num>0){
+                return ResultUtil.success();
+            }else {
+                privilegeService.addDefaultPrivilegesWhenAddRole(roleid);
+                return ResultUtil.unSuccess();
+            }
+        }catch (Exception e){
+            return ResultUtil.error(e);
+        }
+    }
+
+    @RequestMapping("/getRole/{id}")
+    public @ResponseBody Result getRoleById(@PathVariable String id){
+        try {
+            Role role = userInfoService.getRoleById(id);
+            if(role != null){
+                return ResultUtil.success(role);
+            }else {
+                return ResultUtil.unSuccess();
+            }
+        }catch (Exception e){
+            return ResultUtil.error(e);
+        }
+    }
 
     /**
      * get user privilege info through user info and save it in session
