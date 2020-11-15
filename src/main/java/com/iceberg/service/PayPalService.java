@@ -10,22 +10,22 @@ import java.io.IOException;
 
 public interface PayPalService {
 
-    // Cancel Payouts
-    HttpResponse<PayoutItemResponse> cancelPayoutItem(String itemId) throws IOException;
+  // Cancel Payouts
+  HttpResponse<PayoutItemResponse> cancelPayoutItem(String itemId) throws IOException;
 
-    // Create Payouts
-    HttpResponse<CreatePayoutResponse> createPayout(String receiver, String currency, String value) throws IOException;
+  // Create Payouts
+  HttpResponse<CreatePayoutResponse> createPayout(String receiver, String currency, String value) throws IOException;
 
-    PayoutsPostRequest buildRequestBody(String receiver, String currency, String value);
+  PayoutsPostRequest buildRequestBody(String receiver, String currency, String value);
 
-    // Create Payouts Batch
-    HttpResponse<CreatePayoutResponse> createPayoutBatch() throws IOException;
+  // Create Payouts Batch
+  HttpResponse<CreatePayoutResponse> createPayoutBatch() throws IOException;
 
-    PayoutsPostRequest buildRequestBody();
+  PayoutsPostRequest buildRequestBody();
 
-    // Get Payouts Batch
-    HttpResponse<PayoutBatch> getPayoutBatch(String batchId) throws IOException;
+  // Get Payouts Batch
+  HttpResponse<PayoutBatch> getPayoutBatch(String batchId) throws IOException;
 
-    // Get Payouts Item
-    HttpResponse<PayoutItemResponse> getPayoutItem(String itemId) throws IOException;
+  // Get Payouts Item
+  HttpResponse<PayoutItemResponse> getPayoutItem(String itemId) throws IOException;
 }

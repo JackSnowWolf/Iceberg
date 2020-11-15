@@ -14,74 +14,71 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
-* description: Log, Helpful for debug
-* @author Weijie Huang
-* @date 2020/11/13
-*/
+ * description: Log, Helpful for debug
+ * 
+ * @author Weijie Huang
+ * @date 2020/11/13
+ */
 public class LoggerInterceptor implements HandlerInterceptor {
 
-    private static Logger logger = LoggerFactory.getLogger(LoggerInterceptor.class);
-    private static HttpSession session;
-    private static String userid;
-    private static StringBuilder sb = new StringBuilder();
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+  private static Logger logger = LoggerFactory.getLogger(LoggerInterceptor.class);
+  private static HttpSession session;
+  private static String userid;
+  private static StringBuilder sb = new StringBuilder();
 
-        System.out.println("logger preHandler runs @@@@@@@@@@@@@@@@@@@@@@@");
-        if ((session = request.getSession()) != null){
-            System.out.println("Log preHandler comes in");
-            UserInfo userInfo = (UserInfo)session.getAttribute(Config.CURRENT_USERNAME);
-            userid = userInfo == null? request.getHeader("userid") : userInfo.getId().toString();
-            System.out.println("now user id is ： " + userid);
-        }
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+    System.out.println("logger preHandler runs @@@@@@@@@@@@@@@@@@@@@@@");
+    if ((session = request.getSession()) != null) {
+      System.out.println("Log preHandler comes in");
+      UserInfo userInfo = (UserInfo) session.getAttribute(Config.CURRENT_USERNAME);
+      userid = userInfo == null ? request.getHeader("userid") : userInfo.getId().toString();
+      System.out.println("now user id is ： " + userid);
+    }
+    sb.setLength(0);
+
+    sb.append("User ID【").append(userid).append("】is visiting：").append(request.getRequestURL().toString());
+    logger.info(sb.toString());
+    return true;
+  }
+
+  @Override
+  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+      ModelAndView modelAndView) throws Exception {
+    if (!request.getRequestURI().contains("/static/")) {
+      sb.setLength(0);
+      sb.append("Method:").append(((HandlerMethod) handler).getShortLogMessage());
+      logger.info(sb.toString());
+      Map<String, String[]> parameters = request.getParameterMap();
+      if (parameters.size() > 0) {
         sb.setLength(0);
-
-        sb.append("User ID【")
-            .append(userid)
-            .append("】is visiting：")
-            .append(request.getRequestURL().toString());
-        logger.info(sb.toString());
-        return true;
-    }
-
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        if (!request.getRequestURI().contains("/static/")){
-            sb.setLength(0);
-            sb.append("Method:").append(((HandlerMethod)handler).getShortLogMessage());
-            logger.info(sb.toString());
-            Map<String, String[]> parameters = request.getParameterMap();
-            if (parameters.size() > 0){
-                sb.setLength(0);
-                sb.append("Parameters: {");
-                for (String key : parameters.keySet()){
-                    String value = parameters.get(key)[0];
-                    if (value != null && !value.isEmpty()){
-                        sb.append(key +":"+parameters.get(key)[0]+",");
-                    }
-                }
-                if (sb.lastIndexOf(",")!=-1){
-                    sb.deleteCharAt(sb.lastIndexOf(","));
-                }
-                sb.append("}");
-                logger.info(sb.toString());
-            }
+        sb.append("Parameters: {");
+        for (String key : parameters.keySet()) {
+          String value = parameters.get(key)[0];
+          if (value != null && !value.isEmpty()) {
+            sb.append(key + ":" + parameters.get(key)[0] + ",");
+          }
         }
-
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
-        sb.setLength(0);
-        sb.append("User ID【")
-            .append(userid)
-            .append("】")
-            .append(request.getRequestURL().toString())
-            .append("visiting ends... ");
-
+        if (sb.lastIndexOf(",") != -1) {
+          sb.deleteCharAt(sb.lastIndexOf(","));
+        }
+        sb.append("}");
         logger.info(sb.toString());
-
-
+      }
     }
+
+  }
+
+  @Override
+  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
+      throws Exception {
+
+    sb.setLength(0);
+    sb.append("User ID【").append(userid).append("】").append(request.getRequestURL().toString())
+        .append("visiting ends... ");
+
+    logger.info(sb.toString());
+
+  }
 }
