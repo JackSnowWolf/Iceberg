@@ -3,11 +3,12 @@ package com.iceberg.controller;
 import static com.iceberg.entity.ReimbursementRequest.status.*;
 
 import com.iceberg.entity.ReimbursementRequest;
-import com.iceberg.entity.ReimbursementRequest.status.*;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.service.ReiRequestService;
 import com.iceberg.utils.*;
 import javax.servlet.http.HttpSession;
+import org.apache.catalina.User;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -117,6 +118,44 @@ public class ReiRequestController {
         } catch (Exception e) {
             return ResultUtil.error(e);
         }
+    }
+
+    @RequestMapping("/getReiRequestlById/{id}")
+    public Result getReiRequestById(@PathVariable Integer id) {
+        ReimbursementRequest reimbursementRequestCondition = new ReimbursementRequest();
+        reimbursementRequestCondition.setId(id);
+
+        try {
+            return reiRequestService.findByWhereNoPage(reimbursementRequestCondition);
+        } catch (Exception e) {
+            return ResultUtil.error(e);
+        }
+    }
+
+    @RequestMapping("/getReiRequestByUserid/{userid}/{pageNo}/{pageSize}")
+    public Result getReiRequestByUserid(@PathVariable int userid, @PathVariable int pageNo,
+        @PathVariable int pageSize) {
+        ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
+        reimbursementRequest.setId(userid);
+
+        PageModel model = new PageModel<>(pageNo, reimbursementRequest);
+        model.setPageSize(pageSize);
+
+        return reiRequestService.findByWhere(model);
+    }
+
+    @RequestMapping("/getReiRequestByNoPage")
+    public Result getReiRequestByGroup(ReimbursementRequest reimbursementRequest,
+        HttpSession session) {
+        ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+        UserInfo currentUser = Config.getSessionUser(session);
+        // search for group reimbursement information if group manage
+        if (currentUser.getRoleid() == 2) {
+            reimbursementRequestSearch.setGroupid(currentUser.getGroupid());
+        } else if (currentUser.getRoleid() == 3) {
+            reimbursementRequestSearch.setUserid(currentUser.getId());
+        }
+        return reiRequestService.findByWhereNoPage(reimbursementRequestSearch);
     }
 
 

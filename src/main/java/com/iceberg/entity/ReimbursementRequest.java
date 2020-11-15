@@ -11,7 +11,7 @@ public class ReimbursementRequest {
     private String requestdate;
     private type requesttype;
     private status requststatus;
-    private String picid;
+    private String imageid;
     // fields synchronized with previous project
     private String title;
     private Float money;
@@ -72,12 +72,12 @@ public class ReimbursementRequest {
         this.requststatus = requststatus;
     }
 
-    public String getPicid() {
-        return picid;
+    public String getImageid() {
+        return imageid;
     }
 
-    public void setPicid(String picid) {
-        this.picid = picid;
+    public void setImageid(String imageid) {
+        this.imageid = imageid;
     }
 
     public String getTitle() {
