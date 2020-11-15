@@ -6,6 +6,8 @@ import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.service.ReiRequestService;
 import com.iceberg.utils.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpSession;
 import org.apache.catalina.User;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import javax.annotation.Resource;
 
@@ -22,6 +25,8 @@ public class ReiRequestController {
 
     @Resource
     private ReiRequestService reiRequestService;
+
+    Logger logger = LoggerFactory.getLogger(ReiRequestController.class);
 
     @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
     public Result add(ReimbursementRequest reimbursementRequest, HttpSession session) {
