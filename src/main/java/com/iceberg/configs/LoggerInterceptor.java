@@ -27,9 +27,12 @@ public class LoggerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        if (session==null && (session = request.getSession()) != null){
+        System.out.println("logger preHandler runs @@@@@@@@@@@@@@@@@@@@@@@");
+        if ((session = request.getSession()) != null){
+            System.out.println("Log preHandler comes in");
             UserInfo userInfo = (UserInfo)session.getAttribute(Config.CURRENT_USERNAME);
             userid = userInfo == null? request.getHeader("userid") : userInfo.getId().toString();
+            System.out.println("now user id is ： " + userid);
         }
         sb.setLength(0);
 
