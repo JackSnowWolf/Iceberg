@@ -113,7 +113,7 @@
 
     /*删除*/
     function del(obj, id) {
-        layer.confirm('Are you sure to delete？',{title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (index) {
+        layer.confirm('Are you sure to delete？',{btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (index) {
             $.post("/role/del/"+id, function (res) {
                 if (res.code == 200) {
                     getRoles();
