@@ -27,6 +27,7 @@ hs_err_pid*
 **/.mvn
 **/target/
 
+# IDE
 .idea/
-
+reimbursement.iml
 **/.gitignore
