@@ -1,31 +1,32 @@
 package com.iceberg.controller;
 
-import static com.iceberg.entity.ReimbursementRequest.status.*;
+import static com.iceberg.entity.ReimbursementRequest.status.APPROVED;
+import static com.iceberg.entity.ReimbursementRequest.status.PROCESSING;
 
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.service.ReiRequestService;
-import com.iceberg.utils.*;
+import com.iceberg.utils.Config;
+import com.iceberg.utils.PageModel;
+import com.iceberg.utils.Result;
+import com.iceberg.utils.ResultUtil;
+import com.iceberg.utils.Utils;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-
-import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/reirequest")
 public class ReiRequestController {
 
+    Logger logger = LoggerFactory.getLogger(ReiRequestController.class);
     @Resource
     private ReiRequestService reiRequestService;
-
-    Logger logger = LoggerFactory.getLogger(ReiRequestController.class);
 
     @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
     public Result add(ReimbursementRequest reimbursementRequest, HttpSession session) {
