@@ -22,8 +22,8 @@ import java.util.Map;
 public class LoggerInterceptor implements HandlerInterceptor {
 
   private static Logger logger = LoggerFactory.getLogger(LoggerInterceptor.class);
-  private static HttpSession session;
-  private static String userid;
+  private HttpSession session;
+  private String userid;
   private static StringBuilder sb = new StringBuilder();
 
   @Override
@@ -54,10 +54,16 @@ public class LoggerInterceptor implements HandlerInterceptor {
       if (parameters.size() > 0) {
         sb.setLength(0);
         sb.append("Parameters: {");
-        for (String key : parameters.keySet()) {
-          String value = parameters.get(key)[0];
+//        for (String key : parameters.keySet()) {
+//          String value = parameters.get(key)[0];
+//          if (value != null && !value.isEmpty()) {
+//            sb.append(key + ":" + parameters.get(key)[0] + ",");
+//          }
+//        }
+        for (Map.Entry<String, String[]> entrySet : parameters.entrySet()) {
+          String value = entrySet.getValue()[0];
           if (value != null && !value.isEmpty()) {
-            sb.append(key + ":" + parameters.get(key)[0] + ",");
+            sb.append(entrySet.getKey() + ":" + value + ",");
           }
         }
         if (sb.lastIndexOf(",") != -1) {

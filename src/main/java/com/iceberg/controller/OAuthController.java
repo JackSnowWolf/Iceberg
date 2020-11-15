@@ -7,6 +7,7 @@ import com.iceberg.service.UserInfoService;
 import com.iceberg.utils.Config;
 import com.iceberg.utils.HttpClientUtils;
 import com.paypal.http.HttpResponse;
+import java.nio.charset.Charset;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,7 +36,6 @@ public class OAuthController {
   @RequestMapping("/oauth/github/callback")
   public String githubLogin(String code, HttpServletRequest request, HttpServletResponse httpResponse)
       throws IOException {
-    System.out.println("*************************你他吗到底进来没*****++++++++++++++");
     // code is sent by github, need use it to exchange access_token to get userinfo
     // 1. get access_token
     String s3 = "https://github.com/login/oauth/access_token";
@@ -63,9 +63,8 @@ public class OAuthController {
     conn.setRequestProperty("Content-Type", "application/json");
     conn.setRequestMethod("GET");
 
-    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
     String output;
-
     StringBuffer response = new StringBuffer();
     while ((output = in.readLine()) != null) {
       response.append(output);
