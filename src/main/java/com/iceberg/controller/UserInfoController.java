@@ -65,7 +65,7 @@ public class UserInfoController {
             // save user info in session
             userInfo = setSessionUserInfo(userInfo,request.getSession());
             //save user info in cookie
-            setCookieUser(request,response);
+//            setCookieUser(request,response);
             return ResultUtil.success("login successful", userInfo);
         }
     }
@@ -137,7 +137,7 @@ public class UserInfoController {
 
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
-        delCookieUser(request, response);
+//        delCookieUser(request, response);
         request.getSession().removeAttribute(Config.CURRENT_USERNAME);
         return "login";
     }
@@ -233,30 +233,8 @@ public class UserInfoController {
         return userInfo;
 
     }
-    /**
-     * save user info in Cookie
-     * @param response
-     */
-    private void setCookieUser(HttpServletRequest request, HttpServletResponse response){
-        UserInfo user = getSessionUser(request.getSession());
-        Cookie cookie = new Cookie(Config.CURRENT_USERNAME,user.getUsername()+"_"+user.getId());
-        //cookie valid time interval
-        cookie.setMaxAge(60*60*24*7);
-        response.addCookie(cookie);
-    }
 
     public UserInfo getUserInfo(UserInfo userInfo) {
         return userInfoService.getUserInfo(userInfo);
-    }
-    /**
-     * delete cookie info while logout
-     * @param request
-     * @param response
-     */
-    private void delCookieUser(HttpServletRequest request, HttpServletResponse response){
-        UserInfo user = getSessionUser(request.getSession());
-        Cookie cookie = new Cookie(Config.CURRENT_USERNAME,user.getUsername()+"_"+user.getId());
-        cookie.setMaxAge(-1);
-        response.addCookie(cookie);
     }
 }
