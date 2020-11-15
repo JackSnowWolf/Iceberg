@@ -43,8 +43,8 @@
     </select>
 
     <insert id="add" parameterType="com.iceberg.entity.UserInfo" useGeneratedKeys="true" keyProperty="id">
-        insert into user(id,username,password,roleid,realname,groupid,photo)
-          values(#{id},#{username},#{password},#{roleid},#{realname},#{groupid},#{iconUrl})
+        insert into user(id,username,password,roleid,realname,groupid,photo,oauth_provider,email)
+          values(#{id},#{username},#{password},#{roleid},#{realname},#{groupid},#{iconUrl},#{oauthProvider},#{email})
     </insert>
 
     <update id="update" parameterType="com.iceberg.entity.UserInfo">
