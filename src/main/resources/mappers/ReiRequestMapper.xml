@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- 设置为IUserDao接口方法提供sql语句配置 -->
-<mapper namespace="com.iceberg.dao.UserInfoMapper">
+<mapper namespace="com.iceberg.dao.ReiRequestMapper">
 
     <insert id="add" parameterType="com.iceberg.entity.ReimbursementRequest" useGeneratedKeys="true" keyProperty="id">
         insert into bill(id,title,userid,money,typeid,remark,paywayid)
