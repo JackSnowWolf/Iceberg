@@ -14,12 +14,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @PropertySource("classpath:application.yml")
 public class IcebergApplication extends SpringBootServletInitializer {
-    public static void main(String[] args){
-        SpringApplication.run(IcebergApplication.class,args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(IcebergApplication.class, args);
+  }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder applicationBuilder){
-        return applicationBuilder.sources(IcebergApplication.class);
-    }
+  @Override
+  protected SpringApplicationBuilder configure(SpringApplicationBuilder applicationBuilder) {
+    return applicationBuilder.sources(IcebergApplication.class);
+  }
 }

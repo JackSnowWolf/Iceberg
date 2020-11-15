@@ -1,5 +1,6 @@
 package com.iceberg.dao;
 
+import com.iceberg.entity.Payway;
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.utils.PageModel;
 import org.springframework.stereotype.Repository;
@@ -10,20 +11,20 @@ import java.util.Map;
 @Repository
 public interface ReiRequestMapper {
 
-    int add(ReimbursementRequest reimbursementRequest);
+  int add(ReimbursementRequest reimbursementRequest);
 
-    int update(ReimbursementRequest reimbursementRequest);
+  int update(ReimbursementRequest reimbursementRequest);
 
-    int del(int id);
+  int del(int id);
 
-    List<ReimbursementRequest> findByWhere(PageModel<ReimbursementRequest> model);
+  List<ReimbursementRequest> findByWhere(PageModel<ReimbursementRequest> model);
 
-    List<ReimbursementRequest> findByWhereNoPage(ReimbursementRequest model);
+  List<ReimbursementRequest> findByWhereNoPage(ReimbursementRequest model);
 
-    int getTotalByWhere(PageModel<ReimbursementRequest> model);
+  int getTotalByWhere(PageModel<ReimbursementRequest> model);
 
-    List<Map<String,Float>> getMonthlyInfo(PageModel<ReimbursementRequest> model);
+  List<Map<String, Float>> getMonthlyInfo(PageModel<ReimbursementRequest> model);
 
-//    List<Payway> getAllPayways();
+  List<Payway> getAllPayways();
 
 }

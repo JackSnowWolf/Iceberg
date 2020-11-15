@@ -41,7 +41,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">realname</label>
         <div class="layui-input-block">
-            <input type="text" name="realname" lay-verify="required" placeholder="请输入真实姓名" autocomplete="off"
+            <input type="text" name="realname" lay-verify="required" placeholder="please enter real name" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
@@ -112,7 +112,7 @@
         //监听提交
         form.on('submit(add)', function (data) {
             // console.log(data);
-            layer.confirm("Are you sure to add？", {title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (layno) {
+            layer.confirm("Are you sure to add？",{btn: ['Yes', 'No'], title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (layno) {
                 layer.close(layno);
                 $.post("/user/add", data.field, function (res) {
                     if (res.code == 200) {
@@ -130,7 +130,7 @@
         //监听修改
         form.on('submit(update)', function (data) {
             // console.log(data.field);
-            layer.confirm("Are you sure to modify?？", {title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (layno) {
+            layer.confirm("Are you sure to modify?？", {btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (layno) {
                 layer.close(layno);
                 data.field.password = null;
                 $.post("/user/update", data.field, function (res) {
