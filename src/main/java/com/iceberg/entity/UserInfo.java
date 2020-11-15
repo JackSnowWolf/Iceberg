@@ -29,8 +29,40 @@ public class UserInfo {
     private String groupid;
     private String iconUrl;     //icon path
     private String signature;   //self-defined signature
+    private String oauthProvider; // default Github
+
+    public String getOauthProvider() {
+        return oauthProvider;
+    }
+
+    public void setOauthProvider(String oauthProvider) {
+        this.oauthProvider = oauthProvider;
+    }
+
     private List<Privilege> privileges;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    private String email;
+
+    public UserInfo(Integer id, String username, String email) {
+        this.id = id;
+        this.username = username;
+        this.realname = username;
+        this.email = email;
+        // normal user default
+        this.roleid = 3;
+    }
+
+    public UserInfo() {
+
+    }
 //    public AuthenticationProvider getAuthenticationProvider() {
 //        return authenticationProvider;
 //    }

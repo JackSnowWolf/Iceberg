@@ -36,15 +36,16 @@ public class UserInfoController {
     public String toLogin(HttpServletRequest request, HttpServletResponse response){
         HttpSession session = request.getSession();
         if(session.getAttribute(Config.CURRENT_USERNAME)==null){
+            System.out.println("session attribute is null");
             return "login";
         }else {
             try {
                 response.sendRedirect("/pages/index");
+                return null;
             } catch (IOException e) {
                 e.printStackTrace();
                 return "login";
             }
-            return null;
         }
     }
 
@@ -247,7 +248,6 @@ public class UserInfoController {
     public UserInfo getUserInfo(UserInfo userInfo) {
         return userInfoService.getUserInfo(userInfo);
     }
-
     /**
      * delete cookie info while logout
      * @param request

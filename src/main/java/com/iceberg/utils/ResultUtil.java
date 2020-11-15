@@ -10,14 +10,14 @@ public class ResultUtil {
     public static Result success(){
         Result result = new Result();
         result.setCode(Config.SUCCESS);
-        result.setMsg("操作成功！");
+        result.setMsg("Operation successful！");
         return result;
     }
 
     public static Result success(List list){
         Result result = new Result();
         result.setCode(Config.SUCCESS);
-        result.setMsg("操作成功！");
+        result.setMsg("Operation successful！");
         result.setDatas(list);
         return result;
     }
@@ -25,7 +25,7 @@ public class ResultUtil {
     public static Result success(Object o){
         Result result = new Result();
         result.setCode(Config.SUCCESS);
-        result.setMsg("操作成功！");
+        result.setMsg("Operation successul！");
         result.setData(o);
         return result;
     }
@@ -41,7 +41,7 @@ public class ResultUtil {
     public static Result error(Exception e){
         Result result = new Result();
         result.setCode(Config.ERROR);
-        result.setMsg("操作失败，发生异常");
+        result.setMsg("Operation failed, causing exceptions");
         //如果启用自定义日志，则在控制台打印错误信息
         Utils.log(e.getMessage());
         return result;
@@ -50,7 +50,7 @@ public class ResultUtil {
     public static Result unSuccess(){
         Result result = new Result();
         result.setCode(Config.UNSUCCESS);
-        result.setMsg("操作失败！");
+        result.setMsg("Operation failed！");
         return result;
     }
 
