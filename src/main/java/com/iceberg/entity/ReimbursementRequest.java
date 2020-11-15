@@ -1,18 +1,34 @@
 package com.iceberg.entity;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 public class ReimbursementRequest {
+
     // basic fields discussed before
     private Integer id;
     private Integer userid;
     private String requestdate;
-    private String requesttype;
-    private String requststatus;
+    private type requesttype;
+    private status requststatus;
     private String picid;
     // fields synchronized with previous project
     private String title;
     private Float money;
     private String remark;
     private String groupid;
+
+    public enum type {
+        EXAMPLE1,
+        EXAMPLE2
+    }
+
+    public enum status {
+        PROCESSING,
+        MISSING_INFO,
+        DENIED,
+        APPROVED
+    }
 
     // typeid, realname, paywayid, payway, starttime, endtime
 
@@ -40,19 +56,19 @@ public class ReimbursementRequest {
         this.requestdate = requestdate;
     }
 
-    public String getRequesttype() {
+    public type getRequesttype() {
         return requesttype;
     }
 
-    public void setRequesttype(String requesttype) {
+    public void setRequesttype(type requesttype) {
         this.requesttype = requesttype;
     }
 
-    public String getRequststatus() {
+    public status getRequststatus() {
         return requststatus;
     }
 
-    public void setRequststatus(String requststatus) {
+    public void setRequststatus(status requststatus) {
         this.requststatus = requststatus;
     }
 
@@ -94,5 +110,11 @@ public class ReimbursementRequest {
 
     public void setGroupid(String groupid) {
         this.groupid = groupid;
+    }
+
+    @Override
+    public String toString() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(this);
     }
 }
