@@ -10,9 +10,7 @@ public class ReimbursementRequest {
   private Integer userid;
   private String requestdate;
   private type requesttype;
-  private status requststatus;
   private String imageid;
-  // fields synchronized with previous project
   private String title;
   private Float money;
   private String remark;
@@ -50,14 +48,6 @@ public class ReimbursementRequest {
 
   public void setRequesttype(type requesttype) {
     this.requesttype = requesttype;
-  }
-
-  public status getRequststatus() {
-    return requststatus;
-  }
-
-  public void setRequststatus(status requststatus) {
-    this.requststatus = requststatus;
   }
 
   public String getImageid() {
@@ -107,14 +97,10 @@ public class ReimbursementRequest {
   }
 
   public enum type {
-    EXAMPLE1,
-    EXAMPLE2
-  }
-
-  public enum status {
     PROCESSING,
     MISSING_INFO,
     DENIED,
     APPROVED
   }
+
 }

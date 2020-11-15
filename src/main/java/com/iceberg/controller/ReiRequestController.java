@@ -1,7 +1,7 @@
 package com.iceberg.controller;
 
-import static com.iceberg.entity.ReimbursementRequest.status.APPROVED;
-import static com.iceberg.entity.ReimbursementRequest.status.PROCESSING;
+import static com.iceberg.entity.ReimbursementRequest.type.APPROVED;
+import static com.iceberg.entity.ReimbursementRequest.type.PROCESSING;
 
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/reirequest")
 public class ReiRequestController {
 
-  Logger logger = LoggerFactory.getLogger(ReiRequestController.class);
+  private Logger logger = LoggerFactory.getLogger(ReiRequestController.class);
   @Resource
   private ReiRequestService reiRequestService;
 
@@ -40,7 +40,7 @@ public class ReiRequestController {
         int reimbursementRequestId = reimbursementRequest.getId();
         reimbursementRequest = new ReimbursementRequest();
         reimbursementRequest.setId(reimbursementRequestId);
-        reimbursementRequest.setRequststatus(PROCESSING);
+        reimbursementRequest.setRequesttype(PROCESSING);
         logger.debug(reimbursementRequest.toString());
         return ResultUtil.success("Reimbursement Request Successfully!",
           reiRequestService.findByWhereNoPage(reimbursementRequest));
@@ -76,11 +76,11 @@ public class ReiRequestController {
     } else {
       if (roleId == 3 && result.getData().getUserid() != userId) {
         return ResultUtil.unSuccess("Permission denied!");
-      } else if (result.getData().getRequststatus() == APPROVED) {
+      } else if (result.getData().getRequesttype() == APPROVED) {
         return ResultUtil.unSuccess("Request has already been approved!");
       }
       try {
-        reimbursementRequest.setRequststatus(PROCESSING);
+        reimbursementRequest.setRequesttype(PROCESSING);
         int num = reiRequestService.update(reimbursementRequest);
         if (num > 0) {
           return ResultUtil.success("Update successfully!", null);
@@ -108,16 +108,16 @@ public class ReiRequestController {
     if (Config.getSessionUser(session).getRoleid() > 2) {
       return ResultUtil.unSuccess("Permission denied. Don't have review access.");
     }
-    if (reimbursementRequest.getRequststatus() == APPROVED) {
+    if (reimbursementRequest.getRequesttype() == APPROVED) {
       // TODO: approve such request
-    } else if (reimbursementRequest.getRequststatus() == PROCESSING) {
+    } else if (reimbursementRequest.getRequesttype() == PROCESSING) {
       return ResultUtil.unSuccess("Not valid review");
     }
     try {
       int num = reiRequestService.update(reimbursementRequest);
       if (num > 0) {
         return ResultUtil.success(String.format("Update successfully! Status : %s",
-          reimbursementRequest.getRequststatus()), null);
+          reimbursementRequest.getRequesttype()), null);
       } else {
         return ResultUtil.unSuccess();
       }
