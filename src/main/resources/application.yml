@@ -32,5 +32,5 @@ logging:
     root: info
     org:
       springframework:
-        web: info
+        web: debug
     com.iceberg.dao: debug
