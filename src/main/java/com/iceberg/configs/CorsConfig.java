@@ -6,16 +6,14 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-
 /**
  * description: cross-Origin Resource Sharing
- *
+ * 
  * @author Weijie Huang
  * @date 2020/11/13
  */
 @Configuration
 public class CorsConfig {
-
   private CorsConfiguration buildConfig() {
     CorsConfiguration corsConfiguration = new CorsConfiguration();
     corsConfiguration.addAllowedOrigin("*"); // 1 any Origin
