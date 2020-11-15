@@ -43,15 +43,19 @@ public class OAuthController {
         paramMap.put("client_secret", "ac4a5c749e66dcb25bc7f9a216a7983b6326dc5a");
         paramMap.put("code", code);
         paramMap.put("redirect_uri", "http://localhost:8080/oauth/github/callback");
-        String access_token = HttpClientUtils.doPost(s3, paramMap);
+
+        String accessTokenResponse = HttpClientUtils.doPost(s3, paramMap);
+        System.out.println(accessTokenResponse);//access_token=567a64725dd193c3b99f850b2ac518dd5e54b6e6&scope=&token_type=bearer
+        String access_token = parseAccessTokenResponse(accessTokenResponse);
         System.out.println(access_token);
-        System.out.println("************************" + code + "*************");
+      
         //2. access_token get user info
 
         URL url = new URL("https://api.github.com/user");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-        conn.setRequestProperty("Authorization","Bearer "+"4734a4f7f0b6ac362ef99234ebcd56b87759773e");
+        conn.setRequestProperty("Authorization","Bearer "+access_token);
+
         //e.g. bearer token= eyJhbGciOiXXXzUxMiJ9.eyJzdWIiOiPyc2hhcm1hQHBsdW1zbGljZS5jb206OjE6OjkwIiwiZXhwIjoxNTM3MzQyNTIxLCJpYXQiOjE1MzY3Mzc3MjF9.O33zP2l_0eDNfcqSQz29jUGJC-_THYsXllrmkFnk85dNRbAw66dyEKBP5dVcFUuNTA8zhA83kk3Y41_qZYx43T
 
         conn.setRequestProperty("Content-Type","application/json");
@@ -92,6 +96,20 @@ public class OAuthController {
 
 //        return null;
     }
+
+
+    public static String parseAccessTokenResponse(String accessTokenResponse) {
+        if (accessTokenResponse == null) {
+            return null;
+        }
+        String accessToken = null;
+        String[] res = accessTokenResponse.split("&");
+        String accessTokenKV = res[0];
+        accessToken = accessTokenKV.substring(13);
+        System.out.println("*******accessToken is :  " + accessToken);
+        return accessToken;
+    }
+
 
     public static Map<String, String> parseGithubObject(String response) {
         if (response == null) {
