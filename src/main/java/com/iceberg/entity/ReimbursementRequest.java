@@ -42,8 +42,21 @@ public class ReimbursementRequest {
   // hospital fee, education...
   private String remark;
 
+  // The way user chooses to get rei paid back. Now we only support paypal.
+  // Example: paywayid: 1, payway: paypal, receiveraccount: Jack@paypal.com
   private Integer paywayid;
   private String payway;
+
+  public String getReceiveraccount() {
+    return receiveraccount;
+  }
+
+  public void setReceiveraccount(String receiveraccount) {
+    this.receiveraccount = receiveraccount;
+  }
+
+  private String receiveraccount;
+
   private String time;
   private String startTime;
   private String endTime;

@@ -5,8 +5,8 @@
 <mapper namespace="com.iceberg.dao.ReiRequestMapper">
 
     <insert id="add" parameterType="com.iceberg.entity.ReimbursementRequest" useGeneratedKeys="true" keyProperty="id">
-        insert into bill(id,title,userid,money,typeid,remark,paywayid)
-          value(null,#{title},#{userid},#{money},#{typeid},#{remark},#{paywayid})
+        insert into bill(id,title,userid,money,typeid,remark,paywayid,receiveraccount)
+          value(null,#{title},#{userid},#{money},#{typeid},#{remark},#{paywayid},#{receiveraccount})
     </insert>
 
     <update id="update" parameterType="com.iceberg.entity.ReimbursementRequest">
@@ -16,6 +16,7 @@
             <if test="typeid!=null"> typeid = #{typeid}, </if>
             <if test="remark!=null"> remark = #{remark}, </if>
             <if test="paywayid!=null"> paywayid = #{paywayid},</if>
+            <if test="receiveraccount!=null"> receiveraccount = #{receiveraccount},</if>
         </set>
         where id = #{id}
     </update>
@@ -82,9 +83,9 @@
     </select>
 
 
-<!--    <select id="getAllPayways" resultType="com.iceberg.entity.Payway">-->
-<!--        select * from payway-->
-<!--    </select>-->
+    <select id="getAllPayways" resultType="com.iceberg.entity.Payway">
+        select * from payway
+    </select>
 
 
 
