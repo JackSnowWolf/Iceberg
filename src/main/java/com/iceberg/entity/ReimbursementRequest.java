@@ -5,116 +5,116 @@ import com.google.gson.GsonBuilder;
 
 public class ReimbursementRequest {
 
-    // basic fields discussed before
-    private Integer id;
-    private Integer userid;
-    private String requestdate;
-    private type requesttype;
-    private status requststatus;
-    private String imageid;
-    // fields synchronized with previous project
-    private String title;
-    private Float money;
-    private String remark;
-    private String groupid;
+  // basic fields discussed before
+  private Integer id;
+  private Integer userid;
+  private String requestdate;
+  private type requesttype;
+  private status requststatus;
+  private String imageid;
+  // fields synchronized with previous project
+  private String title;
+  private Float money;
+  private String remark;
+  private String groupid;
 
-    public enum type {
-        EXAMPLE1,
-        EXAMPLE2
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public enum status {
-        PROCESSING,
-        MISSING_INFO,
-        DENIED,
-        APPROVED
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    // typeid, realname, paywayid, payway, starttime, endtime
+  // typeid, realname, paywayid, payway, starttime, endtime
 
-    public Integer getId() {
-        return id;
-    }
+  public Integer getUserid() {
+    return userid;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public void setUserid(Integer userid) {
+    this.userid = userid;
+  }
 
-    public Integer getUserid() {
-        return userid;
-    }
+  public String getRequestdate() {
+    return requestdate;
+  }
 
-    public void setUserid(Integer userid) {
-        this.userid = userid;
-    }
+  public void setRequestdate(String requestdate) {
+    this.requestdate = requestdate;
+  }
 
-    public String getRequestdate() {
-        return requestdate;
-    }
+  public type getRequesttype() {
+    return requesttype;
+  }
 
-    public void setRequestdate(String requestdate) {
-        this.requestdate = requestdate;
-    }
+  public void setRequesttype(type requesttype) {
+    this.requesttype = requesttype;
+  }
 
-    public type getRequesttype() {
-        return requesttype;
-    }
+  public status getRequststatus() {
+    return requststatus;
+  }
 
-    public void setRequesttype(type requesttype) {
-        this.requesttype = requesttype;
-    }
+  public void setRequststatus(status requststatus) {
+    this.requststatus = requststatus;
+  }
 
-    public status getRequststatus() {
-        return requststatus;
-    }
+  public String getImageid() {
+    return imageid;
+  }
 
-    public void setRequststatus(status requststatus) {
-        this.requststatus = requststatus;
-    }
+  public void setImageid(String imageid) {
+    this.imageid = imageid;
+  }
 
-    public String getImageid() {
-        return imageid;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public void setImageid(String imageid) {
-        this.imageid = imageid;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public Float getMoney() {
+    return money;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public void setMoney(Float money) {
+    this.money = money;
+  }
 
-    public Float getMoney() {
-        return money;
-    }
+  public String getRemark() {
+    return remark;
+  }
 
-    public void setMoney(Float money) {
-        this.money = money;
-    }
+  public void setRemark(String remark) {
+    this.remark = remark;
+  }
 
-    public String getRemark() {
-        return remark;
-    }
+  public String getGroupid() {
+    return groupid;
+  }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
+  public void setGroupid(String groupid) {
+    this.groupid = groupid;
+  }
 
-    public String getGroupid() {
-        return groupid;
-    }
+  @Override
+  public String toString() {
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    return gson.toJson(this);
+  }
 
-    public void setGroupid(String groupid) {
-        this.groupid = groupid;
-    }
+  public enum type {
+    EXAMPLE1,
+    EXAMPLE2
+  }
 
-    @Override
-    public String toString() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(this);
-    }
+  public enum status {
+    PROCESSING,
+    MISSING_INFO,
+    DENIED,
+    APPROVED
+  }
 }
