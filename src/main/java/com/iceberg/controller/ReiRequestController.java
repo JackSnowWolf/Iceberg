@@ -41,6 +41,7 @@ public class ReiRequestController {
         reimbursementRequest = new ReimbursementRequest();
         reimbursementRequest.setId(reimbursementRequestId);
         reimbursementRequest.setRequststatus(PROCESSING);
+        logger.debug(reimbursementRequest.toString());
         return ResultUtil.success("Reimbursement Request Successfully!",
           reiRequestService.findByWhereNoPage(reimbursementRequest));
       } else {
