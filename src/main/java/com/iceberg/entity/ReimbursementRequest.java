@@ -102,6 +102,17 @@ public class ReimbursementRequest {
   }
 
   @Override
+  public boolean equals(Object obj) {
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    if (this == obj) {
+      return true;
+    }
+    return this.toString().equals(obj.toString());
+  }
+
+  @Override
   public String toString() {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     return gson.toJson(this);
@@ -135,5 +146,4 @@ public class ReimbursementRequest {
       return value;
     }
   }
-
 }

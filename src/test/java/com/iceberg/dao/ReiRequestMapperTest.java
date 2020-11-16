@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import com.iceberg.entity.ReimbursementRequest;
+import com.iceberg.utils.PageModel;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class ReiRequestMapperTest {
     logger.info("add reimbursement request test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(1);
-    reimbursementRequest.setGroupid("group1");
+    reimbursementRequest.setGroupid("1");
     reimbursementRequest.setRemark("For test");
     reimbursementRequest.setRequesttype(APPROVED);
     reimbursementRequest.setMoney((float) 100.0);
@@ -44,7 +45,7 @@ public class ReiRequestMapperTest {
     logger.info("findByWhereNoPage reimbursement request test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(1);
-    reimbursementRequest.setGroupid("group2");
+    reimbursementRequest.setGroupid("2");
     reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
     reimbursementRequest.setRequesttype(APPROVED);
     reimbursementRequest.setMoney((float) 100.0);
@@ -57,7 +58,7 @@ public class ReiRequestMapperTest {
     assertEquals(1, num);
 
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
-    reimbursementRequestSearch.setUserid(1);
+    reimbursementRequestSearch.setGroupid("1");
     System.out.println(reimbursementRequestSearch.toString());
     List<ReimbursementRequest> requestList = reiRequestMapper
       .findByWhereNoPage(reimbursementRequestSearch);
@@ -69,7 +70,6 @@ public class ReiRequestMapperTest {
     logger.info("update reimbursement request test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(1);
-//    TODO: group id
     reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
     reimbursementRequest.setRequesttype(APPROVED);
     reimbursementRequest.setMoney((float) 100.0);
@@ -106,6 +106,18 @@ public class ReiRequestMapperTest {
 
     num = reiRequestMapper.del(reimbursementRequest.getId());
     assertEquals(1, num);
+  }
 
+  @Test
+  public void findByWhere() {
+    logger.info("findByWhere Test");
+    ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
+    reimbursementRequest.setUserid(1);
+    PageModel<ReimbursementRequest> model = new PageModel<>(1, reimbursementRequest);
+
+    List<ReimbursementRequest> requestList = reiRequestMapper
+      .findByWhere(model);
+
+    assertNotEquals(0, requestList.size());
   }
 }
