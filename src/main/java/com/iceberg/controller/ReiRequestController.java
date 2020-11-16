@@ -109,10 +109,11 @@ public class ReiRequestController {
     if (Config.getSessionUser(session).getRoleid() > 2) {
       return ResultUtil.unSuccess("Permission denied. Don't have review access.");
     }
+    // TODO: error handling and check details.
     if (reimbursementRequest.getRequesttype() == APPROVED) {
       // TODO: approve such request
     } else if (reimbursementRequest.getRequesttype() == PROCESSING) {
-      return ResultUtil.unSuccess("Not valid review");
+      return ResultUtil.unSuccess("Not a valid review");
     }
     try {
       int num = reiRequestService.update(reimbursementRequest);
@@ -139,8 +140,8 @@ public class ReiRequestController {
     }
   }
 
-  @RequestMapping("/getReiRequestByUserid/{userid}/{pageNo}/{pageSize}")
-  public Result getReiRequestByUserid(@PathVariable int userid, @PathVariable int pageNo,
+  @RequestMapping("/getReiRequestByUserId/{userid}/{pageNo}/{pageSize}")
+  public Result getReiRequestByUserId(@PathVariable int userid, @PathVariable int pageNo,
     @PathVariable int pageSize) {
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setId(userid);
@@ -151,12 +152,35 @@ public class ReiRequestController {
     return reiRequestService.findByWhere(model);
   }
 
-  @RequestMapping("/getReiRequestByNoPage")
-  public Result getReiRequestByGroup(ReimbursementRequest reimbursementRequest,
+  @RequestMapping("/getReiRequest/{pageNo}/{pageSize}")
+  public Result getReiRequest(@PathVariable int pageNo, @PathVariable int pageSize,
     HttpSession session) {
-    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+    if (Config.getSessionUser(session) == null) {
+      return ResultUtil.unSuccess("No user for current session");
+    }
     UserInfo currentUser = Config.getSessionUser(session);
-    // search for group reimbursement information if group manage
+    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+
+    // search for group reimbursement information if group manager
+    if (currentUser.getRoleid() == 2) {
+      reimbursementRequestSearch.setGroupid(currentUser.getGroupid());
+    } else if (currentUser.getRoleid() == 3) {
+      reimbursementRequestSearch.setUserid(currentUser.getId());
+    }
+    PageModel model = new PageModel<>(pageNo, reimbursementRequestSearch);
+    model.setPageSize(pageSize);
+
+    return reiRequestService.findByWhere(model);
+  }
+
+  @RequestMapping("/getReiRequestByNoPage")
+  public Result getReiRequestByNoPage(HttpSession session) {
+    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+    if (Config.getSessionUser(session) == null) {
+      return ResultUtil.unSuccess("No user for current session");
+    }
+    UserInfo currentUser = Config.getSessionUser(session);
+    // search for group reimbursement information if group manager
     if (currentUser.getRoleid() == 2) {
       reimbursementRequestSearch.setGroupid(currentUser.getGroupid());
     } else if (currentUser.getRoleid() == 3) {
@@ -166,15 +190,15 @@ public class ReiRequestController {
   }
 
   @RequestMapping("/delReiRequest")
-  public Result del(int id){
+  public Result del(int id) {
     try {
       int num = reiRequestService.del(id);
-      if(num>0){
-        return ResultUtil.success("delete successfully!",null);
-      }else {
+      if (num > 0) {
+        return ResultUtil.success("delete successfully!", null);
+      } else {
         return ResultUtil.unSuccess();
       }
-    }catch (Exception e){
+    } catch (Exception e) {
       return ResultUtil.error(e);
     }
   }

@@ -29,4 +29,15 @@ public class PageModel<T> {
     return "PageModel{" + "beginIndex=" + beginIndex + ", currentPageNo=" + currentPageNo + ", pageSize=" + pageSize
         + ", data=" + data + '}';
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this.getClass() != obj.getClass()) {
+      return false;
+    }
+    if (this == obj) {
+      return true;
+    }
+    return this.toString().equals(obj.toString());
+  }
 }

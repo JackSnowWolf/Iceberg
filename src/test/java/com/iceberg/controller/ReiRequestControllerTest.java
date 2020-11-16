@@ -3,6 +3,8 @@ package com.iceberg.controller;
 import static com.iceberg.entity.ReimbursementRequest.TYPE.APPROVED;
 import static com.iceberg.entity.ReimbursementRequest.TYPE.MISSING_INFO;
 import static com.iceberg.entity.ReimbursementRequest.TYPE.PROCESSING;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -13,6 +15,7 @@ import com.google.gson.Gson;
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.service.ReiRequestService;
+import com.iceberg.utils.PageModel;
 import com.iceberg.utils.Result;
 import com.iceberg.utils.ResultUtil;
 import java.util.ArrayList;
@@ -27,6 +30,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.LinkedMultiValueMap;
@@ -148,7 +152,6 @@ public class ReiRequestControllerTest {
         .session(session))
       .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
       .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
-    ;
   }
 
   @Test
@@ -163,6 +166,170 @@ public class ReiRequestControllerTest {
         .session(session))
       .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
       .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
-    ;
+  }
+
+  @Test
+  void shouldApproveReview() throws Exception {
+    // set reimbursement request id for test
+    ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
+    reimbursementRequest1.setId(190);
+    reimbursementRequest1.setRequesttype(APPROVED);
+    given(this.reiRequestService.update(reimbursementRequest1)).willReturn(1);
+
+    // fill request params
+    MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
+    Map<String, String> maps = objectMapper
+      .convertValue(reimbursementRequest1, new TypeReference<Map<String, String>>() {
+      });
+    paramsMap.setAll(maps);
+    this.mockMvc
+      .perform(MockMvcRequestBuilders.post("/reirequest/review")
+        .contentType(MediaType.APPLICATION_JSON)
+        .params(paramsMap)
+        .session(session))
+      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
+  }
+
+  @Test
+  void shouldGetReiRequestById() throws Exception {
+    // set reimbursement request id for test
+    ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
+    reimbursementRequest1.setId(190);
+    reimbursementRequest1.setUserid(1);
+    reimbursementRequest1.setTitle("get reiquest by id test");
+    reimbursementRequest1.setRemark("Test");
+    reimbursementRequest1.setRequesttype(PROCESSING);
+    reimbursementRequest1.setPaywayid(1);
+
+    // simulate response
+    List<ReimbursementRequest> reimbursementRequests = new ArrayList<>();
+    reimbursementRequests.add(reimbursementRequest1);
+
+    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+    reimbursementRequestSearch.setId(190);
+    Result<ReimbursementRequest> willReturnResult = ResultUtil.success(reimbursementRequests);
+    willReturnResult.setTotal(1);
+    given(this.reiRequestService.findByWhereNoPage(eq(reimbursementRequestSearch)))
+      .willReturn(willReturnResult);
+
+    MvcResult result = this.mockMvc
+      .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequestById/{id}", 190)
+        .session(session))
+      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
+
+    Result decodedResponse = objectMapper
+      .readValue(result.getResponse().getContentAsString(), Result.class);
+    assertNotEquals(0, decodedResponse.getTotal());
+    ReimbursementRequest responseData1 = objectMapper
+      .readValue(objectMapper.writeValueAsString(decodedResponse.getDatas().get(0)).toString(),
+        ReimbursementRequest.class);
+    assertEquals(PROCESSING, responseData1.getRequesttype());
+  }
+
+  @Test
+  void shouldGetReiRequestForNormalUser() throws Exception {
+    MockHttpSession session = new MockHttpSession();
+
+    UserInfo userInfo = new UserInfo();
+    userInfo.setUsername("ch");
+    userInfo.setPassword("ch");
+    userInfo.setId(1);
+    userInfo.setRoleid(3);
+    userInfo.setGroupid("1");
+    userInfo.setRolename("NormalUser");
+    userInfo.setRealname("ch");
+    session.setAttribute("currentUser", userInfo);
+
+    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+    reimbursementRequestSearch.setUserid(1);
+
+    ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
+    reimbursementRequest1.setId(190);
+    reimbursementRequest1.setUserid(1);
+    reimbursementRequest1.setTitle("should Get ReiRequst For Normal User test");
+    reimbursementRequest1.setRemark("Test");
+    reimbursementRequest1.setRequesttype(PROCESSING);
+    reimbursementRequest1.setPaywayid(1);
+
+    // simulate response
+    List<ReimbursementRequest> reimbursementRequests = new ArrayList<>();
+    reimbursementRequests.add(reimbursementRequest1);
+
+    Result<ReimbursementRequest> willReturnResult = ResultUtil.success(reimbursementRequests);
+    willReturnResult.setTotal(1);
+
+    PageModel model = new PageModel<>(1, reimbursementRequestSearch);
+    model.setPageSize(20);
+    given(this.reiRequestService.findByWhere(eq(model)))
+      .willReturn(willReturnResult);
+    MvcResult result = this.mockMvc
+      .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequest/{pageNo}/{pageSize}", 1, 20)
+        .session(session))
+      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).
+        andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
+
+    Result decodedResponse = objectMapper
+      .readValue(result.getResponse().getContentAsString(), Result.class);
+    assertNotEquals(0, decodedResponse.getTotal());
+    assertNotEquals(0, decodedResponse.getDatas().size());
+  }
+
+  @Test
+  void shouldGetReiRequestForGroupManager() throws Exception {
+    MockHttpSession session = new MockHttpSession();
+
+    UserInfo userInfo = new UserInfo();
+    userInfo.setUsername("ch");
+    userInfo.setPassword("ch");
+    userInfo.setId(1);
+    userInfo.setRoleid(2);
+    userInfo.setGroupid("1");
+    userInfo.setRolename("NormalUser");
+    userInfo.setRealname("ch");
+    session.setAttribute("currentUser", userInfo);
+
+    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+    reimbursementRequestSearch.setGroupid("1");
+
+    ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
+    reimbursementRequest1.setId(190);
+    reimbursementRequest1.setUserid(1);
+    reimbursementRequest1.setTitle("should Get ReiRequst For Group Manager test");
+    reimbursementRequest1.setRemark("Test");
+    reimbursementRequest1.setRequesttype(PROCESSING);
+    reimbursementRequest1.setPaywayid(1);
+
+    ReimbursementRequest reimbursementRequest2 = new ReimbursementRequest();
+    reimbursementRequest2.setId(191);
+    reimbursementRequest2.setUserid(2);
+    reimbursementRequest2.setTitle("should Get ReiRequst For Group Manager test");
+    reimbursementRequest2.setRemark("Test");
+    reimbursementRequest2.setRequesttype(PROCESSING);
+    reimbursementRequest2.setPaywayid(1);
+
+    // simulate response
+    List<ReimbursementRequest> reimbursementRequests = new ArrayList<>();
+    reimbursementRequests.add(reimbursementRequest1);
+    reimbursementRequests.add(reimbursementRequest2);
+
+    Result<ReimbursementRequest> willReturnResult = ResultUtil.success(reimbursementRequests);
+    willReturnResult.setTotal(2);
+
+    PageModel model = new PageModel<>(1, reimbursementRequestSearch);
+    model.setPageSize(20);
+    given(this.reiRequestService.findByWhere(eq(model)))
+      .willReturn(willReturnResult);
+    MvcResult result = this.mockMvc
+      .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequest/{pageNo}/{pageSize}", 1, 20)
+        .session(session))
+      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).
+        andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
+
+    Result decodedResponse = objectMapper
+      .readValue(result.getResponse().getContentAsString(), Result.class);
+    assertNotEquals(0, decodedResponse.getTotal());
+    assertNotEquals(0, decodedResponse.getDatas().size());
   }
 }
