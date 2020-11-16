@@ -59,6 +59,7 @@ public class ReiRequestController {
    * @param session http session
    * @return result information
    */
+  @RequestMapping(value = "/updateRequest", method = RequestMethod.POST)
   public Result update(ReimbursementRequest reimbursementRequest, HttpSession session) {
     if (Config.getSessionUser(session) == null) {
       return ResultUtil.unSuccess("No user for current session");
