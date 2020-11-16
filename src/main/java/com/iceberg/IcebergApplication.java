@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @SpringBootApplication
 @PropertySource("classpath:application.yml")
-@ComponentScan(basePackages = {"com.iceberg.service.impl","com.iceberg.configs","com.iceberg.controller"})
+@ComponentScan(basePackages = {"com.iceberg.service.impl","com.iceberg.configs","com.iceberg.controller", "com.iceberg.dao"})
 public class IcebergApplication extends SpringBootServletInitializer {
   public static void main(String[] args) {
     SpringApplication.run(IcebergApplication.class, args);
