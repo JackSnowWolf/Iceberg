@@ -1,7 +1,7 @@
-package com.iceberg.service.impl;
+package com.iceberg.externalapi.impl;
 
-import com.iceberg.service.PayPalClient;
-import com.iceberg.service.PayPalService;
+import com.iceberg.externalapi.PayPalClient;
+import com.iceberg.externalapi.PayPalService;
 import com.paypal.http.HttpResponse;
 import com.paypal.http.serializer.Json;
 import com.paypal.payouts.*;

@@ -1,4 +1,4 @@
-package com.iceberg.service;
+package com.iceberg.externalapi;
 
 import com.paypal.core.PayPalEnvironment;
 import com.paypal.core.PayPalHttpClient;
