@@ -39,18 +39,18 @@ public class UserInfoControllerTest {
     assertEquals(200,result2.getResponse().getStatus());
   }
 
-  @Test
-  public void testLogin() throws Exception {
-    String URI = "/login.do";
-    UserInfo userInfo = new UserInfo();
-    userInfo.setUsername("hwj");
-    userInfo.setPassword("hwj");
-    RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI, userInfo).accept(MediaType.APPLICATION_JSON);
-
-    MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-    assertEquals(result.getResponse().getErrorMessage(), "login successful");
-
-  }
+//  @Test
+//  public void testLogin() throws Exception {
+//    String URI = "/login.do";
+//    UserInfo userInfo = new UserInfo();
+//    userInfo.setUsername("hwj");
+//    userInfo.setPassword("hwj");
+//    RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI, userInfo).accept(MediaType.APPLICATION_JSON);
+//
+//    MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+//
+//    assertEquals(result.getResponse().getErrorMessage(), "login successful");
+//
+//  }
 
 }
