@@ -43,9 +43,12 @@ public class ReiRequestControllerTest {
     System.out.println("init test");
     session = new MockHttpSession();
 
-    session.setAttribute("id", 1);
-    session.setAttribute("roleid", 1);
-    session.setAttribute("password", "zsh");
+    UserInfo userInfo = new UserInfo();
+    userInfo.setId(1);
+    userInfo.setRoleid(1);
+    userInfo.setPassword("zsh");
+    userInfo.setUsername("zsh");
+    session.setAttribute("currentUser", userInfo);
 
 //    mockMvc = MockMvcBuilders.standaloneSetup(new ReiRequestController())
 //      .apply(sharedHttpSession()).build();
@@ -59,6 +62,11 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setRemark("Test");
     given(this.reiRequestService.add(reimbursementRequest1))
       .willReturn(1);
+
+    this.mockMvc
+      .perform(MockMvcRequestBuilders.post("/reirequest/addRequest")
+        .content(gson.toJson(reimbursementRequest1))
+        .session(session)).andDo(print());
 
     this.mockMvc
       .perform(MockMvcRequestBuilders.post("/reirequest/addRequest")

@@ -1,7 +1,7 @@
 package com.iceberg.controller;
 
-import static com.iceberg.entity.ReimbursementRequest.type.APPROVED;
-import static com.iceberg.entity.ReimbursementRequest.type.PROCESSING;
+import static com.iceberg.entity.ReimbursementRequest.TYPE.APPROVED;
+import static com.iceberg.entity.ReimbursementRequest.TYPE.PROCESSING;
 
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
