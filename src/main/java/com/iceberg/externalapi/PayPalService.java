@@ -1,4 +1,4 @@
-package com.iceberg.service;
+package com.iceberg.externalapi;
 
 import com.paypal.http.HttpResponse;
 import com.paypal.payouts.CreatePayoutResponse;
