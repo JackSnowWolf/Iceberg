@@ -75,6 +75,7 @@ public class UserInfoController {
       userInfo.setGroupid(null);
     }
     if (userInfo.getRoleid() == -1) {
+      System.out.println("*****" + Config.getSessionUser(session));
       userInfo.setRoleid(Config.getSessionUser(session).getRoleid());
     }
     Utils.log(userInfo.toString());

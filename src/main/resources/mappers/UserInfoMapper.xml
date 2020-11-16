@@ -52,6 +52,7 @@
         <set>
             <if test="password!=null and password.length()>0"> password = #{password}, </if>
             <if test="realname!=null and realname.length()>0"> realname = #{realname}, </if>
+            <if test="roleid!=null"> roleid = #{roleid},</if>
             <if test="groupid!=null and groupid.length()>0"> groupid = #{groupid}, </if>
             <if test="iconUrl!=null and iconUrl.length()>0"> photo = #{iconUrl}, </if>
         </set>
@@ -64,7 +65,7 @@
 
     <insert id="addRole" parameterType="com.iceberg.entity.Role" useGeneratedKeys="true" keyProperty="roleid">
         insert into role(roleid,rolename)
-          values(null,#{rolename})
+          values(#{roleid},#{rolename})
     </insert>
 
     <update id="updateRole" parameterType="com.iceberg.entity.Role">
