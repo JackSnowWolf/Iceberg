@@ -1,6 +1,7 @@
 package com.iceberg.controller;
 
 import static com.iceberg.entity.ReimbursementRequest.TYPE.APPROVED;
+import static com.iceberg.entity.ReimbursementRequest.TYPE.MISSING_INFO;
 import static com.iceberg.entity.ReimbursementRequest.TYPE.PROCESSING;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -56,10 +57,12 @@ public class ReiRequestControllerTest {
     session = new MockHttpSession();
 
     UserInfo userInfo = new UserInfo();
+    userInfo.setUsername("hwj");
+    userInfo.setPassword("hwj");
     userInfo.setId(1);
     userInfo.setRoleid(1);
-    userInfo.setPassword("zsh");
-    userInfo.setUsername("zsh");
+    userInfo.setRolename("Administrator");
+    userInfo.setRealname("hwj");
     session.setAttribute("currentUser", userInfo);
 
 //    mockMvc = MockMvcBuilders.standaloneSetup(new ReiRequestController())
@@ -107,7 +110,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("add reiquest test");
     reimbursementRequest1.setRemark("Test");
-    reimbursementRequest1.setRequesttype(APPROVED);
+    reimbursementRequest1.setRequesttype(PROCESSING);
     reimbursementRequest1.setPaywayid(1);
     given(this.reiRequestService.update(reimbursementRequest1))
       .willReturn(1);
@@ -118,14 +121,24 @@ public class ReiRequestControllerTest {
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
     reimbursementRequestSearch.setId(190);
     Result<ReimbursementRequest> willReturnResult = ResultUtil.success(reimbursementRequests);
-
+    willReturnResult.setTotal(1);
     given(this.reiRequestService.findByWhereNoPage(eq(reimbursementRequestSearch)))
       .willReturn(willReturnResult);
 
+    // set reimbursement request id for test
+    ReimbursementRequest reimbursementRequest2 = new ReimbursementRequest();
+    reimbursementRequest2.setId(190);
+    reimbursementRequest2.setUserid(1);
+    reimbursementRequest2.setTitle("add reiquest test");
+    reimbursementRequest2.setRemark("Test");
+    reimbursementRequest2.setRequesttype(MISSING_INFO);
+    reimbursementRequest2.setPaywayid(1);
+
+    // Change request type from MISSING_INFO to PROCESSING
     // fill request params
     MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
     Map<String, String> maps = objectMapper
-      .convertValue(reimbursementRequest1, new TypeReference<Map<String, String>>() {
+      .convertValue(reimbursementRequest2, new TypeReference<Map<String, String>>() {
       });
     paramsMap.setAll(maps);
     this.mockMvc
@@ -133,8 +146,23 @@ public class ReiRequestControllerTest {
         .contentType(MediaType.APPLICATION_JSON)
         .params(paramsMap)
         .session(session))
-      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk());
+      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
+    ;
   }
 
+  @Test
+  void shouldDelReiRequest() throws Exception {
+    System.out.println("del reirequest test");
+    given(this.reiRequestService.del(eq(190))).willReturn(1);
 
+    this.mockMvc
+      .perform(MockMvcRequestBuilders.post("/reirequest/delReiRequest")
+        .contentType(MediaType.APPLICATION_JSON)
+        .param("id", "190")
+        .session(session))
+      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
+    ;
+  }
 }

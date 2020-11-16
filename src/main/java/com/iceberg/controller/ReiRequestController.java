@@ -75,9 +75,9 @@ public class ReiRequestController {
     } else if (result.getTotal() > 2) {
       return ResultUtil.unSuccess("reimbursement request duplicate!");
     } else {
-      if (roleId == 3 && result.getData().getUserid() != userId) {
+      if (roleId == 3 && result.getDatas().get(0).getUserid() != userId) {
         return ResultUtil.unSuccess("Permission denied!");
-      } else if (result.getData().getRequesttype() == APPROVED) {
+      } else if (result.getDatas().get(0).getRequesttype() == APPROVED) {
         return ResultUtil.unSuccess("Request has already been approved!");
       }
       try {
@@ -163,6 +163,20 @@ public class ReiRequestController {
       reimbursementRequestSearch.setUserid(currentUser.getId());
     }
     return reiRequestService.findByWhereNoPage(reimbursementRequestSearch);
+  }
+
+  @RequestMapping("/delReiRequest")
+  public Result del(int id){
+    try {
+      int num = reiRequestService.del(id);
+      if(num>0){
+        return ResultUtil.success("delete successfully!",null);
+      }else {
+        return ResultUtil.unSuccess();
+      }
+    }catch (Exception e){
+      return ResultUtil.error(e);
+    }
   }
 
 }
