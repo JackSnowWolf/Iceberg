@@ -56,6 +56,7 @@ public class UserInfo {
     this.username = username;
     this.realname = username;
     this.email = email;
+    this.password = "123456";
     // normal user default
     this.roleid = 3;
   }

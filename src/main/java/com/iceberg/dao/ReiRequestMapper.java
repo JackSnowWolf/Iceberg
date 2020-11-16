@@ -1,5 +1,6 @@
 package com.iceberg.dao;
 
+import com.iceberg.entity.Payway;
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.utils.PageModel;
 import org.springframework.stereotype.Repository;
@@ -24,6 +25,6 @@ public interface ReiRequestMapper {
 
   List<Map<String, Float>> getMonthlyInfo(PageModel<ReimbursementRequest> model);
 
-//    List<Payway> getAllPayways();
+  List<Payway> getAllPayways();
 
 }
