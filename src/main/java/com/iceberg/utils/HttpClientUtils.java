@@ -28,25 +28,21 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpClientUtils {
-  private static String tokenString = "";
-  private static String AUTH_TOKEN_EXPIRED = "AUTH_TOKEN_EXPIRED";
-  private static CloseableHttpClient httpClient = null;
-
-  public static String doGet(String url) {
+  public static Integer doGet(String url) {
     // get请求返回结果
-    String strResult = "";
+    Integer status = 0;
     try {
       DefaultHttpClient client = new DefaultHttpClient();
       HttpGet request = new HttpGet(url);
       HttpResponse response = client.execute(request);
 
       if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-        strResult = EntityUtils.toString(response.getEntity());
+        status = response.getStatusLine().getStatusCode();
       }
     } catch (IOException e) {
-      System.out.println("get请求提交失败:" + url);
+      System.out.println("get request failed:" + url);
     }
-    return strResult;
+    return status;
   }
 
   public static String doPost(String url, Map<String, String> paramMap) {
@@ -82,25 +78,4 @@ public class HttpClientUtils {
     }
     return null;
   }
-
-  public static String doGet2(String url, String token) {
-    // 创建HttpClient对象
-    CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-    HttpGet get = new HttpGet(url);
-
-    try {
-      // api_gateway_auth_token自定义header头，用于token验证使用
-      get.addHeader("Bearer Token", token);
-      HttpResponse response = httpClient.execute(get);
-      if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-        // 返回json格式
-        String res = EntityUtils.toString(response.getEntity());
-        return res;
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
 }

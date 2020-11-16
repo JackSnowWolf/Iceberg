@@ -28,8 +28,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 public class UserInfoControllerTest {
   @Autowired
   private MockMvc mockMvc;
-  private static Gson gson = new Gson();
-  private static MockHttpSession session;
   private String randomUUIDForEveryTimeRunTest = String.valueOf(UUID.randomUUID());
   /**
    * test we visiting login page without any session.

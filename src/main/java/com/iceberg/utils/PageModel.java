@@ -20,6 +20,30 @@ public class PageModel<T> {
     this.pageSize = pageSize;
   }
 
+  public void setBeginIndex(int beginIndex) {
+    this.beginIndex = beginIndex;
+  }
+
+  public int getCurrentPageNo() {
+    return currentPageNo;
+  }
+
+  public void setCurrentPageNo(int currentPageNo) {
+    this.currentPageNo = currentPageNo;
+  }
+
+  public int getPageSize() {
+    return pageSize;
+  }
+
+  public T getData() {
+    return data;
+  }
+
+  public void setData(T data) {
+    this.data = data;
+  }
+
   public int getBeginIndex() {
     return beginIndex = (currentPageNo - 1) * pageSize;
   }
