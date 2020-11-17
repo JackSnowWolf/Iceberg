@@ -77,10 +77,11 @@
         <thead>
         <tr>
             <th style="width: 6%;">No.</th>
-            <th style="width: 15%;">Username</th>
-            <th style="width: 10%;">Realname</th>
+            <th style="width: 10%;">User Name</th>
+            <th style="width: 10%;">Real Name</th>
+            <th style="width: 12%;">Email</th>
             <th style="width: 10%;">Role</th>
-            <th style="width: 12%;">Group ID</th>
+            <th style="width: 10%;">Group ID</th>
             <th style="width: 10%;">Operation</th>
         </thead>
         <tbody></tbody>
@@ -113,7 +114,7 @@
                 });
                 $("#roleid").append(html);
                 $(".layui-anim-upbit").append(html2);
-                layui.form.render('select');
+                // layui.form.render('select');
             }
         })
     }
@@ -124,8 +125,8 @@
             "username": $("#username").val(),
             "realname": $("#username").val(),
             "roleid" : $("#roleid").val(),
-            "houseid" : top.sessionUser.houseid,
-        }
+            "groupid" : top.sessionUser.groupid,
+        };
         // console.log(user);
         // console.log(user);
         $.post("/users/getUsersByWhere/" + pageNo + "/" + mPageSize, user, function (res) {
@@ -172,8 +173,9 @@
                 '            <td>' + (index + 1 + beginIndex) + '</td>' +
                 '            <td>' + item.username + '</td>' +
                 '            <td>' + (item.realname == null ? "-" : item.realname) + '</td>' +
+                '            <td>' + (item.email == null ? "-" : item.email) + '</td>' +
                 '            <td>' + item.rolename + '</td>' +
-                '            <td>' + (item.houseid == null ? "-" : item.houseid) + '</td>' +
+                '            <td>' + (item.groupid == null ? "-" : item.groupid) + '</td>' +
                 '            <td style="display: none">' + item.id + '</td>' +
                 '            <td class="td-manage">' +
                 '                <a title="edit" onclick="x_admin_show(\'edit\',\'sys_useradd.html?index='+(index+1)+'#2\',\'460px\',\'80%\')" href="javascript:;">' +
@@ -190,7 +192,7 @@
 
 
     function del(obj, id) {
-        layer.confirm('Are you sure to delete？',{btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (index) {
+        layer.confirm('Are you sure to delete?',{btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (index) {
             $.post("/user/del/"+id, function (res) {
                 if (res.code == 200) {
                     getUsers();

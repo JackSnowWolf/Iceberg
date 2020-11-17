@@ -25,28 +25,28 @@
 <body>
 <form class="layui-form layui-form-pane">
     <div class="layui-form-item" lay-filter="bill-form">
-        <label class="layui-form-label">Username</label>
+        <label class="layui-form-label">User Name</label>
         <div class="layui-input-block">
             <input type="text" name="username" lay-verify="required" placeholder="please enter username" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">password</label>
+        <label class="layui-form-label">Password</label>
         <div class="layui-input-block">
             <input type="text" name="password" lay-verify="required" placeholder="please enter password" value="123456"
                    autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">realname</label>
+        <label class="layui-form-label">Real Name</label>
         <div class="layui-input-block">
             <input type="text" name="realname" lay-verify="required" placeholder="please enter real name" autocomplete="off"
                    class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">role</label>
+        <label class="layui-form-label">Role</label>
         <div class="layui-input-block">
             <select name="roleid" id="roleid" lay-verify="required">
                 <option value="">choose roles</option>
@@ -54,16 +54,24 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">group number</label>
+        <label class="layui-form-label">Group ID</label>
         <div class="layui-input-block">
-            <input type="text" name="houseid" readonly autocomplete="off" class="layui-input">
+            <input type="text" name="groupid" lay-verify="required|number" placeholder="please enter group id"
+                   autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">Email</label>
+        <div class="layui-input-block">
+            <input type="text" name="email" lay-verify="" placeholder="please enter email"
+                   autocomplete="off" class="layui-input">
         </div>
     </div>
     <input type="hidden" name="id">
     <div class="layui-form-item">
-        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;">submit immediately</button>
+        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;">Submit</button>
         <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="update" style="display:none; margin-left: 0;">
-            submit immediately
+            Submit
         </button>
         <button type="reset" id="resetForm" style="display: none;">reset</button>
     </div>
@@ -99,7 +107,7 @@
 
         form.on('submit(add)', function (data) {
             // console.log(data);
-            layer.confirm("Are you sure to add？",{btn: ['Yes', 'No'], title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (layno) {
+            layer.confirm("Are you sure to add?",{btn: ['Yes', 'No'], title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (layno) {
                 layer.close(layno);
                 $.post("/user/add", data.field, function (res) {
                     if (res.code == 200) {
@@ -117,7 +125,7 @@
 
         form.on('submit(update)', function (data) {
             // console.log(data.field);
-            layer.confirm("Are you sure to modify?？", {btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (layno) {
+            layer.confirm("Are you sure to modify?", {btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (layno) {
                 layer.close(layno);
                 data.field.password = null;
                 $.post("/user/update", data.field, function (res) {
@@ -156,7 +164,7 @@
                 });
                 $("#roleid").append(html);
                 $(".layui-anim-upbit").append(html2);
-                layui.form.render('select');
+                // layui.form.render('select');
             }
         })
     }
