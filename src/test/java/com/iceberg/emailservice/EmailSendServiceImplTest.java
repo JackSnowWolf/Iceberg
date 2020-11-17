@@ -1,9 +1,8 @@
-package com.iceberg.externalapi;
+package com.iceberg.emailservice;
 
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
-import com.iceberg.externalapi.impl.EmailSendServiceImpl;
-import javax.annotation.Resource;
+import com.iceberg.emailservice.impl.EmailSendServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,10 +1,7 @@
 package com.iceberg.externalapi.impl;
 
 import com.iceberg.externalapi.DocumentApi;
-import org.json.JSONObject;
 import org.springframework.http.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 public class DocumentImpl implements DocumentApi {

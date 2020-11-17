@@ -1,8 +1,8 @@
-package com.iceberg.externalapi.impl;
+package com.iceberg.emailservice.impl;
 
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
-import com.iceberg.externalapi.EmailSendService;
+import com.iceberg.emailservice.EmailSendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
