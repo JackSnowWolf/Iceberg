@@ -37,10 +37,10 @@
         </div>
     </div>
 <!--    <div class="layui-form-item">-->
-<!--        <label class="layui-form-label">收入方式</label>-->
+<!--        <label class="layui-form-label"></label>-->
 <!--        <div class="layui-input-block">-->
 <!--            <select id="payway" name="paywayid" lay-verify="payway">-->
-<!--                <option value="-1">请选择</option>-->
+<!--                <option value="-1"></option>-->
 <!--            </select>-->
 <!--        </div>-->
 <!--    </div>-->
@@ -78,16 +78,16 @@
             ,layer = layui.layer;
 
 
-        // //自定义验证规则
+        // //
         // form.verify({
         //     payway: function(value){
         //         if(value == -1){
-        //             return '请选择支付方式';
+        //             return '';
         //         }
         //     }
         // });
 
-        //监听提交
+        //
         form.on('submit(add)', function(data){
             // console.log(data);
             $.post("/reirequest/addRequest",data.field,function (res) {
@@ -109,10 +109,10 @@
                     layer.msg(res.msg)
                 }
             })
-            return false; //防止form的action提交
+            return false;
         });
 
-        //监听提交
+
         form.on('submit(update)', function(data){
             console.log(data);
             layer.confirm("Are you sure to edit",{title:false,closeBtn:false,skin: 'layui-layer-molv'},function (layno) {
@@ -128,26 +128,26 @@
                     }
                 });
             });
-            return false;   //防止form的action提交
+            return false;
         });
     });
 
     function initForm(tr) {
-        // console.log(tr);
-        if (tr==undefined){
-            $("input[name=title]").val("工资");
-            var date = new Date();
-            var dateStr = date.getFullYear()+"年"+(date.getMonth()+1)+"月份";
-            $("textarea[name=remark]").val(dateStr+"工资");
-            return;
-        }else {
+        // // console.log(tr);
+        // if (tr==undefined){
+        //     $("input[name=title]").val("");
+        //     var date = new Date();
+        //     var dateStr = date.getFullYear()+""+(date.getMonth()+1)+"";
+        //     $("textarea[name=remark]").val(dateStr+"");
+        //     return;
+        // }else {
             $("input[name=title]").val($(tr).find(":nth-child(2)").html());
             $("input[name=money]").val($(tr).find(":nth-child(4)").html());
             var payway = $(tr).find(":nth-child(5)").html();
             $("#payway").find("option:contains("+payway+")").prop("selected",true);
             $("textarea[name=remark]").val($(tr).find(":nth-child(6)").html());
             $("input[name=id]").val($(tr).find(":nth-child(8)").html());
-        }
+        // }
     }
 </script>
 </body>

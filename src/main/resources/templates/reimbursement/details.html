@@ -43,7 +43,7 @@
 <div class="x-nav">
       <span class="layui-breadcrumb">
         <a href="">Homepage</a>
-        <a href="">Approved</a>
+<!--        <a href="">Approved</a>-->
         <a>
           <cite>Details</cite></a>
       </span>
@@ -58,18 +58,29 @@
             <input class="layui-input" placeholder="End Date" id="end" autocomplete="off">
             <input type="text" placeholder="Name" id="realname" autocomplete="off" class="layui-input">
             <input type="text" placeholder="Title" id="title" autocomplete="off" class="layui-input">
+<!--            <div class="layui-input-inline">-->
+<!--                <select id="payway">-->
+<!--                    <option value="-1">Choose Payway</option>-->
+<!--                </select>-->
+<!--            </div>-->
             <div class="layui-input-inline">
-                <select id="payway">
-                    <option value="-1">Choose Payway</option>
-                </select>
+              <select id="typeid" autocomplete="off">
+                <option selected>status</option>
+                <option value="PROCESSING">PROCESSING</option>
+                <option value="MISSING_INFO">MISSING INFO</option>
+                <option value="DENIED">DENIED</option>
+                <option value="APPROVED">APPROVED</option>
+              </select>
             </div>
             <input type="text" placeholder="Remark" id="remark" autocomplete="off" class="layui-input">
-            <button class="layui-btn" type="button" lay-submit="" lay-filter="sreach" onclick="getBills()">
-                <i class="layui-icon">&#xe615;</i>Explore
+            <div class="layui-form-item">
+              <button class="layui-btn" type="button" lay-submit="" lay-filter="sreach" onclick="getReiRequests()">
+                  <i class="layui-icon">&#xe615;</i>Explore
+              </button>
+              <button class="layui-btn layui-btn-primary" type="reset">
+                  <i class="layui-icon">&#xe640;</i>Reset
             </button>
-            <button class="layui-btn layui-btn-primary" type="reset">
-                <i class="layui-icon">&#xe640;</i>Reset
-            </button>
+            </div>
         </form>
     </div>
     <xblock>
@@ -81,22 +92,23 @@
         <thead>
         <tr>
             <th style="width: 6%;">Index</th>
-            <th style="width: 15%;">Title</th>
-            <th style="width: 10%;">Name</th>
+            <th style="width: 8%;">Title</th>
+            <th style="width: 8%;">Name</th>
             <th style="width: 10%;">Money</th>
-            <th style="width: 10%;">Payway</th>
+<!--            <th style="width: 10%;">Payway</th>-->
             <th style="width: 10%;">Remark</th>
-            <th style="width: 18%;">Time</th>
+            <th style="width: 15%;">Time</th>
+            <th style="width: 10%;">Status</th>
             <th style="width: 10%;">Operation</th>
         </thead>
         <tbody></tbody>
     </table>
 
     <!--<div id="barDemo">-->
-    <!--<a title="编辑" onclick="x_admin_show('编辑','income_add.html?index=' + (index + 1) + '#2','460px','80%')" href="javascript:;">-->
+    <!--<a title="edit" onclick="x_admin_show('edit','income_add.html?index=' + (index + 1) + '#2','460px','80%')" href="javascript:;">-->
     <!--<i class="layui-icon">&#xe642;</i>-->
     <!--</a>-->
-    <!--<a title="删除" onclick="del(this,' + item.id + ')" href="javascript:;">-->
+    <!--<a title="edit" onclick="del(this,' + item.id + ')" href="javascript:;">-->
     <!--<i class="layui-icon">&#xe640;</i>-->
     <!--</a>-->
     <!--</div>-->
@@ -111,13 +123,13 @@
         layer = layui.layer;
         layui.use('laydate', function () {
             var laydate = layui.laydate;
-            //执行一个laydate实例
+
             laydate.render({
-                elem: '#start', //指定元素
+                elem: '#start',
                 max: 0
             });
             laydate.render({
-                elem: '#end', //指定元素
+                elem: '#end',
                 max: 0
             });
         });
@@ -131,11 +143,12 @@
         var reimbursement = {
             "startTime": $("#start").val(),
             "endTime": $("#end").val(),
-            "realname": $("#realname").val(),
+            // "realname": $("#realname").val(),
             "title": $("#title").val(),
+            "typeid": $("#typeid").val(),
             // "paywayid": $("#payway").val() == -1 ? null : $("#payway").val(),
-            "remark": $("#remark").val(),
-        }
+            "remark": $("#remark").val()
+        };
         console.log(reimbursement);
         // TODO: search reimbursement reqeuest by where
         $.post("/reirequest/getReiRequest/" + pageNo + "/" + mPageSize, function (res) {
@@ -149,10 +162,9 @@
                 layui.use('laypage', function () {
                     var laypage = layui.laypage;
 
-                    //执行一个laypage实例
                     laypage.render({
-                        elem: 'pager', //注意，这里的 test1 是 ID，不用加 # 号
-                        count: res.total, //数据总数，从服务端得到
+                        elem: 'pager',
+                        count: res.total,
                         limit: mPageSize,
                         curr: pageNo,
                         prev: "<",
@@ -160,7 +172,7 @@
                         groups: 2,
                         limits: [10, 30, 50, 100],
                         layout: ['prev', 'page', 'next', 'limit', 'refresh', 'skip'],
-                        skip: true, //是否开启跳页
+                        skip: true,
                         jump: function (obj, isfirst) {
                             if (!isfirst) {
                                 mPageSize = obj.limit;
@@ -179,11 +191,12 @@
         var html = "";
         $.each(reiRequests, function (index, item) {
             html += '<tr>' +
-                '            <td>' + (index + 1 + beginIndex) + '</td>' +
+                  '            <td>' + (index + 1 + beginIndex) + '</td>' +
                 '            <td>' + item.title + '</td>' +
                 '            <td>' + item.realname + '</td>' +
                 '            <td>' + parseFloat(item.money).toFixed(2) + '</td>' +
-                '            <td>' + item.payway + '</td>' +
+                // '            <td>' + item.payway + '</td>' +
+                '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
                 '            <td class="remark" title=' + item.remark + '>' + item.remark + '</td>' +
                 '            <td>' + item.time + '</td>' +
                 '            <td style="display: none">' + item.id + '</td>' +
@@ -194,9 +207,8 @@
                 '                <a title="delete" onclick="del(this,' + item.id + ')" href="javascript:;">' +
                 '                    <i class="layui-icon">&#xe640;</i>' +
                 '                </a>' +
-                '            </td>'
-            '        </tr>';
-        })
+                '        </tr>';
+        });
         $("#reiRequests tbody").html(html);
     }
 
@@ -234,36 +246,17 @@
                         {fixed: 'right', title:'操作', toolbar: '#barDemo', width:100}
                     ]
                 ],
-                // page: {
-                //     // elem: 'pager', //注意，这里的 test1 是 ID，不用加 # 号
-                //     // count: res.total, //数据总数，从服务端得到
-                //     limit: mPageSize,
-                //     curr: pageNo,
-                //     prev: "<",
-                //     next: ">",
-                //     groups: 2,
-                //     limits: [10, 30, 50, 100],
-                //     layout: ['prev', 'page', 'next', 'limit', 'refresh', 'skip'],
-                //     skip: true, //是否开启跳页
-                //     jump: function (obj, isfirst) {
-                //         console.log(obj);
-                //         if (!isfirst) {
-                //             mPageSize = obj.limit;
-                //             getBills2(obj.curr, obj.limit)
-                //         }
-                //     }
-                // },
                 response: {
-                    statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+                    statusCode: 200
                 },
-                parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+                parseData: function (res) {
                     layui.use('laypage', function () {
                         var laypage = layui.laypage;
 
                         //执行一个laypage实例
                         laypage.render({
-                            elem: 'pager', //注意，这里的 test1 是 ID，不用加 # 号
-                            count: res.total, //数据总数，从服务端得到
+                            elem: 'pager',
+                            count: res.total,
                             limit: mPageSize,
                             curr: pageNo,
                             prev: "<",
@@ -271,7 +264,7 @@
                             groups: 2,
                             limits: [10, 30, 50, 100],
                             layout: ['prev', 'page', 'next', 'limit', 'refresh', 'skip'],
-                            skip: true, //是否开启跳页
+                            skip: true,
                             jump: function (obj, isfirst) {
                                 if (!isfirst) {
                                     mPageSize = obj.limit;
@@ -281,17 +274,17 @@
                         });
                     });
                     return {
-                        "code": res.code, //解析接口状态
-                        "msg": res.msg, //解析提示文本
-                        "count": res.total, //解析数据长度
-                        "data": res.datas //解析数据列表
+                        "code": res.code,
+                        "msg": res.msg,
+                        "count": res.total,
+                        "data": res.datas
                     };
                 }
             });
         });
     }
 
-    /*删除*/
+    /*delete*/
     function del(obj, id) {
         layer.confirm('Are your sure to delete this request', {btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (index) {
             var data = {"id": id};
