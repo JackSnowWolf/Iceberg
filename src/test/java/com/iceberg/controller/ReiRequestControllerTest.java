@@ -13,7 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
+import com.iceberg.externalapi.PayPalService;
 import com.iceberg.service.ReiRequestService;
+import com.iceberg.service.UserInfoService;
 import com.iceberg.utils.PageModel;
 import com.iceberg.utils.Result;
 import com.iceberg.utils.ResultUtil;
@@ -52,7 +54,11 @@ public class ReiRequestControllerTest {
   private ReiRequestService reiRequestService;
   private List<ReimbursementRequest> reimbursementRequestList;
 
-  private UserInfo userInfo;
+  @MockBean
+  private UserInfoService userInfoService;
+
+  @MockBean
+  private PayPalService payPalService;
 
 
   @BeforeEach
@@ -174,6 +180,19 @@ public class ReiRequestControllerTest {
 
   @Test
   void shouldApproveReview() throws Exception {
+
+    // set reimbursement request id for test
+    ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
+    reimbursementRequest1.setId(190);
+    reimbursementRequest1.setUserid(1);
+    reimbursementRequest1.setTitle("approve request test");
+    reimbursementRequest1.setRemark("Test");
+    reimbursementRequest1.setTypeid(PROCESSING.value);
+    reimbursementRequest1.setPaywayid(1);
+    reimbursementRequest1.setMoney((float) 10);
+    reimbursementRequest1.setReceiveraccount("normaluser@paypal.com");
+
+    given(reiRequestService.getReimRequestById(190)).willReturn(reimbursementRequest1);
     UserInfo userInfo = new UserInfo();
     userInfo.setUsername("group1");
     userInfo.setPassword("m123");
@@ -181,12 +200,43 @@ public class ReiRequestControllerTest {
     userInfo.setRoleid(2);
     userInfo.setRolename("Group Manager");
     userInfo.setRealname("123");
+    userInfo.setEmail("groupmanger@gmail.com");
     session.setAttribute("currentUser", userInfo);
-    this.mockMvc
+
+    String normalUserEmail = "normaluser@gmail.com";
+    String receiver = "normaluser@paypal.com";
+    // set userInfoService return
+    UserInfo normalUserInfo = new UserInfo();
+    normalUserInfo.setUsername("normal user");
+    normalUserInfo.setPassword("m123");
+    normalUserInfo.setId(1);
+    normalUserInfo.setRoleid(2);
+    normalUserInfo.setRolename("Normal User");
+    normalUserInfo.setRealname("Normal User");
+    normalUserInfo.setEmail(normalUserEmail);
+    given(userInfoService.getUserInfoById("1")).willReturn(normalUserInfo);
+
+    ReimbursementRequest reimbursementRequest2 = new ReimbursementRequest();
+    reimbursementRequest2.setId(190);
+    reimbursementRequest2.setUserid(1);
+    reimbursementRequest2.setTitle("approve request test");
+    reimbursementRequest2.setRemark("Test");
+    reimbursementRequest2.setTypeid(APPROVED.value);
+    reimbursementRequest2.setPaywayid(1);
+    reimbursementRequest2.setMoney((float) 10);
+    reimbursementRequest2.setReceiveraccount(receiver);
+    // mock reiRequestService update returnt
+    given(reiRequestService.update(reimbursementRequest2)).willReturn(1);
+    // mock transfer and send email return
+//    when(MailUtils.sendMail(receiver, MailUtils.approved)).thenReturn("");
+    given(payPalService.createPayout(receiver, "USD", reimbursementRequest2.getMoney().toString()))
+      .willReturn(null);
+    MvcResult result = this.mockMvc
       .perform(MockMvcRequestBuilders.post("/reirequest/review/{typeid}/{userid}/{reimid}",
-          String.valueOf(3), String.valueOf(2), String.valueOf(9))
+        String.valueOf(3), String.valueOf(1), String.valueOf(190))
         .contentType(MediaType.APPLICATION_JSON)
-        .session(session)).andReturn();
+        .session(session)).andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
   }
 
   @Test
