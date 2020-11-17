@@ -29,8 +29,8 @@ mybatis:
 
 logging:
   level:
-    root: info
+    root: debug
     org:
       springframework:
-        web: info
+        web: debug
     com.iceberg.dao: debug

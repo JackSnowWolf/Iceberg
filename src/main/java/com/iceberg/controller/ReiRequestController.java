@@ -1,7 +1,7 @@
 package com.iceberg.controller;
 
-import static com.iceberg.entity.ReimbursementRequest.status.APPROVED;
-import static com.iceberg.entity.ReimbursementRequest.status.PROCESSING;
+import static com.iceberg.entity.ReimbursementRequest.TYPE.APPROVED;
+import static com.iceberg.entity.ReimbursementRequest.TYPE.PROCESSING;
 
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/reirequest")
 public class ReiRequestController {
 
-  Logger logger = LoggerFactory.getLogger(ReiRequestController.class);
+  private Logger logger = LoggerFactory.getLogger(ReiRequestController.class);
   @Resource
   private ReiRequestService reiRequestService;
 
@@ -35,14 +35,12 @@ public class ReiRequestController {
     }
     Utils.log(reimbursementRequest.toString());
     try {
+      reimbursementRequest.setTypeid(PROCESSING.value);
+      logger.debug(reimbursementRequest.toString());
       int num = reiRequestService.add(reimbursementRequest);
       if (num > 0) {
-        int reimbursementRequestId = reimbursementRequest.getId();
-        reimbursementRequest = new ReimbursementRequest();
-        reimbursementRequest.setId(reimbursementRequestId);
-        reimbursementRequest.setRequststatus(PROCESSING);
         return ResultUtil.success("Reimbursement Request Successfully!",
-          reiRequestService.findByWhereNoPage(reimbursementRequest));
+          reimbursementRequest);
       } else {
         return ResultUtil.unSuccess();
       }
@@ -58,28 +56,30 @@ public class ReiRequestController {
    * @param session http session
    * @return result information
    */
+  @RequestMapping(value = "/updateRequest", method = RequestMethod.POST)
   public Result update(ReimbursementRequest reimbursementRequest, HttpSession session) {
     if (Config.getSessionUser(session) == null) {
       return ResultUtil.unSuccess("No user for current session");
     }
+    Utils.log(reimbursementRequest.toString());
     int userId = Config.getSessionUser(session).getId();
     int roleId = Config.getSessionUser(session).getRoleid();
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
     reimbursementRequestSearch.setId(reimbursementRequest.getId());
     Result<ReimbursementRequest> result = reiRequestService
       .findByWhereNoPage(reimbursementRequestSearch);
-    if (result.getTotal() == 0) {
+    if (result.getDatas().size() == 0) {
       return ResultUtil.unSuccess("Such reimbursement request doesn't exist!");
-    } else if (result.getTotal() > 2) {
+    } else if (result.getDatas().size() > 2) {
       return ResultUtil.unSuccess("reimbursement request duplicate!");
     } else {
-      if (roleId == 3 && result.getData().getUserid() != userId) {
+      if (roleId == 3 && result.getDatas().get(0).getUserid() != userId) {
         return ResultUtil.unSuccess("Permission denied!");
-      } else if (result.getData().getRequststatus() == APPROVED) {
+      } else if (result.getDatas().get(0).getTypeid() == APPROVED) {
         return ResultUtil.unSuccess("Request has already been approved!");
       }
       try {
-        reimbursementRequest.setRequststatus(PROCESSING);
+        reimbursementRequest.setTypeid(PROCESSING.value);
         int num = reiRequestService.update(reimbursementRequest);
         if (num > 0) {
           return ResultUtil.success("Update successfully!", null);
@@ -107,16 +107,17 @@ public class ReiRequestController {
     if (Config.getSessionUser(session).getRoleid() > 2) {
       return ResultUtil.unSuccess("Permission denied. Don't have review access.");
     }
-    if (reimbursementRequest.getRequststatus() == APPROVED) {
+    // TODO: error handling and check details.
+    if (reimbursementRequest.getTypeid() == APPROVED) {
       // TODO: approve such request
-    } else if (reimbursementRequest.getRequststatus() == PROCESSING) {
-      return ResultUtil.unSuccess("Not valid review");
+    } else if (reimbursementRequest.getTypeid() == PROCESSING) {
+      return ResultUtil.unSuccess("Not a valid review");
     }
     try {
       int num = reiRequestService.update(reimbursementRequest);
       if (num > 0) {
         return ResultUtil.success(String.format("Update successfully! Status : %s",
-          reimbursementRequest.getRequststatus()), null);
+          reimbursementRequest.getTypeid()), null);
       } else {
         return ResultUtil.unSuccess();
       }
@@ -125,7 +126,7 @@ public class ReiRequestController {
     }
   }
 
-  @RequestMapping("/getReiRequestlById/{id}")
+  @RequestMapping("/getReiRequestById/{id}")
   public Result getReiRequestById(@PathVariable Integer id) {
     ReimbursementRequest reimbursementRequestCondition = new ReimbursementRequest();
     reimbursementRequestCondition.setId(id);
@@ -137,8 +138,8 @@ public class ReiRequestController {
     }
   }
 
-  @RequestMapping("/getReiRequestByUserid/{userid}/{pageNo}/{pageSize}")
-  public Result getReiRequestByUserid(@PathVariable int userid, @PathVariable int pageNo,
+  @RequestMapping("/getReiRequestByUserId/{userid}/{pageNo}/{pageSize}")
+  public Result getReiRequestByUserId(@PathVariable int userid, @PathVariable int pageNo,
     @PathVariable int pageSize) {
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setId(userid);
@@ -149,18 +150,55 @@ public class ReiRequestController {
     return reiRequestService.findByWhere(model);
   }
 
-  @RequestMapping("/getReiRequestByNoPage")
-  public Result getReiRequestByGroup(ReimbursementRequest reimbursementRequest,
+  @RequestMapping("/getReiRequest/{pageNo}/{pageSize}")
+  public Result getReiRequest(@PathVariable int pageNo, @PathVariable int pageSize,
     HttpSession session) {
-    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+    if (Config.getSessionUser(session) == null) {
+      return ResultUtil.unSuccess("No user for current session");
+    }
     UserInfo currentUser = Config.getSessionUser(session);
-    // search for group reimbursement information if group manage
+    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+
+    // search for group reimbursement information if group manager
+    if (currentUser.getRoleid() == 2) {
+      reimbursementRequestSearch.setGroupid(currentUser.getGroupid());
+    } else if (currentUser.getRoleid() == 3) {
+      reimbursementRequestSearch.setUserid(currentUser.getId());
+    }
+    PageModel model = new PageModel<>(pageNo, reimbursementRequestSearch);
+    model.setPageSize(pageSize);
+
+    return reiRequestService.findByWhere(model);
+  }
+
+  @RequestMapping("/getReiRequestByNoPage")
+  public Result getReiRequestByNoPage(HttpSession session) {
+    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+    if (Config.getSessionUser(session) == null) {
+      return ResultUtil.unSuccess("No user for current session");
+    }
+    UserInfo currentUser = Config.getSessionUser(session);
+    // search for group reimbursement information if group manager
     if (currentUser.getRoleid() == 2) {
       reimbursementRequestSearch.setGroupid(currentUser.getGroupid());
     } else if (currentUser.getRoleid() == 3) {
       reimbursementRequestSearch.setUserid(currentUser.getId());
     }
     return reiRequestService.findByWhereNoPage(reimbursementRequestSearch);
+  }
+
+  @RequestMapping("/delReiRequest")
+  public Result del(int id) {
+    try {
+      int num = reiRequestService.del(id);
+      if (num > 0) {
+        return ResultUtil.success("delete successfully!", null);
+      } else {
+        return ResultUtil.unSuccess();
+      }
+    } catch (Exception e) {
+      return ResultUtil.error(e);
+    }
   }
 
 }

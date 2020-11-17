@@ -46,7 +46,7 @@ public class OAuthController {
     paramMap.put("redirect_uri", "http://localhost:8080/oauth/github/callback");
 
     String accessTokenResponse = HttpClientUtils.doPost(s3, paramMap);
-    System.out.println(accessTokenResponse);// access_token=567a64725dd193c3b99f850b2ac518dd5e54b6e6&scope=&token_type=bearer
+    System.out.println(accessTokenResponse);
     String access_token = parseAccessTokenResponse(accessTokenResponse);
     System.out.println(access_token);
 
@@ -56,10 +56,6 @@ public class OAuthController {
     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
     conn.setRequestProperty("Authorization", "Bearer " + access_token);
-
-    // e.g. bearer token=
-    // eyJhbGciOiXXXzUxMiJ9.eyJzdWIiOiPyc2hhcm1hQHBsdW1zbGljZS5jb206OjE6OjkwIiwiZXhwIjoxNTM3MzQyNTIxLCJpYXQiOjE1MzY3Mzc3MjF9.O33zP2l_0eDNfcqSQz29jUGJC-_THYsXllrmkFnk85dNRbAw66dyEKBP5dVcFUuNTA8zhA83kk3Y41_qZYx43T
-
     conn.setRequestProperty("Content-Type", "application/json");
     conn.setRequestMethod("GET");
 
@@ -88,12 +84,9 @@ public class OAuthController {
       userInfoService.add(user);
     }
     setSessionUserInfo(user, request.getSession());
-    setCookieUser(request, httpResponse);
     // 4. configure user session in order to login in
 
     return "redirect:http://localhost:8080/";
-
-//        return null;
   }
 
   public static String parseAccessTokenResponse(String accessTokenResponse) {
@@ -104,7 +97,7 @@ public class OAuthController {
     String[] res = accessTokenResponse.split("&");
     String accessTokenKV = res[0];
     accessToken = accessTokenKV.substring(13);
-    System.out.println("*******accessToken is :  " + accessToken);
+    System.out.println("accessToken is " + accessToken);
     return accessToken;
   }
 
@@ -143,24 +136,5 @@ public class OAuthController {
     session.setAttribute(Config.CURRENT_USERNAME, userInfo);
     return userInfo;
 
-  }
-
-  /**
-   * save user info in Cookie
-   * 
-   * @param response
-   */
-  private void setCookieUser(HttpServletRequest request, HttpServletResponse response) {
-    UserInfo user = getSessionUser(request.getSession());
-    Cookie cookie = new Cookie(Config.CURRENT_USERNAME, user.getUsername() + "_" + user.getId());
-    // cookie valid time interval
-    cookie.setMaxAge(60 * 60 * 24 * 7);
-    response.addCookie(cookie);
-  }
-
-  public UserInfo getSessionUser(HttpSession session) {
-    UserInfo sessionUser = (UserInfo) session.getAttribute(Config.CURRENT_USERNAME);
-    sessionUser.setPassword(null);
-    return sessionUser;
   }
 }

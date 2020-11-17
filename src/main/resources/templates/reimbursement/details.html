@@ -73,22 +73,23 @@
         </form>
     </div>
     <xblock>
-        <button class="layui-btn" onclick="x_admin_show('新增收入账单','income_add.html','460px','80%')"><i class="layui-icon"></i>添加
-            <button class="layui-btn" onclick="x_admin_show('工资录入','income_add.html/#3','460px','80%')"><i class="layui-icon"></i>工资录入
+        <button class="layui-btn" onclick="x_admin_show('新增收入账单','reimbursement_add.html','460px','80%')"><i class="layui-icon"></i>添加
+            <button class="layui-btn" onclick="x_admin_show('工资录入','reimbursement_add.html/#3','460px','80%')"><i class="layui-icon"></i>工资录入
             </button>
             <span class="x-right" style="line-height:40px">共有数据：<span id="num"></span> 条</span>
+        </button>>
     </xblock>
-    <table class="layui-table" id="bills">
+    <table class="layui-table" id="reiRequests">
         <thead>
         <tr>
-            <th style="width: 6%;">序号</th>
-            <th style="width: 15%;">标题</th>
-            <th style="width: 10%;">姓名</th>
-            <th style="width: 10%;">金额(元)</th>
-            <th style="width: 12%;">收入方式</th>
-            <th>备注</th>
-            <th style="width: 18%;">时间</th>
-            <th style="width: 10%;">操作</th>
+            <th style="width: 6%;">Index</th>
+            <th style="width: 15%;">Title</th>
+            <th style="width: 10%;"></th>
+            <th style="width: 10%;">Money</th>
+            <th style="width: 10%;">收入方式</th>
+            <th style="width: 10%;">Remark</th>
+            <th style="width: 18%;">Time</th>
+            <th style="width: 10%;">Operation</th>
         </thead>
         <tbody></tbody>
     </table>
@@ -106,7 +107,7 @@
 
 </div>
 <script>
-    getAllPayways();
+    // getAllPayways();
     mPageSize = 10;
     $(function () {
         layer = layui.layer;
@@ -122,24 +123,25 @@
                 max: 0
             });
         });
-        getBills();
-        // getBills2();
+        getReiRequests();
+        // getReiRequests2();
     });
 
 
-    function getBills(pageNo) {
+    function getReiRequests(pageNo) {
         pageNo = pageNo || 1;
-        var bill = {
+        var reimbursement = {
             "startTime": $("#start").val(),
             "endTime": $("#end").val(),
             "realname": $("#realname").val(),
             "title": $("#title").val(),
-            "paywayid": $("#payway").val() == -1 ? null : $("#payway").val(),
+            // "paywayid": $("#payway").val() == -1 ? null : $("#payway").val(),
             "remark": $("#remark").val(),
         }
-        // console.log(bill);
-        $.post("/bills/getBillsByWhere/2/" + pageNo + "/" + mPageSize, bill, function (res) {
-            // console.log(res);
+        console.log(reimbursement);
+        // TODO: search reimbursement reqeuest by where
+        $.post("/reirequest/getReiRequest/" + pageNo + "/" + mPageSize, function (res) {
+            console.log(res);
             if (res.code == 200) {
                 if (res.total == 0) {
                     layer.msg(res.msg);
@@ -164,7 +166,7 @@
                         jump: function (obj, isfirst) {
                             if (!isfirst) {
                                 mPageSize = obj.limit;
-                                getBills(obj.curr, obj.limit)
+                                getReiRequests(obj.curr, obj.limit)
                             }
                         }
                     });
@@ -175,9 +177,9 @@
         });
     }
 
-    function fillTable(bills, beginIndex) {
+    function fillTable(reiRequests, beginIndex) {
         var html = "";
-        $.each(bills, function (index, item) {
+        $.each(reiRequests, function (index, item) {
             html += '<tr>' +
                 '            <td>' + (index + 1 + beginIndex) + '</td>' +
                 '            <td>' + item.title + '</td>' +
@@ -188,21 +190,21 @@
                 '            <td>' + item.time + '</td>' +
                 '            <td style="display: none">' + item.id + '</td>' +
                 '            <td class="td-manage">' +
-                '                <a title="编辑" onclick="x_admin_show(\'编辑\',\'income_add.html?index=' + (index + 1) + '#2\',\'460px\',\'80%\')" href="javascript:;">' +
+                '                <a title="edit" onclick="x_admin_show(\'edit\',\'reimbursement_add.html?index=' + (index + 1) + '#2\',\'460px\',\'80%\')" href="javascript:;">' +
                 '                    <i class="layui-icon">&#xe642;</i>' +
                 '                </a>' +
-                '                <a title="删除" onclick="del(this,' + item.id + ')" href="javascript:;">' +
+                '                <a title="delete" onclick="del(this,' + item.id + ')" href="javascript:;">' +
                 '                    <i class="layui-icon">&#xe640;</i>' +
                 '                </a>' +
                 '            </td>'
             '        </tr>';
         })
-        $("#bills tbody").html(html);
+        $("#reiRequests tbody").html(html);
     }
 
-    function getBills2(pageNo) {
+    function getReiRequests2(pageNo) {
         pageNo = pageNo || 1;
-        var bill = {
+        var reiRequest = {
             "startTime": $("#start").val(),
             "endTime": $("#end").val(),
             "realname": $("#realname").val(),
@@ -215,21 +217,21 @@
             var table = layui.table;
 
             table.render({
-                elem: '#bills',
-                url: "/bills/getBillsByWhere/2/" + pageNo + "/" + mPageSize,
+                elem: '#reiRequests',
+                url: "/reirequest/getReiRequest/" + pageNo + "/" + mPageSize,
                 method: 'post',
-                where: bill,
+                where: null,
                 // toolbar: true,
-                title: '用户数据表',
+                title: 'reimbursement statistic',
                 // totalRow: true,
                 cols: [
                     [
-                        {type:'numbers',title: '序号'},
-                        {field: 'title', title: '标题',},
-                        {field: 'realname', title: '姓名',},
-                        {field: 'money', title: '金额(元)', sort: true,},
-                        {field: 'payway', title: '收入方式', sort: true},
-                        {field: 'remark', title: '备注', sort: true,},
+                        {type:'numbers',title: 'id'},
+                        {field: 'title', title: 'title'},
+                        // {field: 'realname', title: '姓名',},
+                        {field: 'money', title: 'money', sort: true,},
+                        // {field: 'payway', title: '收入方式', sort: true},
+                        {field: 'remark', title: 'remark', sort: true,},
                         {field: 'time', title: '时间'},
                         {fixed: 'right', title:'操作', toolbar: '#barDemo', width:100}
                     ]
@@ -293,14 +295,14 @@
 
     /*删除*/
     function del(obj, id) {
-        layer.confirm('确认要删除吗？', {title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (index) {
-            var data = {"id": id}
-            $.post("/bills/delBill", data, function (res) {
+        layer.confirm('Are your sure to delete this request', {title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (index) {
+            var data = {"id": id};
+            $.post("/reirequest/delReiRequest", data, function (res) {
                 if (res.code == 200) {
                     getBills();
-                    layer.msg('删除成功!', {icon: 1, time: 1000});
+                    layer.msg('Delete Successfully!', {icon: 1, time: 1000});
                 } else {
-                    layer.msg("删除失败！", {icon: 2, time: 1000});
+                    layer.msg("Delete error!", {icon: 2, time: 1000});
                 }
             });
 

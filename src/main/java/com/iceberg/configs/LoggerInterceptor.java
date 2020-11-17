@@ -54,12 +54,6 @@ public class LoggerInterceptor implements HandlerInterceptor {
       if (parameters.size() > 0) {
         sb.setLength(0);
         sb.append("Parameters: {");
-//        for (String key : parameters.keySet()) {
-//          String value = parameters.get(key)[0];
-//          if (value != null && !value.isEmpty()) {
-//            sb.append(key + ":" + parameters.get(key)[0] + ",");
-//          }
-//        }
         for (Map.Entry<String, String[]> entrySet : parameters.entrySet()) {
           String value = entrySet.getValue()[0];
           if (value != null && !value.isEmpty()) {
