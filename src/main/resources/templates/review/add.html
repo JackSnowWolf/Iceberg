@@ -27,13 +27,13 @@
     <div class="layui-form-item" lay-filter="bill-form">
         <label class="layui-form-label">Title</label>
         <div class="layui-input-block">
-            <input type="text" name="title" lay-verify="required" placeholder="Please input title" autocomplete="off" class="layui-input">
+            <input type="text" name="title" lay-verify="required" placeholder="Please input title" autocomplete="off" class="layui-input" disabled="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">Money</label>
         <div class="layui-input-block">
-            <input type="text" name="money" lay-verify="required|number" placeholder="Please input money" autocomplete="off" class="layui-input">
+            <input type="text" name="money" lay-verify="required|number" placeholder="Please input money" autocomplete="off" class="layui-input" disabled="">
         </div>
     </div>
 <!--    <div class="layui-form-item">-->
@@ -47,13 +47,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label">Type</label>
         <div class="layui-input-block">
-            <input type="text" name="remark"  placeholder="Please fill type" autocomplete="off" class="layui-input">
+            <input type="text" name="remark"  placeholder="Please fill type" autocomplete="off" class="layui-input" disabled="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">Pay way</label>
         <div class="layui-input-inline">
-            <select id="typeid" autocomplete="off">
+            <select id="paywayid" autocomplete="off" disabled="">
                 <option selected>Pay way</option>
                 <option value="0">Paypal</option>
                 <option value="1">Cash</option>
@@ -66,16 +66,26 @@
     <div class="layui-form-item">
         <label class="layui-form-label">Receiver</label>
         <div class="layui-input-block">
-            <input type="text" name="receiveraccount"  placeholder="Please fill receiver account" autocomplete="off" class="layui-input">
+            <input type="text" name="receiveraccount"  placeholder="Please fill receiver account" autocomplete="off" class="layui-input" disabled="">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">Invoice</label>
         <button type="button" class="layui-btn" name="image">
-            <i class="layui-icon">&#xe67c;</i>Upload Invoice
+            <i class="layui-icon">&#xe67c;</i>Invoice
         </button>
     </div>
-
+    <div class="layui-form-item">
+        <label class="layui-form-label">Status</label>
+        <div class="layui-input-inline">
+            <select id="typeid" autocomplete="off">
+                <option>Status</option>
+                <option value="1">MISSING INFO</option>
+                <option value="2">DENIED</option>
+                <option value="3">APPROVED</option>
+            </select>
+        </div>
+    </div>
 <!--    <div class="layui-form-item">-->
 <!--        <div class="layui-input-block" style="margin-left: 0;">-->
 <!--            <textarea name="remark" placeholder="Remark" class="layui-textarea" autocomplete="off"></textarea>-->
@@ -85,7 +95,7 @@
     <input type="hidden" name="id">
     <div class="layui-form-item">
         <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;" >Add</button>
-        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="update"  style="display:none; margin-left: 0;" >Update</button>
+        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="review"  style="display:none; margin-left: 0;" >Review</button>
         <button type="reset" id="resetForm" style="display: none;">Reset</button>
     </div>
 </form>
@@ -94,7 +104,7 @@
     // getAllPayways();
     var url = location.href;
     if (url.indexOf("#2")!=-1){
-        $("button[lay-filter=update]").css("display","block");
+        $("button[lay-filter=review]").css("display","block");
         var index = getQueryString("index");
         initForm(parent.document.getElementsByTagName("tr")[index]);
     }else {
@@ -124,7 +134,7 @@
             // console.log(data);
             $.post("/reirequest/addRequest",data.field,function (res) {
                 if (res.code == 200){
-                    layer.confirm("Apply Reimbursement Successfullt",{btn: ['Yes', 'No'],title:false,closeBtn:false,skin: 'layui-layer-molv',btn:["Add more","cancel"]},function (layno) {
+                    layer.confirm("Apply Reimbursement Successfully",{btn: ['Yes', 'No'],title:false,closeBtn:false,skin: 'layui-layer-molv',btn:["Add more","cancel"]},function (layno) {
                         layer.close(layno);
                         $("#resetForm").click();
                     },function () {
@@ -145,11 +155,11 @@
         });
 
 
-        form.on('submit(update)', function(data){
+        form.on('submit(review)', function(data){
             console.log(data);
-            layer.confirm("Are you sure to edit",{btn: ['Yes', 'No'],title:false,closeBtn:false,skin: 'layui-layer-molv'},function (layno) {
+            layer.confirm("Are you sure to submit review",{btn: ['Yes', 'No'],title:false,closeBtn:false,skin: 'layui-layer-molv'},function (layno) {
                 layer.close(layno);
-                $.post("/reirequest/updateRequest",data.field,function (res) {
+                $.post("/reirequest/review",data.field,function (res) {
                     if (res.code == 200){
                         layer.msg(res.msg,{ time: 1000},function () {
                             x_admin_close();

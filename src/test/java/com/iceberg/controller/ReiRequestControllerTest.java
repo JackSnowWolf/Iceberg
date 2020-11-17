@@ -269,6 +269,7 @@ public class ReiRequestControllerTest {
     MvcResult result = this.mockMvc
       .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequest/{pageNo}/{pageSize}", 1, 20)
         .session(session))
+
       .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).
         andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
 

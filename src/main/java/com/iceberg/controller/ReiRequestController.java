@@ -151,13 +151,22 @@ public class ReiRequestController {
   }
 
   @RequestMapping("/getReiRequest/{pageNo}/{pageSize}")
-  public Result getReiRequest(@PathVariable int pageNo, @PathVariable int pageSize,
-    HttpSession session) {
+  public Result getReiRequest(ReimbursementRequest reimbursementRequest, @PathVariable int pageNo,
+    @PathVariable int pageSize, HttpSession session) {
     if (Config.getSessionUser(session) == null) {
       return ResultUtil.unSuccess("No user for current session");
     }
     UserInfo currentUser = Config.getSessionUser(session);
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+    if (reimbursementRequest.getTitle() != null) {
+      reimbursementRequestSearch.setTitle(reimbursementRequest.getTitle());
+    }
+    if (reimbursementRequest.getRemark() != null) {
+      reimbursementRequestSearch.setRemark(reimbursementRequest.getRemark());
+    }
+    if (reimbursementRequest.getTypeid() != null) {
+      reimbursementRequestSearch.setTypeid(reimbursementRequest.getTypeid().value);
+    }
 
     // search for group reimbursement information if group manager
     if (currentUser.getRoleid() == 2) {
