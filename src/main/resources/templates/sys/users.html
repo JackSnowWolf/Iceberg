@@ -139,10 +139,10 @@
                 layui.use('laypage', function () {
                     var laypage = layui.laypage;
 
-                    //执行一个laypage实例
+
                     laypage.render({
-                        elem: 'pager', //注意，这里的 test1 是 ID，不用加 # 号
-                        count: res.total, //数据总数，从服务端得到
+                        elem: 'pager',
+                        count: res.total,
                         limit: mPageSize,
                         curr: pageNo,
                         prev: "<",
@@ -150,7 +150,7 @@
                         groups: 2,
                         limits: [10, 30, 50, 100],
                         layout: ['prev', 'page', 'next', 'limit', 'refresh', 'skip'],
-                        skip: true, //是否开启跳页
+                        skip: true,
                         jump: function (obj, isfirst) {
                             if (!isfirst) {
                                 mPageSize = obj.limit;
@@ -188,7 +188,7 @@
         $("#users tbody").html(html);
     }
 
-    /*删除*/
+
     function del(obj, id) {
         layer.confirm('Are you sure to delete？',{btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (index) {
             $.post("/user/del/"+id, function (res) {

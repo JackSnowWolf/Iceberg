@@ -71,10 +71,10 @@
 <script>
 
     initRoles();
-    //系统管理员可以添加成员时，可以选择角色-家主
+
     if (top.sessionUser.roleid == 2) {
         $("input[name=houseid]").val(top.sessionUser.houseid);
-        //家主，默认只能添加普通用户
+
         $("input[name=roleid]").parent().parent().css("display", "none");
         $("input[name=roleid]").val(3);
     } else {
@@ -95,21 +95,8 @@
         var form = layui.form
             , layer = layui.layer;
 
-        // form.verify({
-        //     role: function(value, item){ //value：表单的值、item：表单的DOM对象
-        //         if (value == -1){
-        //             return "请选择角色";
-        //         }
-        //     }
-        //     //我们既支持上述函数式的方式，也支持下述数组的形式
-        //     //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
-        //     // ,pass: [
-        //     //     /^[\S]{6,12}$/
-        //     //     ,'密码必须6到12位，且不能出现空格'
-        //     // ]
-        // });
 
-        //监听提交
+
         form.on('submit(add)', function (data) {
             // console.log(data);
             layer.confirm("Are you sure to add？",{btn: ['Yes', 'No'], title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (layno) {
@@ -125,9 +112,9 @@
                     }
                 });
             });
-            return false;   //防止form的action提交
+            return false;
         });
-        //监听修改
+
         form.on('submit(update)', function (data) {
             // console.log(data.field);
             layer.confirm("Are you sure to modify?？", {btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (layno) {
@@ -144,7 +131,7 @@
                     }
                 });
             });
-            return false;   //防止form的action提交
+            return false;
         });
     });
 

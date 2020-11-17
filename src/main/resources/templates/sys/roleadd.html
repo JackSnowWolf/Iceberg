@@ -52,7 +52,7 @@
         var form = layui.form
             ,layer = layui.layer;
 
-        //监听提交
+        //
         form.on('submit(add)', function(data){
             // console.log(data);
             layer.confirm("Are you sure to add？",{btn: ['Yes', 'No'],title:false,closeBtn:false,skin: 'layui-layer-molv'},function (layno) {
@@ -68,9 +68,9 @@
                     }
                 });
             });
-            return false;   //防止form的action提交
+            return false;
         });
-        //监听提交
+        //
         form.on('submit(update)', function(data){
             // console.log(data);
             layer.confirm("Are you sure to modify?？",{btn: ['Yes', 'No'],title:false,closeBtn:false,skin: 'layui-layer-molv'},function (layno) {
@@ -86,7 +86,7 @@
                     }
                 });
             });
-            return false;   //防止form的action提交
+            return false;
         });
     });
 
