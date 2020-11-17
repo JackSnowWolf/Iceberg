@@ -92,7 +92,7 @@
             // console.log(data);
             $.post("/reirequest/addRequest",data.field,function (res) {
                 if (res.code == 200){
-                    layer.confirm("Apply Reimbursement Successfullt",{title:false,closeBtn:false,skin: 'layui-layer-molv',btn:["再记一笔","取消"]},function (layno) {
+                    layer.confirm("Apply Reimbursement Successfullt",{btn: ['Yes', 'No'],title:false,closeBtn:false,skin: 'layui-layer-molv',btn:["Add more","cancel"]},function (layno) {
                         layer.close(layno);
                         $("#resetForm").click();
                     },function () {
@@ -115,7 +115,7 @@
 
         form.on('submit(update)', function(data){
             console.log(data);
-            layer.confirm("Are you sure to edit",{title:false,closeBtn:false,skin: 'layui-layer-molv'},function (layno) {
+            layer.confirm("Are you sure to edit",{btn: ['Yes', 'No'],title:false,closeBtn:false,skin: 'layui-layer-molv'},function (layno) {
                 layer.close(layno);
                 $.post("/reirequest/updateRequest",data.field,function (res) {
                     if (res.code == 200){

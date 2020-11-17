@@ -1,12 +1,14 @@
-package com.iceberg.externalapi;
+package com.iceberg.emailservice;
 
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
+import com.iceberg.emailservice.impl.EmailSendServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class EmailSendServiceImplTest {
     private Logger logger = LoggerFactory.getLogger(EmailSendServiceImplTest.class);
-
     @Autowired
-    private EmailSendService emailSendService;
+    private JavaMailSender javaMailSender;
+    private EmailSendService emailSendService = new EmailSendServiceImpl(javaMailSender);
     private UserInfo userInfo;
     private ReimbursementRequest reimbursementRequest;
 

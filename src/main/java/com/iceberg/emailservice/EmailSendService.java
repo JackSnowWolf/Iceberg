@@ -1,4 +1,4 @@
-package com.iceberg.externalapi;
+package com.iceberg.emailservice;
 
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
