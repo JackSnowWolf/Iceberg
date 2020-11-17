@@ -111,7 +111,7 @@
         $("#roles tbody").html(html);
     }
 
-    /*删除*/
+
     function del(obj, id) {
         layer.confirm('Are you sure to delete？',{btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (index) {
             $.post("/role/del/"+id, function (res) {

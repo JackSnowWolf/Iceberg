@@ -65,11 +65,11 @@
       <!--            </div>-->
       <div class="layui-input-inline">
         <select id="typeid" autocomplete="off">
-          <option selected>status</option>
-          <option value="0">PROCESSING</option>
-          <option value="1">MISSING INFO</option>
-          <option value="2">DENIED</option>
-          <option value="3">APPROVED</option>
+          <option value=-1>status</option>
+          <option value=0>PROCESSING</option>
+          <option value=1>MISSING INFO</option>
+          <option value=2>DENIED</option>
+          <option value=3>APPROVED</option>
         </select>
       </div>
       <input type="text" placeholder="Remark" id="remark" autocomplete="off" class="layui-input">
@@ -100,7 +100,8 @@
       <th style="width: 10%;">Money</th>
       <!--            <th style="width: 10%;">Payway</th>-->
       <th style="width: 10%;">Remark</th>
-      <th style="width: 15%;">Time</th>
+      <th style="width: 10%;">Receiver</th>
+      <th style="width: 12%;">Time</th>
       <th style="width: 10%;">Status</th>
       <th style="width: 10%;">Operation</th>
     </thead>
@@ -142,13 +143,15 @@
 
   function getReiRequests(pageNo) {
     pageNo = pageNo || 1;
+    typeid = $("#typeid").val();
+    paywayid = $("#payway").val();
     var reimbursement = {
       "startTime": $("#start").val(),
       "endTime": $("#end").val(),
       // "realname": $("#realname").val(),
       "title": $("#title").val(),
-      "typeid": $("#typeid").val(),
-      // "paywayid": $("#payway").val() == -1 ? null : $("#payway").val(),
+      "typeid": typeid === -1 ? null : typeid,
+      // "paywayid": paywayid === -1 ? null : paywayid,
       "remark": $("#remark").val()
     };
     // for normal user, only approved
@@ -158,7 +161,7 @@
 
     console.log(reimbursement);
     // TODO: search reimbursement reqeuest by where
-    $.post("/reirequest/getReiRequest/" + pageNo + "/" + mPageSize, function (res) {
+    $.post("/reirequest/getReiRequest/" + pageNo + "/" + mPageSize, reimbursement,function (res) {
       console.log(res);
       if (res.code == 200) {
         if (res.total == 0) {
@@ -230,6 +233,7 @@
             '            <td>' + parseFloat(item.money).toFixed(2) + '</td>' +
             // '            <td>' + item.payway + '</td>' +
             '            <td class="remark" title=' + item.remark + '>' + item.remark + '</td>' +
+            '            <td class="receiveraccount" title=' + item.receiveraccount + '>' + item.receiveraccount + '</td>' +
             '            <td>' + item.time + '</td>' +
             '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
             '            <td style="display: none">' + item.id + '</td>' +
@@ -257,7 +261,7 @@
       "endTime": $("#end").val(),
       "realname": $("#realname").val(),
       "title": $("#title").val(),
-      "paywayid": $("#payway").val() == -1 ? null : $("#payway").val(),
+      // "paywayid": $("#payway").val() == -1 ? null : $("#payway").val(),
       "remark": $("#remark").val(),
     }
     var resData;
@@ -276,12 +280,12 @@
           [
             {type: 'numbers', title: 'id'},
             {field: 'title', title: 'title'},
-            // {field: 'realname', title: '姓名',},
+            // {field: 'realname', title: '',},
             {field: 'money', title: 'money', sort: true,},
-            // {field: 'payway', title: '收入方式', sort: true},
+            // {field: 'payway', title: '', sort: true},
             {field: 'remark', title: 'remark', sort: true,},
-            {field: 'time', title: '时间'},
-            {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 100}
+            {field: 'time', title: ''},
+            {fixed: 'right', title: '', toolbar: '#barDemo', width: 100}
           ]
         ],
         response: {
