@@ -1,7 +1,6 @@
 package com.iceberg.dao;
 
 import static com.iceberg.entity.ReimbursementRequest.TYPE.APPROVED;
-import static com.iceberg.entity.ReimbursementRequest.TYPE.PROCESSING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -110,7 +109,7 @@ public class ReiRequestMapperTest {
   }
 
   @Test
-  public void findByWhere() {
+  public void findByWhereForNormalUser() {
     logger.info("findByWhere Test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(1);
@@ -120,5 +119,18 @@ public class ReiRequestMapperTest {
       .findByWhere(model);
 
     assertNotEquals(0, requestList.size());
+  }
+
+  @Test
+  public void findByWhereForGroupManager() {
+    logger.info("findByWhere Test");
+    ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
+    reimbursementRequest.setGroupid("1");
+    PageModel<ReimbursementRequest> model = new PageModel<>(1, reimbursementRequest);
+    model.setPageSize(10);
+    List<ReimbursementRequest> requestList = reiRequestMapper
+      .findByWhere(model);
+
+    assertEquals(10, requestList.size());
   }
 }

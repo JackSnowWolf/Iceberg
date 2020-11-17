@@ -51,6 +51,7 @@
             <!--            <if test="endTime!=null"> and time &lt;= #{endTime}</if>-->
         </where>
     </select>
+<!--    TODO: payway need to be checked-->
 
     <select id="findByWhere" resultType="com.iceberg.entity.ReimbursementRequest"
         parameterType="com.iceberg.utils.PageModel">
@@ -68,7 +69,6 @@
             <!--            <if test="data.realname!=null ">and realname like concat('%',#{data.realname},'%')</if>-->
             <if test="data.money!=null">and money = #{data.money}</if>
             <if test="data.remark!=null">and remark like concat('%',#{data.remark},'%')</if>
-            # TODO: payway need to be checked
             <!--            <if test="data.paywayid!=null">and paywayid = #{data.paywayid}</if>-->
             <!--            <if test="data.startTime!=null">and time >= #{data.startTime}</if>-->
             <!--            <if test="data.endTime!=null">and time &lt;= #{data.endTime}</if>-->
