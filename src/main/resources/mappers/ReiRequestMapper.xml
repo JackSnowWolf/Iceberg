@@ -45,11 +45,10 @@
             <if test="userid!=null">and userid = #{userid}</if>
             <if test="title!=null">and title = #{title}</if>
             <if test="remark!=null">and remark = #{remark}</if>
-            <!--            <if test="realname!=null"> and realname = #{realname}</if>-->
             # paywayid always has a default value zero. remove from where clause
-            <!--            <if test="paywayid!=null"> and paywayid = #{paywayid}</if>-->
-            <!--            <if test="startTime!=null"> and time >= #{startTime}</if>-->
-            <!--            <if test="endTime!=null"> and time &lt;= #{endTime}</if>-->
+<!--            <if test="paywayid!=null"> and paywayid = #{paywayid}</if>-->
+            <if test="startTime!=null"> and time >= #{startTime}</if>
+            <if test="endTime!=null"> and time &lt;= #{endTime}</if>
         </where>
     </select>
 
@@ -81,8 +80,8 @@
             <if test="data.money!=null">and money = #{data.money}</if>
             <if test="data.remark!=null">and remark like concat('%',#{data.remark},'%')</if>
             <!--            <if test="data.paywayid!=null">and paywayid = #{data.paywayid}</if>-->
-            <!--            <if test="data.startTime!=null">and time >= #{data.startTime}</if>-->
-            <!--            <if test="data.endTime!=null">and time &lt;= #{data.endTime}</if>-->
+            <if test="data.startTime!=null">and time >= #{data.startTime}</if>
+            <if test="data.endTime!=null"> and time &lt;= #{data.endTime}</if>
         </where>
         order by time desc
         limit #{beginIndex},#{pageSize}
@@ -116,8 +115,8 @@
             <if test="data.money!=null">and money = #{data.money}</if>
             <if test="data.remark!=null">and remark like concat('%',#{data.remark},'%')</if>
             <!--            <if test="data.paywayid!=null">and paywayid = #{data.paywayid}</if>-->
-            <!--            <if test="data.startTime!=null">and time >= #{data.startTime}</if>-->
-            <!--            <if test="data.endTime!=null">and time &lt;= #{data.endTime}</if>-->
+            <if test="data.startTime!=null">and time >= #{data.startTime}</if>
+            <if test="data.endTime!=null"> and time &lt;= #{data.endTime}</if>
         </where>
     </select>
 

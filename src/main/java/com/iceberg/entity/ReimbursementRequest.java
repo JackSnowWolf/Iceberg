@@ -19,6 +19,27 @@ public class ReimbursementRequest {
   private String groupid;
   private int paywayid;
   private String receiveraccount;
+  private String startTime;
+
+  public String getStartTime() {
+    return startTime;
+  }
+
+  public void setStartTime(String startTime) {
+    if("".equals(startTime.trim())) return;
+    this.startTime = startTime;
+  }
+
+  public String getEndTime() {
+    return endTime;
+  }
+
+  public void setEndTime(String endTime) {
+    if("".equals(endTime.trim())) return;;
+    this.endTime = endTime;
+  }
+
+  private String endTime;
 
   public String getReceiveraccount() {
     return receiveraccount;
@@ -35,8 +56,6 @@ public class ReimbursementRequest {
   public void setId(Integer id) {
     this.id = id;
   }
-
-  // typeid, realname, paywayid, payway, starttime, endtime
 
   public Integer getUserid() {
     return userid;
@@ -156,5 +175,7 @@ public class ReimbursementRequest {
     public int getValue() {
       return value;
     }
+
+
   }
 }
