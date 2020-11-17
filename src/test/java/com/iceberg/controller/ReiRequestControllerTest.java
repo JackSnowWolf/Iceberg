@@ -3,7 +3,6 @@ package com.iceberg.controller;
 import static com.iceberg.entity.ReimbursementRequest.TYPE.APPROVED;
 import static com.iceberg.entity.ReimbursementRequest.TYPE.MISSING_INFO;
 import static com.iceberg.entity.ReimbursementRequest.TYPE.PROCESSING;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
