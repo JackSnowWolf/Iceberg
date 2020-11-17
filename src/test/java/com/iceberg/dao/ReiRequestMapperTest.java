@@ -115,11 +115,11 @@ public class ReiRequestMapperTest {
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(1);
     PageModel<ReimbursementRequest> model = new PageModel<>(1, reimbursementRequest);
-
+    model.setPageSize(10);
     List<ReimbursementRequest> requestList = reiRequestMapper
       .findByWhere(model);
 
-    assertNotEquals(0, requestList.size());
+    assertEquals(10, requestList.size());
   }
 
   @Test

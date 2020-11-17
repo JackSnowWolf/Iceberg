@@ -17,16 +17,22 @@ public class ReimbursementRequest {
   private Float money;
   private String remark;
   private String groupid;
+  private String groupname;
   private Integer paywayid;
   private String receiveraccount;
   private String startTime;
+  private String endTime;
+  private String realname;
+  private String time;
 
   public String getStartTime() {
     return startTime;
   }
 
   public void setStartTime(String startTime) {
-    if("".equals(startTime.trim())) return;
+    if ("".equals(startTime.trim())) {
+      return;
+    }
     this.startTime = startTime;
   }
 
@@ -35,11 +41,13 @@ public class ReimbursementRequest {
   }
 
   public void setEndTime(String endTime) {
-    if("".equals(endTime.trim())) return;;
+    if ("".equals(endTime.trim())) {
+      return;
+    }
+    ;
     this.endTime = endTime;
   }
 
-  private String endTime;
 
   public String getReceiveraccount() {
     return receiveraccount;
@@ -129,6 +137,33 @@ public class ReimbursementRequest {
 
   public void setPaywayid(Integer paywayid) {
     this.paywayid = paywayid;
+  }
+
+  public String getTime() {
+    return time;
+  }
+
+  public void setTime(String time) {
+    this.time = time;
+  }
+
+  public String getRealname() {
+    return realname;
+  }
+
+  public void setRealname(String realname) {
+    if ("".equals(realname.trim())) {
+      return;
+    }
+    this.realname = realname;
+  }
+
+  public String getGroupname() {
+    return this.groupname;
+  }
+
+  public void setGroupname(String groupname) {
+    this.groupname = groupname;
   }
 
   @Override

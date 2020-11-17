@@ -45,8 +45,7 @@
             <if test="userid!=null">and userid = #{userid}</if>
             <if test="title!=null">and title = #{title}</if>
             <if test="remark!=null">and remark = #{remark}</if>
-            # paywayid always has a default value zero. remove from where clause
-<!--            <if test="paywayid!=null"> and paywayid = #{paywayid}</if>-->
+            <if test="paywayid!=null"> and paywayid = #{paywayid}</if>
             <if test="startTime!=null"> and time >= #{startTime}</if>
             <if test="endTime!=null"> and time &lt;= #{endTime}</if>
         </where>
@@ -60,13 +59,12 @@
             <if test="id!=null">and bill.id = #{id}</if>
         </where>
     </select>
-<!--    TODO: payway need to be checked-->
 
     <select id="findByWhere" resultType="com.iceberg.entity.ReimbursementRequest"
         parameterType="com.iceberg.utils.PageModel">
-        select bill.* , user.realname, payway.payway, type.name type from bill left join user on
+        select bill.* , user.realname, payway.payway, payway.id, type.name type, groupname from bill left join user on
         bill.userid = user.id left join type on bill.typeid = type.id
-        left join payway on paywayid = payway.id
+        left join payway on paywayid = payway.id left join `group` on `group`.id = user.groupid
         <where>
             <if test="data.groupid!=null">and userid in (select id from user where groupid =
                 #{data.groupid})
@@ -76,10 +74,10 @@
             <if test="data.typeid!=null">and bill.typeid = #{data.typeid.value}</if>
             <if test="data.userid!=null">and bill.userid = #{data.userid}</if>
             <if test="data.receiveraccount!=null">and bill.userid = #{data.receiveraccount}</if>
-            <!--            <if test="data.realname!=null ">and realname like concat('%',#{data.realname},'%')</if>-->
+            <if test="data.realname!=null ">and realname like concat('%',#{data.realname},'%')</if>
             <if test="data.money!=null">and money = #{data.money}</if>
             <if test="data.remark!=null">and remark like concat('%',#{data.remark},'%')</if>
-            <!--            <if test="data.paywayid!=null">and paywayid = #{data.paywayid}</if>-->
+            <if test="data.paywayid!=null">and paywayid = #{data.paywayid}</if>
             <if test="data.startTime!=null">and time >= #{data.startTime}</if>
             <if test="data.endTime!=null"> and time &lt;= #{data.endTime}</if>
         </where>
