@@ -105,4 +105,6 @@ public class UserInfoServiceImpl implements UserInfoService {
     return userInfoMapper.getRoleById(id);
   }
 
+  @Override
+  public UserInfo getUserInfoById(String id) { return userInfoMapper.getUserInfoById(id); }
 }

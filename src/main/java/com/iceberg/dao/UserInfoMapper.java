@@ -52,4 +52,6 @@ public interface UserInfoMapper {
   Role getRoleById(String id);
 
   int addGroupId(Group group);
+
+  UserInfo getUserInfoById(String id);
 }

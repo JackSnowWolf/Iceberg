@@ -27,4 +27,5 @@ public interface ReiRequestMapper {
 
   List<Payway> getAllPayways();
 
+  ReimbursementRequest getReimRequestById(Integer id);
 }

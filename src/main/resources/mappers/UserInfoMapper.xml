@@ -13,6 +13,13 @@
         </where>
     </select>
 
+    <select id="getUserInfoById" resultType="com.iceberg.entity.UserInfo" parameterType="com.iceberg.entity.UserInfo">
+        SELECT * FROM user
+        <where>
+            <if test="id!=null">and id=#{id}</if>
+        </where>
+    </select>
+
     <select id="userIsExisted" resultType="java.lang.Integer" parameterType="com.iceberg.entity.UserInfo">
         SELECT count(*) FROM user where username = #{username}
     </select>

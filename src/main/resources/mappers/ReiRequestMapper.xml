@@ -19,6 +19,7 @@
             <if test="remark!=null">remark = #{remark},</if>
             <if test="paywayid!=null">paywayid = #{paywayid},</if>
             <if test="receiveraccount!=null"> receiveraccount = #{receiveraccount},</if>
+            <if test="money!=null">typeid = #{typeid.value},</if>
         </set>
         where id = #{id}
     </update>
@@ -49,6 +50,15 @@
             <!--            <if test="paywayid!=null"> and paywayid = #{paywayid}</if>-->
             <!--            <if test="startTime!=null"> and time >= #{startTime}</if>-->
             <!--            <if test="endTime!=null"> and time &lt;= #{endTime}</if>-->
+        </where>
+    </select>
+
+    <select id="getReimRequestById" resultType="com.iceberg.entity.ReimbursementRequest"
+      parameterType="com.iceberg.entity.ReimbursementRequest">
+        select *, type.name type from bill left join type on bill.typeid = type.id left join payway
+        on paywayid = payway.id left join user on bill.userid = user.id
+        <where>
+            <if test="id!=null">and bill.id = #{id}</if>
         </where>
     </select>
 <!--    TODO: payway need to be checked-->

@@ -20,4 +20,6 @@ public interface ReiRequestService {
 
   List<Map<String, Float>> getMonthlyInfo(PageModel<ReimbursementRequest> model);
 
+  ReimbursementRequest getReimRequestById(Integer id);
+
 }

@@ -110,8 +110,9 @@ public class ReiRequestController {
      * @param session              http session
      * @return result information whether the request has been approved.
      */
-    @RequestMapping(value = "/review", method = RequestMethod.POST)
-    public Result review(ReimbursementRequest reimbursementRequest, HttpSession session) throws IOException {
+    @RequestMapping(value = "/review/{typeid}/{userid}/{reimId}", method = RequestMethod.POST)
+    public Result review(ReimbursementRequest reimbursementRequest, HttpSession session, @PathVariable String typeid
+        , @PathVariable String userid, @PathVariable String reimId) throws IOException {
         if (Config.getSessionUser(session) == null) {
             return ResultUtil.unSuccess("No user for current session");
         }
@@ -119,27 +120,24 @@ public class ReiRequestController {
             return ResultUtil.unSuccess("Permission denied. Don't have review access.");
         }
         // TODO: error handling and check details.
+        System.out.println("type id :" + typeid + "userid : " + userid + "reimId : " + reimId);
+        reimbursementRequest.setTypeid(Integer.parseInt(typeid));
+        UserInfo requestUserInfo = userInfoService.getUserInfoById(userid);
+        ReimbursementRequest request = reiRequestService.getReimRequestById(Integer.parseInt(reimId));
+        System.out.println("request :" + request.getMoney());
         if (reimbursementRequest.getTypeid() == APPROVED) {
             // TODO: approve such request
-
             // email send service
             try {
-                int id = reimbursementRequest.getUserid();
-                UserInfo userInfoWithOnlyID = new UserInfo();
-                userInfoWithOnlyID.setId(id);
-                UserInfo completeUserInfo = userInfoService.getUserInfo(userInfoWithOnlyID);
-                String email=completeUserInfo.getEmail();
+                String email=requestUserInfo.getEmail();
                 MailUtils.sendMail(email,MailUtils.approved);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             // paypal send service
             try {
-                Result<ReimbursementRequest> result = reiRequestService.findByWhereNoPage(reimbursementRequest);
-                ReimbursementRequest completeReimbursementRequest = result.getDatas().get(0);
-                String receiver = completeReimbursementRequest.getReceiveraccount();
-                String money = completeReimbursementRequest.getMoney().toString();
+                String receiver = request.getReceiveraccount();
+                String money = request.getMoney().toString();
                 if (receiver == null || receiver == "") {
                     return ResultUtil.unSuccess("No receiver account");
                 }

@@ -77,4 +77,9 @@ public class ReiRequestServiceImpl implements ReiRequestService {
     public List<Map<String, Float>> getMonthlyInfo(PageModel<ReimbursementRequest> model) {
         return mapper.getMonthlyInfo(model);
     }
+
+    @Override
+    public ReimbursementRequest getReimRequestById(Integer id) {
+        return mapper.getReimRequestById(id);
+    }
 }

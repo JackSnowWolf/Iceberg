@@ -24,6 +24,12 @@
 
 <body>
 <form class="layui-form layui-form-pane">
+    <div class="layui-form-item">
+    <label class="layui-form-label">UserId</label>
+    <div class="layui-input-block">
+        <input type="text" name="userid" lay-verify="required" autocomplete="off" class="layui-input" disabled="">
+    </div>
+    </div>
     <div class="layui-form-item" lay-filter="bill-form">
         <label class="layui-form-label">Title</label>
         <div class="layui-input-block">
@@ -75,28 +81,45 @@
             <i class="layui-icon">&#xe67c;</i>Invoice
         </button>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">Status</label>
-        <div class="layui-input-inline">
-            <select id="typeid" autocomplete="off">
-                <option>Status</option>
-                <option value="1">MISSING INFO</option>
-                <option value="2">DENIED</option>
-                <option value="3">APPROVED</option>
-            </select>
+    <form class="layui-form layui-form-pane">
+        <div class="layui-form-item" lay-filter="bill-form">
+            <label class="layui-form-label">Status</label>
+            <div class="layui-input-inline">
+                <select id="typeid" autocomplete="off">
+                    <option>Status</option>
+                    <option value="1">MISSING INFO</option>
+                    <option value="2">DENIED</option>
+                    <option value="3">APPROVED</option>
+                </select>
+            </div>
         </div>
-    </div>
+<!--        <div class="layui-form-item">-->
+<!--            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;">Review</button>-->
+<!--&lt;!&ndash;            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="update"  style="display:none; margin-left: 0;" >submit immediately</button>&ndash;&gt;-->
+<!--        </div>-->
+    </form>
+<!--    <div class="layui-form-item">-->
+<!--        <label class="layui-form-label">Status</label>-->
+<!--        <div class="layui-input-inline">-->
+<!--            <select id="typeid" autocomplete="off">-->
+<!--                <option>Status</option>-->
+<!--                <option value="1">MISSING INFO</option>-->
+<!--                <option value="2">DENIED</option>-->
+<!--                <option value="3">APPROVED</option>-->
+<!--            </select>-->
+<!--        </div>-->
+<!--    </div>-->
 <!--    <div class="layui-form-item">-->
 <!--        <div class="layui-input-block" style="margin-left: 0;">-->
 <!--            <textarea name="remark" placeholder="Remark" class="layui-textarea" autocomplete="off"></textarea>-->
 <!--        </div>-->
 <!--    </div>-->
-    <input type="hidden" name="typeid" value="2">
-    <input type="hidden" name="id">
+<!--    <input type="hidden" name="typeid" value="2">-->
+<!--    <input type="hidden" name="id">-->
     <div class="layui-form-item">
-        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;" >Add</button>
+<!--        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;" >Add</button>-->
         <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="review"  style="display:none; margin-left: 0;" >Review</button>
-        <button type="reset" id="resetForm" style="display: none;">Reset</button>
+<!--        <button type="reset" id="resetForm" style="display: none;">Reset</button>-->
     </div>
 </form>
 <script>
@@ -119,17 +142,6 @@
         var form = layui.form
             ,layer = layui.layer;
 
-
-        // //
-        // form.verify({
-        //     payway: function(value){
-        //         if(value == -1){
-        //             return '';
-        //         }
-        //     }
-        // });
-
-        //
         form.on('submit(add)', function(data){
             // console.log(data);
             $.post("/reirequest/addRequest",data.field,function (res) {
@@ -159,7 +171,15 @@
             console.log(data);
             layer.confirm("Are you sure to submit review",{btn: ['Yes', 'No'],title:false,closeBtn:false,skin: 'layui-layer-molv'},function (layno) {
                 layer.close(layno);
-                $.post("/reirequest/review",data.field,function (res) {
+                var options = $("#typeid").val();
+                var tr = parent.document.getElementsByTagName("tr")[index];
+                console.log("trtrtrtrtrtr" + tr);
+                // var userid =  $("input[name=userid]").val($(tr).find(":nth-child(2)").html());
+                //now the userid is in 0, 1 index get value from it
+                var userid = tr.cells[1].innerHTML;
+                console.log("userid**************************************" + userid)
+                var reimid = tr.cells[2].innerHTML;
+                $.post("/reirequest/review"+ "/" + options + "/" + userid + "/" + reimid,data.field,function (res) {
                     if (res.code == 200){
                         layer.msg(res.msg,{ time: 1000},function () {
                             x_admin_close();
@@ -183,12 +203,13 @@
         //     $("textarea[name=remark]").val(dateStr+"");
         //     return;
         // }else {
-            $("input[name=title]").val($(tr).find(":nth-child(2)").html());
-            $("input[name=money]").val($(tr).find(":nth-child(4)").html());
+            $("input[name=userid]").val($(tr).find(":nth-child(2)").html());
+            $("input[name=title]").val($(tr).find(":nth-child(4)").html());
+            $("input[name=money]").val($(tr).find(":nth-child(6)").html());
             var payway = $(tr).find(":nth-child(5)").html();
             $("#payway").find("option:contains("+payway+")").prop("selected",true);
-            $("textarea[name=remark]").val($(tr).find(":nth-child(6)").html());
-            $("input[name=id]").val($(tr).find(":nth-child(8)").html());
+            $("textarea[name=remark]").val($(tr).find(":nth-child(7)").html());
+            $("input[name=id]").val($(tr).find(":nth-child(9)").html());
         // }
     }
 </script>

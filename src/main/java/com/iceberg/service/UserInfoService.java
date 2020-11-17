@@ -31,4 +31,5 @@ public interface UserInfoService {
 
   Role getRoleById(String id);
 
+  UserInfo getUserInfoById(String id);
 }
