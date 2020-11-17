@@ -145,10 +145,10 @@ public class ReiRequestController {
       try {
         String receiver = request.getReceiveraccount();
         String money = request.getMoney().toString();
-        if (receiver == null || receiver == "") {
+        if (receiver == null || receiver.equals("")) {
           return ResultUtil.unSuccess("No receiver account");
         }
-        if (money == null || money == "") {
+        if (money == null || money.equals("")) {
           return ResultUtil.unSuccess("Please input money");
         }
         payPalService.createPayout(receiver, "USD", money);
