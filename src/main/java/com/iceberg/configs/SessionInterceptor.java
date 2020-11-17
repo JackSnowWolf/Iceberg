@@ -24,27 +24,6 @@ public class SessionInterceptor implements HandlerInterceptor {
 //        System.out.println(request.getRequestURL());
     System.out.println("session preHandler runs *******************");
     HttpSession session = request.getSession();
-
-    // session has no user info, but cookie has
-    // use info in cookies
-    if (session.getAttribute(Config.CURRENT_USERNAME) == null && getCookieUser(request) != null) {
-//            System.out.println(HandlerMethod.class +"==="+ handler.getClass());
-      if (HandlerMethod.class.equals(handler.getClass())) {
-        Object controller = ((HandlerMethod) handler).getBean();
-        if (controller instanceof UserInfoController) {
-          UserInfoController userInfoController = (UserInfoController) controller;
-          String userinfoStr = getCookieUser(request);
-          UserInfo userInfo = new UserInfo();
-          userInfo.setId(Integer.parseInt(userinfoStr.split("_")[1]));
-          userInfo.setUsername(userinfoStr.split("_")[0]);
-          userInfo = userInfoController.getUserInfo(userInfo);
-          userInfoController.setSessionUserInfo(userInfo, session);
-          System.out.println("session prehandler return true");
-          return true;
-        }
-      }
-    }
-
     // mobile client skip
     if ("client".equals(request.getHeader("token"))) {
       System.out.println("session prehandler return true");
@@ -66,14 +45,9 @@ public class SessionInterceptor implements HandlerInterceptor {
       }
     }
 
-    System.out.println("session prehandler return true");
+    System.out.println("session prehandler return true ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     return true;
   }
-
-//    @Override
-//    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-////        System.out.println("postHandle");
-//    }
 
   @Override
   public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
@@ -89,26 +63,6 @@ public class SessionInterceptor implements HandlerInterceptor {
     if (request.getSession().getAttribute(Config.CURRENT_USERNAME) == null) {
       response.sendRedirect("/login.html");
       return;
-    }
-  }
-
-  /**
-   * get user info in cookie
-   * 
-   * @param request
-   * @return
-   */
-  private String getCookieUser(HttpServletRequest request) {
-    Cookie[] cookies = request.getCookies();
-    if (cookies == null) {
-      return null;
-    } else {
-      for (Cookie cookie : cookies) {
-        if (Config.CURRENT_USERNAME.equals(cookie.getName())) {
-          return cookie.getValue();
-        }
-      }
-      return null;
     }
   }
 }
