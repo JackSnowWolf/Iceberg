@@ -33,10 +33,10 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setTitle("Test Usage");
     reimbursementRequest.setPaywayid(1);
+    reimbursementRequest.setReceiveraccount("test@paypal.com");
     int num = reiRequestMapper.add(reimbursementRequest);
     assertEquals(1, num);
     logger.info("add reimbursement request successfully!");
-
   }
 
 
@@ -49,6 +49,7 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
     reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
+    reimbursementRequest.setReceiveraccount("test@paypal.com");
     reimbursementRequest.setTitle("Test Usage: findByWhereNoPage");
     reimbursementRequest.setPaywayid(1);
 
@@ -58,7 +59,8 @@ public class ReiRequestMapperTest {
     assertEquals(1, num);
 
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
-    reimbursementRequestSearch.setGroupid("1");
+    reimbursementRequestSearch.setUserid(1);
+    reimbursementRequestSearch.setReceiveraccount("test@paypal.com");
     System.out.println(reimbursementRequestSearch.toString());
     List<ReimbursementRequest> requestList = reiRequestMapper
       .findByWhereNoPage(reimbursementRequestSearch);
@@ -94,7 +96,6 @@ public class ReiRequestMapperTest {
     logger.info("del reimbursement request test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(1);
-//    TODO: group id
     reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
     reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);

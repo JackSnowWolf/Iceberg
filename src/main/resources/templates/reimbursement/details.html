@@ -97,7 +97,8 @@
             <th style="width: 10%;">Money</th>
 <!--            <th style="width: 10%;">Payway</th>-->
             <th style="width: 10%;">Type</th>
-            <th style="width: 15%;">Time</th>
+            <th style="width: 16%;">Receiver</th>
+            <th style="width: 12%;">Time</th>
             <th style="width: 10%;">Status</th>
             <th style="width: 10%;">Operation</th>
         </thead>
@@ -141,13 +142,14 @@
     function getReiRequests(pageNo) {
         pageNo = pageNo || 1;
         typeid = $("#typeid").val();
+        paywayid = $("#payway").val();
         var reimbursement = {
             "startTime": $("#start").val(),
             "endTime": $("#end").val(),
             // "realname": $("#realname").val(),
             "title": $("#title").val(),
             "typeid": typeid === -1 ? null : typeid,
-            // "paywayid": $("#payway").val() == -1 ? null : $("#payway").val(),
+            // "paywayid": paywayid === -1 ? null : paywayid,
             "remark": $("#remark").val()
         };
         console.log(reimbursement);
@@ -198,6 +200,7 @@
                 '            <td>' + parseFloat(item.money).toFixed(2) + '</td>' +
                 // '            <td>' + item.payway + '</td>' +
                 '            <td class="remark" title=' + item.remark + '>' + item.remark + '</td>' +
+                '            <td class="receiveraccount" title=' + item.receiveraccount + '>' + item.receiveraccount + '</td>' +
                 '            <td>' + item.time + '</td>' +
                 '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
                 '            <td style="display: none">' + item.id + '</td>' +
@@ -220,7 +223,7 @@
             "endTime": $("#end").val(),
             "realname": $("#realname").val(),
             "title": $("#title").val(),
-            "paywayid": $("#payway").val() == -1 ? null : $("#payway").val(),
+            // "paywayid": $("#payway").val() == -1 ? null : $("#payway").val(),
             "remark": $("#remark").val(),
         }
         var resData;
@@ -269,7 +272,7 @@
                             jump: function (obj, isfirst) {
                                 if (!isfirst) {
                                     mPageSize = obj.limit;
-                                    getBills2(obj.curr, obj.limit)
+                                    getReiRequests2(obj.curr, obj.limit)
                                 }
                             }
                         });

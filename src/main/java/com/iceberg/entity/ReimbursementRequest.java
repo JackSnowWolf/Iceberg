@@ -123,11 +123,11 @@ public class ReimbursementRequest {
     this.groupid = groupid;
   }
 
-  public int getPaywayid() {
+  public Integer getPaywayid() {
     return this.paywayid;
   }
 
-  public void setPaywayid(int paywayid) {
+  public void setPaywayid(Integer paywayid) {
     this.paywayid = paywayid;
   }
 
