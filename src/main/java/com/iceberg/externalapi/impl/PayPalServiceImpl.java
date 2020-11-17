@@ -7,12 +7,14 @@ import com.paypal.http.serializer.Json;
 import com.paypal.payouts.*;
 import org.json.JSONObject;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Service
 public class PayPalServiceImpl extends PayPalClient implements PayPalService {
 
   @Override
