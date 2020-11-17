@@ -4,7 +4,6 @@ import com.iceberg.entity.Group;
 import com.iceberg.entity.Role;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.utils.PageModel;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,20 +11,10 @@ import java.util.List;
 @Service("UserInfoMapper")
 public interface UserInfoMapper {
 
-  /**
-   * 获取单个用户信息，可用于： 1.登录 2.通过用户某一部分信息获取用户完整信息
-   * 
-   * @param userInfo
-   * @return
-   */
+
   UserInfo getUserInfo(UserInfo userInfo);
 
-  /**
-   * 注册
-   * 
-   * @param userInfo
-   * @return
-   */
+
   int addUser(UserInfo userInfo);
 
   /**
