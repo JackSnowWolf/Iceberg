@@ -20,7 +20,10 @@ public class PrivilegeMapperTest {
     @Autowired
     private PrivilegeMapper privilegeMapper;
 
-
+    /**
+     * When a new user is created, he will be given basic 6 privileges
+     * by default.
+     */
     @Test
     public void addDefaultPrivilegesWhenAddRoleTest() {
         logger.info("addDefaultPrivilegesWhenAddRoleTest test");
@@ -32,6 +35,9 @@ public class PrivilegeMapperTest {
 
     }
 
+    /**
+     * Given a role id, find what privileges this kind of role has.
+     */
     @Test
     public void getPrivilegeByRoleId() {
         logger.info("getPrivilegeByRoleId test");
@@ -43,7 +49,9 @@ public class PrivilegeMapperTest {
     }
 
 
-
+    /**
+     * Given a role id, delete all its related privileges.
+     */
     @Test
     public void delPrivilegesWenDelRoleTest() {
         logger.info("delPrivilegesWenDelRoleTest test");
