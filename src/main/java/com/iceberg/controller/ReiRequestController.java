@@ -8,11 +8,7 @@ import com.iceberg.entity.UserInfo;
 import com.iceberg.externalapi.PayPalService;
 import com.iceberg.service.ReiRequestService;
 import com.iceberg.service.UserInfoService;
-import com.iceberg.utils.Config;
-import com.iceberg.utils.PageModel;
-import com.iceberg.utils.Result;
-import com.iceberg.utils.ResultUtil;
-import com.iceberg.utils.Utils;
+import com.iceberg.utils.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -126,6 +122,18 @@ public class ReiRequestController {
         if (reimbursementRequest.getTypeid() == APPROVED) {
             // TODO: approve such request
 
+            // email send service
+            try {
+                int id = reimbursementRequest.getUserid();
+                UserInfo userInfoWithOnlyID = new UserInfo();
+                userInfoWithOnlyID.setId(id);
+                UserInfo completeUserInfo = userInfoService.getUserInfo(userInfoWithOnlyID);
+                String email=completeUserInfo.getEmail();
+                MailUtils.sendMail(email,MailUtils.approved);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             // paypal send service
             try {
                 Result<ReimbursementRequest> result = reiRequestService.findByWhereNoPage(reimbursementRequest);
@@ -143,17 +151,6 @@ public class ReiRequestController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-//            // email send service
-//            int id = reimbursementRequest.getUserid();
-//            UserInfo userInfoWithOnlyID = new UserInfo();
-//            userInfoWithOnlyID.setId(id);
-//            UserInfo completeUserInfo = userInfoService.getUserInfo(userInfoWithOnlyID);
-//            try {
-//                emailSendService.approveConfirm(completeUserInfo, completeReimbursementRequest);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
 
         } else if (reimbursementRequest.getTypeid() == PROCESSING) {
             return ResultUtil.unSuccess("Not a valid review");
