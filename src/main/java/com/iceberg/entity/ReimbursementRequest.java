@@ -17,7 +17,7 @@ public class ReimbursementRequest {
   private Float money;
   private String remark;
   private String groupid;
-  private int paywayid;
+  private Integer paywayid;
   private String receiveraccount;
   private String startTime;
 
