@@ -66,10 +66,10 @@
             <div class="layui-input-inline">
               <select id="typeid" autocomplete="off">
                 <option selected>status</option>
-                <option value="PROCESSING">PROCESSING</option>
-                <option value="MISSING_INFO">MISSING INFO</option>
-                <option value="DENIED">DENIED</option>
-                <option value="APPROVED">APPROVED</option>
+                <option value="0">PROCESSING</option>
+                <option value="1">MISSING INFO</option>
+                <option value="2">DENIED</option>
+                <option value="3">APPROVED</option>
               </select>
             </div>
             <input type="text" placeholder="Remark" id="remark" autocomplete="off" class="layui-input">
@@ -196,9 +196,9 @@
                 '            <td>' + item.realname + '</td>' +
                 '            <td>' + parseFloat(item.money).toFixed(2) + '</td>' +
                 // '            <td>' + item.payway + '</td>' +
-                '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
                 '            <td class="remark" title=' + item.remark + '>' + item.remark + '</td>' +
                 '            <td>' + item.time + '</td>' +
+                '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
                 '            <td style="display: none">' + item.id + '</td>' +
                 '            <td class="td-manage">' +
                 '                <a title="edit" onclick="x_admin_show(\'edit\',\'reimbursement_add.html?index=' + (index + 1) + '#2\',\'460px\',\'80%\')" href="javascript:;">' +
