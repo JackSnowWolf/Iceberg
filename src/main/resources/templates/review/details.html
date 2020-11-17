@@ -100,7 +100,8 @@
       <th style="width: 10%;">Money</th>
       <!--            <th style="width: 10%;">Payway</th>-->
       <th style="width: 10%;">Remark</th>
-      <th style="width: 15%;">Time</th>
+      <th style="width: 10%;">Receiver</th>
+      <th style="width: 12%;">Time</th>
       <th style="width: 10%;">Status</th>
       <th style="width: 10%;">Operation</th>
     </thead>
@@ -232,6 +233,7 @@
             '            <td>' + parseFloat(item.money).toFixed(2) + '</td>' +
             // '            <td>' + item.payway + '</td>' +
             '            <td class="remark" title=' + item.remark + '>' + item.remark + '</td>' +
+            '            <td class="receiveraccount" title=' + item.receiveraccount + '>' + item.receiveraccount + '</td>' +
             '            <td>' + item.time + '</td>' +
             '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
             '            <td style="display: none">' + item.id + '</td>' +
