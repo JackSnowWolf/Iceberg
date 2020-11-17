@@ -14,6 +14,9 @@ public class EmailSendServiceImpl implements EmailSendService {
   @Autowired
   private JavaMailSender javaMailSender;
 
+  public EmailSendServiceImpl(JavaMailSender javaMailSender) {
+    this.javaMailSender = javaMailSender;
+  }
   @Override
   public String postConfirm(UserInfo userInfo, ReimbursementRequest reimbursementRequest) {
     String to = userInfo.getEmail();
