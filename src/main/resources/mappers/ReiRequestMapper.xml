@@ -6,9 +6,9 @@
 
     <insert id="add" parameterType="com.iceberg.entity.ReimbursementRequest" useGeneratedKeys="true"
         keyProperty="id">
-        insert into bill(id, title, userid, money, typeid, remark, paywayid)
+        insert into bill(id, title, userid, money, typeid, remark, paywayid,receiveraccount)
             value (null, #{title}, #{userid}, #{money}, #{typeid.value}, #{remark},
-                   #{paywayid})
+                   #{paywayid}, #{receiveraccount})
     </insert>
 
     <update id="update" parameterType="com.iceberg.entity.ReimbursementRequest">
@@ -18,7 +18,7 @@
             <if test="typeid!=null">typeid = #{typeid.value},</if>
             <if test="remark!=null">remark = #{remark},</if>
             <if test="paywayid!=null">paywayid = #{paywayid},</if>
-            <!--            <if test="receiveraccount!=null"> receiveraccount = #{receiveraccount},</if>-->
+            <if test="receiveraccount!=null"> receiveraccount = #{receiveraccount},</if>
         </set>
         where id = #{id}
     </update>
@@ -39,7 +39,7 @@
                 #{groupid})
             </if>
             <if test="remark!=null">and bill.remark = #{remark}</if>
-            <!--            <if test="receiveraccount!=null">and bill.receiveraccount = #{receiveraccount}</if>-->
+            <if test="receiveraccount!=null">and bill.receiveraccount = #{receiveraccount}</if>
             <if test="typeid!=null">and typeid = #{typeid.value}</if>
             <if test="userid!=null">and userid = #{userid}</if>
             <if test="title!=null">and title = #{title}</if>
@@ -66,6 +66,7 @@
             <if test="data.title!=null">and bill.title = #{data.title}</if>
             <if test="data.typeid!=null">and bill.typeid = #{data.typeid.value}</if>
             <if test="data.userid!=null">and bill.userid = #{data.userid}</if>
+            <if test="data.receiveraccount!=null">and bill.userid = #{data.receiveraccount}</if>
             <!--            <if test="data.realname!=null ">and realname like concat('%',#{data.realname},'%')</if>-->
             <if test="data.money!=null">and money = #{data.money}</if>
             <if test="data.remark!=null">and remark like concat('%',#{data.remark},'%')</if>
@@ -100,6 +101,7 @@
             <if test="data.title!=null">and bill.title = #{data.title}</if>
             <if test="data.typeid!=null">and bill.typeid = #{data.typeid.value}</if>
             <if test="data.userid!=null">and bill.userid = #{data.userid}</if>
+            <if test="data.receiveraccount!=null">and bill.userid = #{data.receiveraccount}</if>
             <!--            <if test="data.realname!=null ">and realname like concat('%',#{data.realname},'%')</if>-->
             <if test="data.money!=null">and money = #{data.money}</if>
             <if test="data.remark!=null">and remark like concat('%',#{data.remark},'%')</if>

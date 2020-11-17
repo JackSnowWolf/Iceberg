@@ -55,6 +55,23 @@ public class PayPalServiceImplTest {
     }
 
     @Test
+    public void createPayoutTest() throws IOException{
+        try{
+            HttpResponse<CreatePayoutResponse> createPayoutResponse = payPalService.createPayout("payout-sdk-test@paypal.com", "USD", "1.00");
+            boolean res=false;
+            if(createPayoutResponse!=null){
+                res=true;
+            }
+            assertEquals(true,res);
+            HttpResponse<PayoutBatch> getBatchResponse;
+            getBatchResponse = payPalService.getPayoutBatch(createPayoutResponse.result().batchHeader().payoutBatchId());
+            HttpResponse<PayoutItemResponse> response=payPalService.cancelPayoutItem(getBatchResponse.result().items().get(0).payoutItemId());
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void cancelPayoutItemTest() throws IOException, InterruptedException{
         try{
             HttpResponse<CreatePayoutResponse> createPayoutResponse = payPalService.createPayoutBatch();

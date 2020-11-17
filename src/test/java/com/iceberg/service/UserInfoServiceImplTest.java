@@ -61,6 +61,21 @@ public class UserInfoServiceImplTest {
 
     @Test
     @Order(2)
+    public void testGetUserInfoWithOnlyId(){
+        logger.info("user with only id get test");
+        UserInfo userInfoWithOnlyId=new UserInfo();
+        userInfoWithOnlyId.setId(1);
+
+        UserInfo outputuserinfo=userInfoService.getUserInfo(userInfoWithOnlyId);
+
+        assertEquals(userInfo.getId(),outputuserinfo.getId());
+        assertEquals(userInfo.getUsername(),outputuserinfo.getUsername());
+
+        logger.info("user get test success");
+    }
+
+    @Test
+    @Order(2)
     public void testUserIsExisted() {
         logger.info("user existed test");
 

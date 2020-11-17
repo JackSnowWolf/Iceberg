@@ -18,6 +18,15 @@ public class ReimbursementRequest {
   private String remark;
   private String groupid;
   private int paywayid;
+  private String receiveraccount;
+
+  public String getReceiveraccount() {
+    return receiveraccount;
+  }
+
+  public void setReceiveraccount(String receiveraccount) {
+    this.receiveraccount = receiveraccount;
+  }
 
   public Integer getId() {
     return id;

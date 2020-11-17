@@ -3,9 +3,12 @@ package com.iceberg.controller;
 import static com.iceberg.entity.ReimbursementRequest.TYPE.APPROVED;
 import static com.iceberg.entity.ReimbursementRequest.TYPE.PROCESSING;
 
+import com.iceberg.emailservice.EmailSendService;
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
+import com.iceberg.externalapi.PayPalService;
 import com.iceberg.service.ReiRequestService;
+import com.iceberg.service.UserInfoService;
 import com.iceberg.utils.Config;
 import com.iceberg.utils.PageModel;
 import com.iceberg.utils.Result;
@@ -20,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/reirequest")
 public class ReiRequestController {
@@ -27,6 +32,15 @@ public class ReiRequestController {
   private Logger logger = LoggerFactory.getLogger(ReiRequestController.class);
   @Resource
   private ReiRequestService reiRequestService;
+
+  @Resource
+  private UserInfoService userInfoService;
+
+  @Resource
+  private PayPalService payPalService;
+
+//  @Resource
+//  private EmailSendService emailSendService;
 
   @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
   public Result add(ReimbursementRequest reimbursementRequest, HttpSession session) {
@@ -100,7 +114,7 @@ public class ReiRequestController {
    * @return result information whether the request has been approved.
    */
   @RequestMapping(value = "/review", method = RequestMethod.POST)
-  public Result review(ReimbursementRequest reimbursementRequest, HttpSession session) {
+  public Result review(ReimbursementRequest reimbursementRequest, HttpSession session) throws IOException {
     if (Config.getSessionUser(session) == null) {
       return ResultUtil.unSuccess("No user for current session");
     }
@@ -110,6 +124,22 @@ public class ReiRequestController {
     // TODO: error handling and check details.
     if (reimbursementRequest.getTypeid() == APPROVED) {
       // TODO: approve such request
+
+      // paypal send service
+      Result<ReimbursementRequest> result=reiRequestService.findByWhereNoPage(reimbursementRequest);
+      ReimbursementRequest completeReimbursementRequest=result.getDatas().get(0);
+      String receiver=completeReimbursementRequest.getReceiveraccount();
+      String money=completeReimbursementRequest.getMoney().toString();
+      payPalService.createPayout(receiver,"USD",money);
+
+//      // email send service
+//      int id=reimbursementRequest.getUserid();
+//      UserInfo userInfoWithOnlyID=new UserInfo();
+//      userInfoWithOnlyID.setId(id);
+//      UserInfo completeUserInfo=userInfoService.getUserInfo(userInfoWithOnlyID);
+//      emailSendService.approveConfirm(completeUserInfo,completeReimbursementRequest);
+
+
     } else if (reimbursementRequest.getTypeid() == PROCESSING) {
       return ResultUtil.unSuccess("Not a valid review");
     }
