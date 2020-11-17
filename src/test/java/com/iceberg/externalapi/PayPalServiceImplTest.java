@@ -3,6 +3,7 @@ package com.iceberg.externalapi;
 import com.paypal.http.HttpResponse;
 import com.paypal.payouts.CreatePayoutResponse;
 import com.paypal.payouts.PayoutBatch;
+import com.paypal.payouts.PayoutItemResponse;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,15 +25,31 @@ public class PayPalServiceImplTest {
     @Test
     public void createPayoutBatchTest() throws IOException {
         try{
-            HttpResponse<CreatePayoutResponse> response=payPalService.createPayoutBatch();
-
-            boolean result=false;
-            if(response!=null){
-                result=true;
+            HttpResponse<CreatePayoutResponse> createPayoutResponse = payPalService.createPayoutBatch();
+            boolean res=false;
+            if(createPayoutResponse!=null){
+                res=true;
             }
-            assertEquals(true,result);
 
-        }catch (IOException e){
+            assertEquals(true,res);
+
+            int i = 0;
+            HttpResponse<PayoutBatch> getBatchResponse;
+            do {
+                getBatchResponse = payPalService.getPayoutBatch(createPayoutResponse.result().batchHeader().payoutBatchId());
+                if (getBatchResponse.result().batchHeader().batchStatus().equals("SUCCESS")) {
+                    break;
+                }
+                Thread.sleep(1000);
+                i++;
+            } while (i <= 5);
+
+            if (i < 5) {
+                HttpResponse<PayoutItemResponse> response=payPalService.cancelPayoutItem(getBatchResponse.result().items().get(0).payoutItemId());
+            } else {
+                System.out.println("Payout create request is still not processed");
+            }
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -51,9 +68,54 @@ public class PayPalServiceImplTest {
                 Thread.sleep(1000);
                 i++;
             } while (i <= 5);
+            boolean res=false;
+            if (i < 5) {
+                HttpResponse<PayoutItemResponse> response=payPalService.cancelPayoutItem(getBatchResponse.result().items().get(0).payoutItemId());
+
+                if(response!=null){
+                    res=true;
+                }
+
+                assertEquals(true,res);
+                res=false;
+            } else {
+                System.out.println("Payout create request is still not processed");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void getPayoutBatchAndItemTest() throws IOException {
+        try{
+            HttpResponse<CreatePayoutResponse> createPayoutResponse = payPalService.createPayoutBatch();
+            int i = 0;
+            HttpResponse<PayoutBatch> getBatchResponse;
+
+            boolean res=false;
+            do {
+                getBatchResponse = payPalService.getPayoutBatch(createPayoutResponse.result().batchHeader().payoutBatchId());
+                if (getBatchResponse.result().batchHeader().batchStatus().equals("SUCCESS")) {
+                    break;
+                }
+                Thread.sleep(1000);
+                if(getBatchResponse!=null){
+                    res=true;
+                }
+
+                assertEquals(true,res);
+                res=false;
+                i++;
+            } while (i <= 5);
+            HttpResponse<PayoutItemResponse> payoutItemResponseHttpResponse=payPalService.getPayoutItem(createPayoutResponse.result().batchHeader().payoutBatchId());
+            if (payoutItemResponseHttpResponse!=null){
+                res=true;
+            }
+            assertEquals(true,res);
 
             if (i < 5) {
-                payPalService.cancelPayoutItem(getBatchResponse.result().items().get(0).payoutItemId());
+                HttpResponse<PayoutItemResponse> response=payPalService.cancelPayoutItem(getBatchResponse.result().items().get(0).payoutItemId());
             } else {
                 System.out.println("Payout create request is still not processed");
             }
