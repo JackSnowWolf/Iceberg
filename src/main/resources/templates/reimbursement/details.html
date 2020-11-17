@@ -73,20 +73,18 @@
         </form>
     </div>
     <xblock>
-        <button class="layui-btn" onclick="x_admin_show('新增收入账单','reimbursement_add.html','460px','80%')"><i class="layui-icon"></i>添加
-            <button class="layui-btn" onclick="x_admin_show('工资录入','reimbursement_add.html/#3','460px','80%')"><i class="layui-icon"></i>工资录入
+        <button class="layui-btn" onclick="x_admin_show('New Reimbursement Request','reimbursement_add.html','460px','80%')"><i class="layui-icon"></i>ADD
             </button>
-            <span class="x-right" style="line-height:40px">共有数据：<span id="num"></span> 条</span>
-        </button>>
+            <span class="x-right" style="line-height:40px">Total count：<span id="num"></span> </span>
     </xblock>
     <table class="layui-table" id="reiRequests">
         <thead>
         <tr>
             <th style="width: 6%;">Index</th>
             <th style="width: 15%;">Title</th>
-            <th style="width: 10%;"></th>
+            <th style="width: 10%;">Name</th>
             <th style="width: 10%;">Money</th>
-            <th style="width: 10%;">收入方式</th>
+            <th style="width: 10%;">Payway</th>
             <th style="width: 10%;">Remark</th>
             <th style="width: 18%;">Time</th>
             <th style="width: 10%;">Operation</th>
@@ -295,7 +293,7 @@
 
     /*删除*/
     function del(obj, id) {
-        layer.confirm('Are your sure to delete this request', {title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (index) {
+        layer.confirm('Are your sure to delete this request', {btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (index) {
             var data = {"id": id};
             $.post("/reirequest/delReiRequest", data, function (res) {
                 if (res.code == 200) {

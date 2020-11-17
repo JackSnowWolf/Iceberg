@@ -78,7 +78,7 @@
         form.verify({
             payway: function(value){
                 if(value == -1){
-                    return '请选择支付方式';
+                    return 'please choose your payway';
                 }
             }
         });
@@ -88,7 +88,7 @@
             // console.log(data);
             $.post("/bills/addBill",data.field,function (res) {
                 if (res.code == 200){
-                    layer.confirm("记账成功！",{title:false,closeBtn:false,skin: 'layui-layer-molv',btn:["再记一笔","取消"]},function (layno) {
+                    layer.confirm("Add successful！",{btn: ['Yes', 'No'],title:false,closeBtn:false,skin: 'layui-layer-molv',btn:["ADD MORE","CANCEL"]},function (layno) {
                         layer.close(layno);
                         $("#resetForm").click();
                     },function (layno) {
@@ -111,7 +111,7 @@
         //监听提交
         form.on('submit(update)', function(data){
             // console.log(data);
-            layer.confirm("确认修改？",{title:false,closeBtn:false,skin: 'layui-layer-molv'},function (layno) {
+            layer.confirm("Are you sure to edit？",{btn: ['Yes', 'No'],title:false,closeBtn:false,skin: 'layui-layer-molv'},function (layno) {
                 layer.close(layno);
                 $.post("/bills/updateBill",data.field,function (res) {
                     if (res.code == 200){
