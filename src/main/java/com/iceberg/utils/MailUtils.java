@@ -38,7 +38,7 @@ public class MailUtils {
   public static final String denied = "Sorry to inform you that your reimbursement"
       + "has been denied. " + "For more information, please reach out to your account.\n\n" + "Iceberg Team";
 
-  public static void sendMail(String to, String content) throws Exception{
+  public static String sendMail(String to, String content) throws Exception{
 
 
     String host = "smtp.qq.com";
@@ -103,16 +103,12 @@ public class MailUtils {
 
       Transport.send(message);
 
-
+      return "success";
 
     }catch(MessagingException mex){
 
       mex.printStackTrace();
-
+      return "failed";
     }
-  }
-
-  public static void main(String[] args) throws Exception {
-    MailUtils.sendMail("hwj97055@gmail.com", MailUtils.approved);
   }
 }
