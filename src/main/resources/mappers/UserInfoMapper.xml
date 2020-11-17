@@ -81,7 +81,7 @@
     </select>
 
     <insert id="addGroupId" useGeneratedKeys="true" keyProperty="id">
-        insert into group values(null,#{managerid},#{groupname})
+        insert into group(id,managerid,groupname) values(null,#{managerid},#{groupname})
     </insert>
 
 
