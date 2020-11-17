@@ -174,27 +174,19 @@ public class ReiRequestControllerTest {
 
   @Test
   void shouldApproveReview() throws Exception {
-    // set reimbursement request id for test
-    ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
-    reimbursementRequest1.setId(190);
-    reimbursementRequest1.setTypeid(APPROVED.value);
-    given(this.reiRequestService.update(reimbursementRequest1)).willReturn(1);
-
-    // fill request params
-    MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
-    Map<String, String> maps = objectMapper
-      .convertValue(reimbursementRequest1, new TypeReference<Map<String, String>>() {
-      });
-    maps.values().removeAll(Collections.singleton(null));
-    paramsMap.setAll(maps);
-    paramsMap.set("typeid", "3");
+    UserInfo userInfo = new UserInfo();
+    userInfo.setUsername("group1");
+    userInfo.setPassword("m123");
+    userInfo.setId(2);
+    userInfo.setRoleid(2);
+    userInfo.setRolename("Group Manager");
+    userInfo.setRealname("123");
+    session.setAttribute("currentUser", userInfo);
     this.mockMvc
-      .perform(MockMvcRequestBuilders.post("/reirequest/review")
+      .perform(MockMvcRequestBuilders.post("/reirequest/review/{typeid}/{userid}/{reimid}",
+          String.valueOf(3), String.valueOf(2), String.valueOf(9))
         .contentType(MediaType.APPLICATION_JSON)
-        .params(paramsMap)
-        .session(session))
-      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
-      .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
+        .session(session)).andReturn();
   }
 
   @Test

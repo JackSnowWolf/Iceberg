@@ -124,7 +124,7 @@ public class ReiRequestController {
         reimbursementRequest.setTypeid(Integer.parseInt(typeid));
         UserInfo requestUserInfo = userInfoService.getUserInfoById(userid);
         ReimbursementRequest request = reiRequestService.getReimRequestById(Integer.parseInt(reimId));
-        System.out.println("request :" + request.getMoney());
+        request.setTypeid(Integer.parseInt(typeid));
         if (reimbursementRequest.getTypeid() == APPROVED) {
             // TODO: approve such request
             // email send service
@@ -145,7 +145,7 @@ public class ReiRequestController {
                     return ResultUtil.unSuccess("Please input money");
                 }
                 payPalService.createPayout(receiver, "USD", money);
-                return ResultUtil.success("Approved");
+//                return ResultUtil.success("Approved");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -154,7 +154,7 @@ public class ReiRequestController {
             return ResultUtil.unSuccess("Not a valid review");
         }
         try {
-            int num = reiRequestService.update(reimbursementRequest);
+            int num = reiRequestService.update(request);
             if (num > 0) {
                 return ResultUtil.success(String.format("Update successfully! Status : %s",
                         reimbursementRequest.getTypeid()), null);
