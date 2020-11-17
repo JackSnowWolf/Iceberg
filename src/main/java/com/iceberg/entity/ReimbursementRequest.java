@@ -11,7 +11,7 @@ public class ReimbursementRequest {
   private Integer id;
   private Integer userid;
   private String requestdate;
-  private TYPE requesttype;
+  private TYPE typeid;
   private String imageid;
   private String title;
   private Float money;
@@ -45,13 +45,15 @@ public class ReimbursementRequest {
     this.requestdate = requestdate;
   }
 
-  public TYPE getRequesttype() {
-    return requesttype;
+
+  public TYPE getTypeid() {
+    return typeid;
   }
 
-  public void setRequesttype(TYPE requesttype) {
-    this.requesttype = requesttype;
+  public void setTypeid(int typeid) {
+    this.typeid = TYPE.valueOf(typeid);
   }
+
 
   public String getImageid() {
     return imageid;

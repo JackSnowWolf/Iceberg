@@ -81,9 +81,9 @@ public class ReiRequestControllerTest {
     ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
     reimbursementRequest1.setId(190);
     reimbursementRequest1.setUserid(1);
-    reimbursementRequest1.setTitle("add reiquest test");
+    reimbursementRequest1.setTitle("add reirequest test");
     reimbursementRequest1.setRemark("Test");
-    reimbursementRequest1.setRequesttype(PROCESSING);
+    reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
     given(this.reiRequestService.add(eq(reimbursementRequest1)))
       .willReturn(1);
@@ -114,7 +114,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("add reiquest test");
     reimbursementRequest1.setRemark("Test");
-    reimbursementRequest1.setRequesttype(PROCESSING);
+    reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
     given(this.reiRequestService.update(reimbursementRequest1))
       .willReturn(1);
@@ -135,7 +135,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest2.setUserid(1);
     reimbursementRequest2.setTitle("add reiquest test");
     reimbursementRequest2.setRemark("Test");
-    reimbursementRequest2.setRequesttype(MISSING_INFO);
+    reimbursementRequest2.setTypeid(MISSING_INFO.value);
     reimbursementRequest2.setPaywayid(1);
 
     // Change request type from MISSING_INFO to PROCESSING
@@ -173,7 +173,7 @@ public class ReiRequestControllerTest {
     // set reimbursement request id for test
     ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
     reimbursementRequest1.setId(190);
-    reimbursementRequest1.setRequesttype(APPROVED);
+    reimbursementRequest1.setTypeid(APPROVED.value);
     given(this.reiRequestService.update(reimbursementRequest1)).willReturn(1);
 
     // fill request params
@@ -199,7 +199,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("get reiquest by id test");
     reimbursementRequest1.setRemark("Test");
-    reimbursementRequest1.setRequesttype(PROCESSING);
+    reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
 
     // simulate response
@@ -225,7 +225,7 @@ public class ReiRequestControllerTest {
     ReimbursementRequest responseData1 = objectMapper
       .readValue(objectMapper.writeValueAsString(decodedResponse.getDatas().get(0)).toString(),
         ReimbursementRequest.class);
-    assertEquals(PROCESSING, responseData1.getRequesttype());
+    assertEquals(PROCESSING, responseData1.getTypeid());
   }
 
   @Test
@@ -250,7 +250,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("should Get ReiRequst For Normal User test");
     reimbursementRequest1.setRemark("Test");
-    reimbursementRequest1.setRequesttype(PROCESSING);
+    reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
 
     // simulate response
@@ -298,7 +298,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("should Get ReiRequst For Group Manager test");
     reimbursementRequest1.setRemark("Test");
-    reimbursementRequest1.setRequesttype(PROCESSING);
+    reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
 
     ReimbursementRequest reimbursementRequest2 = new ReimbursementRequest();
@@ -306,7 +306,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest2.setUserid(2);
     reimbursementRequest2.setTitle("should Get ReiRequst For Group Manager test");
     reimbursementRequest2.setRemark("Test");
-    reimbursementRequest2.setRequesttype(PROCESSING);
+    reimbursementRequest2.setTypeid(PROCESSING.value);
     reimbursementRequest2.setPaywayid(1);
 
     // simulate response

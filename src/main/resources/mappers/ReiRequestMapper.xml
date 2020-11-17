@@ -7,7 +7,7 @@
     <insert id="add" parameterType="com.iceberg.entity.ReimbursementRequest" useGeneratedKeys="true"
         keyProperty="id">
         insert into bill(id, title, userid, money, typeid, remark, paywayid)
-            value (null, #{title}, #{userid}, #{money}, #{requesttype.value}, #{remark},
+            value (null, #{title}, #{userid}, #{money}, #{typeid.value}, #{remark},
                    #{paywayid})
     </insert>
 
@@ -15,7 +15,7 @@
         update bill
         <set>
             <if test="money!=null">money = #{money},</if>
-            <if test="typeid!=null">typeid = #{typeid},</if>
+            <if test="typeid!=null">typeid = #{typeid.value},</if>
             <if test="remark!=null">remark = #{remark},</if>
             <if test="paywayid!=null">paywayid = #{paywayid},</if>
             <!--            <if test="receiveraccount!=null"> receiveraccount = #{receiveraccount},</if>-->
@@ -40,7 +40,7 @@
             </if>
             <if test="remark!=null">and bill.remark = #{remark}</if>
             <!--            <if test="receiveraccount!=null">and bill.receiveraccount = #{receiveraccount}</if>-->
-            <if test="requesttype!=null">and typeid = #{requesttype.value}</if>
+            <if test="typeid!=null">and typeid = #{typeid.value}</if>
             <if test="userid!=null">and userid = #{userid}</if>
             <if test="title!=null">and title = #{title}</if>
             <if test="remark!=null">and remark = #{remark}</if>
@@ -63,7 +63,7 @@
             </if>
             <if test="data.id!=null">and bill.id = #{data.id}</if>
             <if test="data.title!=null">and bill.title = #{data.title}</if>
-            <if test="data.requesttype!=null">and bill.typeid = #{data.requesttype.value}</if>
+            <if test="data.typeid!=null">and bill.typeid = #{data.typeid.value}</if>
             <if test="data.userid!=null">and bill.userid = #{data.userid}</if>
             <!--            <if test="data.realname!=null ">and realname like concat('%',#{data.realname},'%')</if>-->
             <if test="data.money!=null">and money = #{data.money}</if>
@@ -98,14 +98,14 @@
             </if>
             <if test="data.id!=null">and bill.id = #{data.id}</if>
             <if test="data.title!=null">and bill.title = #{data.title}</if>
-            <if test="data.requesttype!=null">and bill.typeid = #{data.requesttype.value}</if>
+            <if test="data.typeid!=null">and bill.typeid = #{data.typeid.value}</if>
             <if test="data.userid!=null">and bill.userid = #{data.userid}</if>
             <!--            <if test="data.realname!=null ">and realname like concat('%',#{data.realname},'%')</if>-->
             <if test="data.money!=null">and money = #{data.money}</if>
             <if test="data.remark!=null">and remark like concat('%',#{data.remark},'%')</if>
-<!--            <if test="data.paywayid!=null">and paywayid = #{data.paywayid}</if>-->
-<!--            <if test="data.startTime!=null">and time >= #{data.startTime}</if>-->
-<!--            <if test="data.endTime!=null">and time &lt;= #{data.endTime}</if>-->
+            <!--            <if test="data.paywayid!=null">and paywayid = #{data.paywayid}</if>-->
+            <!--            <if test="data.startTime!=null">and time >= #{data.startTime}</if>-->
+            <!--            <if test="data.endTime!=null">and time &lt;= #{data.endTime}</if>-->
         </where>
     </select>
 
@@ -114,6 +114,5 @@
         select *
         from payway
     </select>
-
 
 </mapper>

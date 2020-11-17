@@ -1,6 +1,7 @@
 package com.iceberg.dao;
 
 import static com.iceberg.entity.ReimbursementRequest.TYPE.APPROVED;
+import static com.iceberg.entity.ReimbursementRequest.TYPE.PROCESSING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -29,7 +30,7 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setUserid(1);
     reimbursementRequest.setGroupid("1");
     reimbursementRequest.setRemark("For test");
-    reimbursementRequest.setRequesttype(APPROVED);
+    reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setTitle("Test Usage");
     reimbursementRequest.setPaywayid(1);
@@ -47,7 +48,7 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setUserid(1);
     reimbursementRequest.setGroupid("2");
     reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
-    reimbursementRequest.setRequesttype(APPROVED);
+    reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setTitle("Test Usage: findByWhereNoPage");
     reimbursementRequest.setPaywayid(1);
@@ -71,7 +72,7 @@ public class ReiRequestMapperTest {
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(1);
     reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
-    reimbursementRequest.setRequesttype(APPROVED);
+    reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setTitle("Test Usage");
     reimbursementRequest.setPaywayid(1);
@@ -96,7 +97,7 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setUserid(1);
 //    TODO: group id
     reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
-    reimbursementRequest.setRequesttype(APPROVED);
+    reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setTitle("Test Usage");
     reimbursementRequest.setPaywayid(1);
