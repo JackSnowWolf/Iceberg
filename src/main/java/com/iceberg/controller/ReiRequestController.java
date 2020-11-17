@@ -196,12 +196,13 @@ public class ReiRequestController {
         if (Config.getSessionUser(session) == null) {
             return ResultUtil.unSuccess("No user for current session");
         }
+        Utils.log(reimbursementRequest.toString());
         UserInfo currentUser = Config.getSessionUser(session);
         ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
-        if (reimbursementRequest.getTitle() != null) {
+        if (reimbursementRequest.getTitle() != null && !reimbursementRequest.getTitle().equals("")) {
             reimbursementRequestSearch.setTitle(reimbursementRequest.getTitle());
         }
-        if (reimbursementRequest.getRemark() != null) {
+        if (reimbursementRequest.getRemark() != null && !reimbursementRequest.getRemark().equals("") ) {
             reimbursementRequestSearch.setRemark(reimbursementRequest.getRemark());
         }
         if (reimbursementRequest.getTypeid() != null) {
