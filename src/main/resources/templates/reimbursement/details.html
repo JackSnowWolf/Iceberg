@@ -152,6 +152,10 @@
             // "paywayid": paywayid === -1 ? null : paywayid,
             "remark": $("#remark").val()
         };
+      // for normal user, only approved
+      if (parent.sessionUser.roleid == 3) {
+        reimbursement.typeid = 3;
+      }
         console.log(reimbursement);
         // TODO: search reimbursement reqeuest by where
         $.post("/reirequest/getReiRequest/" + pageNo + "/" + mPageSize, reimbursement,function (res) {
