@@ -10,22 +10,22 @@ public class ResultUtil {
   public static Result success() {
     Result result = new Result();
     result.setCode(Config.SUCCESS);
-    result.setMsg("Operation successful！");
+    result.setMsg("Operation successful!");
     return result;
   }
 
   public static Result success(List list) {
     Result result = new Result();
     result.setCode(Config.SUCCESS);
-    result.setMsg("Operation successful！");
+    result.setMsg("Operation successful!");
     result.setDatas(list);
     return result;
   }
 
   public static Result success(Object o) {
-    Result result = new Result();
+    Result<Object> result = new Result<>();
     result.setCode(Config.SUCCESS);
-    result.setMsg("Operation successul！");
+    result.setMsg("Operation successful!");
     result.setData(o);
     return result;
   }
@@ -49,7 +49,7 @@ public class ResultUtil {
   public static Result unSuccess() {
     Result result = new Result();
     result.setCode(Config.UNSUCCESS);
-    result.setMsg("Operation failed！");
+    result.setMsg("Operation failed!");
     return result;
   }
 
