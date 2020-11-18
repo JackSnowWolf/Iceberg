@@ -52,8 +52,8 @@
     </div>
     <fieldset class="layui-elem-field" style="height: 1000px; ">
         <div id="chart1" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>
-        <div id="chart11" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>
-<!--        <div id="chart2" style="height: 600px;"></div>-->
+<!--        <div id="chart11" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>-->
+<!--        <div id="chart2" class="layui-col-md12" style="height: 600px;"></div>-->
     </fieldset>
 </div>
 
@@ -90,21 +90,21 @@
             "endTime": $("#end").val(),
             "realname": $("#realname").val(),
             "title": $("#title").val(),
-            "paywayid": paywayid == -1 ? null : paywayid,
+            "paywayid": paywayid === -1 ? null : paywayid,
         };
         // console.log(reimbursement)
         // Asynchronously loading
         $.post('/reirequest/getReiRequestByNoPage', reimbursement, function (res) {
-            console.log(res)
-            if (res.code == 200){
+            console.log(res);
+            if (res.code === 200){
 
                     setChart1(res.datas);
-                    setChart11(res.datas);
+                    // setChart11(res.datas);
                     setChart2(res.datas);
 
             } else {
                 myChart1.hideLoading();
-                myChart11.hideLoading();
+                // myChart11.hideLoading();
                 myChart2.hideLoading();
             }
 
@@ -115,7 +115,7 @@
         // initia chart
         myChart1 = echarts.init(document.getElementById('chart1'));
         // myChart11 = echarts.init(document.getElementById('chart11'));
-        myChart11 = echarts.init(document.getElementById('chart11'));
+        // myChart11 = echarts.init(document.getElementById('chart11'));
         // myChart2 = echarts.init(document.getElementById('chart2'));
         // configuration
         myChart1.setOption({
@@ -179,64 +179,64 @@
             ]
         });
         myChart1.showLoading();
-        myChart11.setOption({
-            title : {
-                text: 'payway',
-                x: 'center',
-                y: 'bottom',
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-            xAxis: {
-                type: 'category',
-                data: ['cash', 'online app(paypal)', 'debit card', 'credit card', 'others']
-            },
-            yAxis: {
-                type: 'value'
-            },
-            tooltip : {
-                trigger: 'item',
-                axisPointer:{
-                    type: 'shadow',
-                },
-            },
-            series: [{
-                data: [],
-                type: 'bar',
-                barWidth: '40',
-                label: {
-                    show: true,
-                    // position: 'inside',
-                    color: '#FFFFFF',
-                    distance: 20
-                },
-                itemStyle: {
-                    barBorderRadius: [5, 5, 5, 5],
-                    color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                        {color: '#2FAEF2', offset: 0},
-                        {color: '#1CD8A8', offset: 1}
-                    ]),
-                },
-            },{
-                data: [],
-                type: 'line',
-                smooth: true,
-                symbol: 'circle',
-                showSymbol: true,
-                itemStyle: {
-                    color: ['#1CD8A8']
-                },
-                symbolSize: 8,
-                lineStyle: {
-                    width: 2,
-                    color:  new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#2FAEF2'},{offset: 1, color: '#1CD8A8'}])
-                },
-            }]
-        });
-        myChart11.showLoading();
+        // myChart11.setOption({
+        //     title : {
+        //         text: 'payway',
+        //         x: 'center',
+        //         y: 'bottom',
+        //     },
+        //     toolbox: {
+        //         feature: {
+        //             saveAsImage: {}
+        //         }
+        //     },
+        //     xAxis: {
+        //         type: 'category',
+        //         data: ['cash', 'online app(paypal)', 'debit card', 'credit card', 'others']
+        //     },
+        //     yAxis: {
+        //         type: 'value'
+        //     },
+        //     tooltip : {
+        //         trigger: 'item',
+        //         axisPointer:{
+        //             type: 'shadow',
+        //         },
+        //     },
+        //     series: [{
+        //         data: [],
+        //         type: 'bar',
+        //         barWidth: '40',
+        //         label: {
+        //             show: true,
+        //             // position: 'inside',
+        //             color: '#FFFFFF',
+        //             distance: 20
+        //         },
+        //         itemStyle: {
+        //             barBorderRadius: [5, 5, 5, 5],
+        //             color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+        //                 {color: '#2FAEF2', offset: 0},
+        //                 {color: '#1CD8A8', offset: 1}
+        //             ]),
+        //         },
+        //     },{
+        //         data: [],
+        //         type: 'line',
+        //         smooth: true,
+        //         symbol: 'circle',
+        //         showSymbol: true,
+        //         itemStyle: {
+        //             color: ['#1CD8A8']
+        //         },
+        //         symbolSize: 8,
+        //         lineStyle: {
+        //             width: 2,
+        //             color:  new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#2FAEF2'},{offset: 1, color: '#1CD8A8'}])
+        //         },
+        //     }]
+        // });
+        // myChart11.showLoading();
         // myChart2.setOption({
         //     title : {
         //         text: 'income-outcome comparison',
