@@ -1,15 +1,12 @@
 package com.iceberg.service;
 
 
-import com.iceberg.entity.Privilege;
 import com.iceberg.entity.Role;
 import com.iceberg.entity.UserInfo;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.annotation.Order;
 

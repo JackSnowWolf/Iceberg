@@ -48,7 +48,6 @@ public class ReimbursementRequest {
     this.endTime = endTime;
   }
 
-
   public String getReceiveraccount() {
     return receiveraccount;
   }
@@ -81,7 +80,6 @@ public class ReimbursementRequest {
     this.requestdate = requestdate;
   }
 
-
   public TYPE getTypeid() {
     return typeid;
   }
@@ -89,7 +87,6 @@ public class ReimbursementRequest {
   public void setTypeid(int typeid) {
     this.typeid = TYPE.valueOf(typeid);
   }
-
 
   public String getImageid() {
     return imageid;
@@ -184,10 +181,7 @@ public class ReimbursementRequest {
   }
 
   public enum TYPE {
-    PROCESSING(0),
-    MISSING_INFO(1),
-    DENIED(2),
-    APPROVED(3);
+    PROCESSING(0), MISSING_INFO(1), DENIED(2), APPROVED(3);
 
     private static Map map = new HashMap<>();
 
@@ -210,7 +204,6 @@ public class ReimbursementRequest {
     public int getValue() {
       return value;
     }
-
 
   }
 }

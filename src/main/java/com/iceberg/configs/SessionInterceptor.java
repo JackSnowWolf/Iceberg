@@ -1,12 +1,9 @@
 package com.iceberg.configs;
 
-import com.iceberg.controller.UserInfoController;
-import com.iceberg.entity.UserInfo;
 import com.iceberg.utils.Config;
-import org.springframework.web.method.HandlerMethod;
+
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

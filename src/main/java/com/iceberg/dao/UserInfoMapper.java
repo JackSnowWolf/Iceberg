@@ -11,9 +11,7 @@ import java.util.List;
 @Service("UserInfoMapper")
 public interface UserInfoMapper {
 
-
   UserInfo getUserInfo(UserInfo userInfo);
-
 
   int addUser(UserInfo userInfo);
 

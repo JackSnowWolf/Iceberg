@@ -5,7 +5,6 @@ import com.iceberg.entity.Role;
 import com.iceberg.entity.UserInfo;
 import static org.junit.Assert.assertEquals;
 
-import com.google.gson.Gson;
 import com.iceberg.utils.MockResultParseRoleSample;
 import com.iceberg.utils.MockResultParseUserInfoSample;
 import java.util.UUID;
