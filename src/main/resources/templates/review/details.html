@@ -93,14 +93,12 @@
     <thead>
     <tr>
       <th style="width: 6%;">Index</th>
-      <th style="width: 6%;">UserId</th>
-      <th style="width: 6%;">requestId</th>
       <th style="width: 8%;">Title</th>
       <th style="width: 8%;">Name</th>
       <th style="width: 10%;">Money</th>
       <!--            <th style="width: 10%;">Payway</th>-->
-      <th style="width: 10%;">Remark</th>
-      <th style="width: 10%;">Receiver</th>
+      <th style="width: 10%;">Type</th>
+      <th style="width: 16%;">Receiver</th>
       <th style="width: 12%;">Time</th>
       <th style="width: 10%;">Status</th>
       <th style="width: 10%;">Operation</th>
@@ -181,8 +179,8 @@
             next: ">",
             groups: 2,
             limits: [10, 30, 50, 100],
-            layout: ['prev', 'page', 'next', 'limit', 'refresh', 'skip'],
-            skip: true,
+            layout: ['prev', 'page', 'next', 'limit', 'refresh'],
+            // skip: true,
             jump: function (obj, isfirst) {
               if (!isfirst) {
                 mPageSize = obj.limit;
@@ -203,23 +201,22 @@
       $.each(reiRequests, function (index, item) {
         html += '<tr>' +
             '            <td>' + (index + 1 + beginIndex) + '</td>' +
-            '            <td>' + item.userid + '</td>' +
-            '            <td>' + item.id + '</td>' +
             '            <td>' + item.title + '</td>' +
             '            <td>' + item.realname + '</td>' +
             '            <td>' + parseFloat(item.money).toFixed(2) + '</td>' +
             // '            <td>' + item.payway + '</td>' +
             '            <td class="remark" title=' + item.remark + '>' + item.remark + '</td>' +
+            '            <td class="receiveraccount" title=' + item.receiveraccount + '>' + item.receiveraccount + '</td>' +
             '            <td>' + item.time + '</td>' +
             '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
             '            <td style="display: none">' + item.id + '</td>' +
             '            <td class="td-manage">' +
-            // '                <a title="edit" onclick="x_admin_show(\'edit\',\'review_add.html?index=' + (index + 1) + '#2\',\'460px\',\'80%\')" href="javascript:;">' +
-            // '                    <i class="layui-icon">&#xe642;</i>' +
-            // '                </a>' +
-            // '                <a title="delete" onclick="del(this,' + item.id + ')" href="javascript:;">' +
-            // '                    <i class="layui-icon">&#xe640;</i>' +
-            // '                </a>' +
+            '                <a title="edit" onclick="x_admin_show(\'edit\',\'reimbursement_add.html?index=' + (index + 1) + '#2\',\'460px\',\'80%\')" href="javascript:;">' +
+            '                    <i class="layui-icon">&#xe642;</i>' +
+            '                </a>' +
+            '                <a title="delete" onclick="del(this,' + item.id + ')" href="javascript:;">' +
+            '                    <i class="layui-icon">&#xe640;</i>' +
+            '                </a>' +
             '        </tr>';
       });
     } else {
@@ -305,8 +302,8 @@
               next: ">",
               groups: 2,
               limits: [10, 30, 50, 100],
-              layout: ['prev', 'page', 'next', 'limit', 'refresh', 'skip'],
-              skip: true,
+              layout: ['prev', 'page', 'next', 'limit', 'refresh'],
+              // skip: true,
               jump: function (obj, isfirst) {
                 if (!isfirst) {
                   mPageSize = obj.limit;

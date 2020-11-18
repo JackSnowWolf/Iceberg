@@ -174,8 +174,8 @@
                         next: ">",
                         groups: 2,
                         limits: [10, 30, 50, 100],
-                        layout: ['prev', 'page', 'next', 'limit', 'refresh', 'skip'],
-                        skip: true,
+                        layout: ['prev', 'page', 'next', 'limit', 'refresh'],
+                        // skip: true,
                         jump: function (obj, isfirst) {
                             if (!isfirst) {
                                 mPageSize = obj.limit;
@@ -267,8 +267,8 @@
                             next: ">",
                             groups: 2,
                             limits: [10, 30, 50, 100],
-                            layout: ['prev', 'page', 'next', 'limit', 'refresh', 'skip'],
-                            skip: true,
+                            layout: ['prev', 'page', 'next', 'limit', 'refresh'],
+                            // skip: true,
                             jump: function (obj, isfirst) {
                                 if (!isfirst) {
                                     mPageSize = obj.limit;
