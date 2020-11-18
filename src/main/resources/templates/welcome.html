@@ -113,9 +113,9 @@
     <fieldset class="layui-elem-field">
         <legend>Data Analysis</legend>
         <div id="chart1" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>
-        <div id="chart2" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>
+<!--        <div id="chart2" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>-->
     </fieldset>
-    <blockquote class="layui-elem-quote layui-quote-nm">credit to layui,x-admin,baidu-Echarts,jquery</blockquote>
+<!--    <blockquote class="layui-elem-quote layui-quote-nm">credit to layui,x-admin,baidu-Echarts,jquery</blockquote>-->
 </div>
 <script>
     $(function () {
@@ -148,23 +148,23 @@
         var end = new Date();
         end.setMonth(end.getMonth() + 1)
         end.setDate(1);
-        var bill = {
+        var reimbursement = {
             "startTime": start.toLocaleDateString().replace(/\//g, '-'),
             "endTime": end.toLocaleDateString().replace(/\//g, '-')
-        }
-        // console.log(bill)
+        };
+        // console.log(reimbursement)
         // asynchronous
-        $.post('/bills/getBillsToChart', bill, function (res) {
-            if (res.code == 200) {
+        $.post('/reirequest/getReiRequestByNoPage', reimbursement, function (res) {
+            if (res.code === 200) {
                 //Analyze the data and display the data on the leaderboard
-                analyzeLB123(res.datas)
+                analyzeLB123(res.datas);
                 analyzeLB4(res.datas);
                 //statistic chart
                 setChart1(res.datas);
-                setChart2(res.datas);
+                // setChart2(res.datas);
 
                 myChart1.hideLoading();
-                myChart2.hideLoading();
+                // myChart2.hideLoading();
             }
 
         });
@@ -283,7 +283,7 @@
                 }
                 html += (i == 0) ? "<h2>" : "<h3>";
                 html += "    <name>" + datas[i].ouputname + "</name>\n" +
-                    "    <money style='float: right;'>" + parseFloat(datas[i][moneyMap.get(index)]).toFixed(2) + "元</money>\n";
+                    "    <money style='float: right;'>" + parseFloat(datas[i][moneyMap.get(index)]).toFixed(2) + "</money>\n";
                 html += (i == 0) ? "</h2>" : "</h3>";
             }
         }
@@ -292,42 +292,42 @@
     }
 
     function initChart() {
+        // initia chart
         myChart1 = echarts.init(document.getElementById('chart1'));
-        myChart2 = echarts.init(document.getElementById('chart2'));
+        // myChart11 = echarts.init(document.getElementById('chart11'));
+        // myChart11 = echarts.init(document.getElementById('chart11'));
+        // myChart2 = echarts.init(document.getElementById('chart2'));
         // configuration
         myChart1.setOption({
-            title: {
-                text: 'income-outcome-chart this month',
-                left: 'center',
-                top: 20,
-                textStyle: {
-                    color: '#000'
-                }
+            title : {
+                text: 'inflight - transferred this month',
+                x: 'center',
+                y: 'bottom',
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{b} : {c}$ ({d}%)"
             },
             legend: {
                 orient: 'vertical',
                 left: '10%',
                 top: '10%',
                 // align: 'left',
-                data:['Reimbursement Income', 'Reimbursement Outcome'],
-            },
-            tooltip: {
-                trigger: 'item',
-                formatter: "{b} : {c}$ ({d}%)"
+                data:['income', 'outcome'],
             },
             toolbox: {
                 feature: {
                     saveAsImage: {}
                 }
             },
-            color: ['#ff9f7b', '#2fa1dd'],
-            series: [
+            color: [ '#ff9f7b', '#2fa1dd'],
+            series : [
                 {
-                    name: 'Income-outcome this month',
-                    type: 'pie',
-                    radius: '55%',
+                    name:'income-outcome this month',
+                    type:'pie',
+                    radius : '55%',
                     center: ['50%', '50%'],
-                    data: [],
+                    data:[],
                     label: {
                         position: 'inside',
                         formatter: '{b} \n\n {d}%',
@@ -359,120 +359,169 @@
             ]
         });
         myChart1.showLoading();
-        myChart2.setOption({
-            title: {
-                text: 'Income-outcome Comparison',
-                x: 'center',
-                y: 'top'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                // orient: 'vertical',
-                data: ['Income', 'Outcome', 'Net Income'],
-                x: 'left'
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-            // dataZoom: [
-            //     {
-            //         type: 'inside'
-            //     }
-            // ],
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: []
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [
-                {
-                    name:'Reimbursement Income',
-                    type:'bar',
-                    itemStyle: {
-                        barBorderRadius: [5, 5, 5, 5],// 圆角（左上、右上、右下、左下）
-                        // color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                        //     {color: '#2FAEF2', offset: 0},
-                        //     {color: '#1CD8A8', offset: 1}
-                        // ]), // 渐变
-                        color: "#ed9473",
-                    },
-                    data:[],
-                },
-                {
-                    name:'Reimbursement Outcome',
-                    type:'bar',
-                    itemStyle: {
-                        barBorderRadius: [5, 5, 5, 5],// 圆角（左上、右上、右下、左下）
-                        // color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                        //     {color: '#c23531', offset: 0},
-                        //     {color: '#caba26', offset: 1}
-                        // ]), // 渐变
-                        color: "#2fa1dd"
-                    },
-                    data:[]
-                },
-                {
-                    name:'Net Income',
-                    type:'line',
-                    areaStyle: {},
-                    itemStyle: {
-                        barBorderRadius: [5, 5, 5, 5],// 圆角（左上、右上、右下、左下）
-                        color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                            {color: '#e0dec6', offset: 0},
-                            {color: '#a1a1dc', offset: 1}
-                        ]), // 渐变
-                    },
-                    smooth: true, // 线条转折有弧度
-                    data:[]
-                }
-            ],
-            animationDuration: function (idx) {
-                // 越往后的数据延迟越大
-                return idx * 300;
-            }
-        });
-        myChart2.showLoading();
+        // myChart11.setOption({
+        //     title : {
+        //         text: 'payway',
+        //         x: 'center',
+        //         y: 'bottom',
+        //     },
+        //     toolbox: {
+        //         feature: {
+        //             saveAsImage: {}
+        //         }
+        //     },
+        //     xAxis: {
+        //         type: 'category',
+        //         data: ['cash', 'online app(paypal)', 'debit card', 'credit card', 'others']
+        //     },
+        //     yAxis: {
+        //         type: 'value'
+        //     },
+        //     tooltip : {
+        //         trigger: 'item',
+        //         axisPointer:{
+        //             type: 'shadow',
+        //         },
+        //     },
+        //     series: [{
+        //         data: [],
+        //         type: 'bar',
+        //         barWidth: '40',
+        //         label: {
+        //             show: true,
+        //             // position: 'inside',
+        //             color: '#FFFFFF',
+        //             distance: 20
+        //         },
+        //         itemStyle: {
+        //             barBorderRadius: [5, 5, 5, 5],
+        //             color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+        //                 {color: '#2FAEF2', offset: 0},
+        //                 {color: '#1CD8A8', offset: 1}
+        //             ]),
+        //         },
+        //     },{
+        //         data: [],
+        //         type: 'line',
+        //         smooth: true,
+        //         symbol: 'circle',
+        //         showSymbol: true,
+        //         itemStyle: {
+        //             color: ['#1CD8A8']
+        //         },
+        //         symbolSize: 8,
+        //         lineStyle: {
+        //             width: 2,
+        //             color:  new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#2FAEF2'},{offset: 1, color: '#1CD8A8'}])
+        //         },
+        //     }]
+        // });
+        // myChart11.showLoading();
+        // myChart2.setOption({
+        //     title : {
+        //         text: 'income-outcome comparison',
+        //         x: 'center',
+        //         y: 'bottom'
+        //     },
+        //     tooltip: {
+        //         trigger: 'axis'
+        //     },
+        //     legend: {
+        //         data:['income','outcome','net income'],
+        //         right: '5%',
+        //         top: 10,
+        //     },
+        //     // dataZoom: [
+        //     //     {
+        //     //         type: 'inside',
+        //     //         start: 60,
+        //     //         end: 70
+        //     //     }
+        //     // ],
+        //     grid: {
+        //         left: '3%',
+        //         right: '4%',
+        //         bottom: '3%',
+        //         containLabel: true
+        //     },
+        //     toolbox: {
+        //         feature: {
+        //             saveAsImage: {},
+        //         }
+        //     },
+        //     xAxis: {
+        //         type: 'category',
+        //         boundaryGap: false,
+        //         data: []
+        //     },
+        //     yAxis: {
+        //         type: 'value'
+        //     },
+        //     series: [
+        //         {
+        //             name:'income',
+        //             type:'bar',
+        //             itemStyle: {
+        //                 barBorderRadius: [5, 5, 5, 5],
+        //                 color: "#ed9473",
+        //             },
+        //             data:[],
+        //         },
+        //         {
+        //             name:'outcome',
+        //             type:'bar',
+        //             itemStyle: {
+        //                 barBorderRadius: [5, 5, 5, 5],
+        //                 color: "#2fa1dd"
+        //             },
+        //             data:[]
+        //         },
+        //         {
+        //             name:'net income',
+        //             type:'line',
+        //             areaStyle: {},
+        //             itemStyle: {
+        //                 barBorderRadius: [5, 5, 5, 5],
+        //                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+        //                     {color: '#e0dec6', offset: 0},
+        //                     {color: '#a1a1dc', offset: 1}
+        //                 ]),
+        //             },
+        //             smooth: true,
+        //             data:[]
+        //         }
+        //     ],
+        //     animationDuration: function (idx) {
+        //         return idx * 300;
+        //     }
+        // });
+        // myChart2.showLoading();
     }
 
 
-    // 填入myChart1数据
-    function setChart1(datas) {
-        var paySum = 0;
-        var incomeSum = 0;
-        $.each(datas, function (index, item) {
-            if (item.typeid == 1) {
-                paySum += parseFloat(item.money);
-            } else if (item.typeid == 2) {
-                incomeSum += parseFloat(item.money);
+    function setChart1(datas){
+        var inflightSum = 0;
+        var transferredSum = 0;
+        $.each(datas,function (index,item) {
+            if(item.typeid === "APPROVED"){
+                transferredSum += parseFloat(item.money);
+            }else{
+                inflightSum += parseFloat(item.money);
             }
         });
         myChart1.hideLoading();
         myChart1.setOption({
             series: [{
-                // 根据名字对应到相应的系列
-                name: 'income-outcome this month',
+                name: 'inflight - transferred this month',
                 data: [
-                    {value: incomeSum.toFixed(2), name: 'Reimbursement Income', selected: true},
-                    {value: paySum.toFixed(2), name: 'Reimbursement Outcome'},
+                    {value:inflightSum.toFixed(2), name:'inflight', selected: true},
+                    {value:transferredSum.toFixed(2), name:'transferred'}
                 ]
             }]
         });
     }
 
-    // 填入myChart2数据
+
     function setChart2(datas) {
 
         var x = [], payVal = new Array(30), incomeVal = new Array(30), netIncomeVal = new Array(30);
