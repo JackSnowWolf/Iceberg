@@ -178,9 +178,9 @@
                 console.log("trtrtrtrtrtr" + tr);
                 // var userid =  $("input[name=userid]").val($(tr).find(":nth-child(2)").html());
                 //now the userid is in 0, 1 index get value from it
-                var userid = tr.cells[1].innerHTML;
+                var userid = tr.cells[2].innerHTML;
                 console.log("userid**************************************" + userid)
-                var reimid = tr.cells[2].innerHTML;
+                var reimid = tr.cells[3].innerHTML;
                 $.post("/reirequest/review"+ "/" + options + "/" + userid + "/" + reimid,data.field,function (res) {
                     if (res.code == 200){
                         layer.msg(res.msg,{ time: 1000},function () {
@@ -205,13 +205,15 @@
         //     $("textarea[name=remark]").val(dateStr+"");
         //     return;
         // }else {
-            $("input[name=userid]").val($(tr).find(":nth-child(2)").html());
-            $("input[name=title]").val($(tr).find(":nth-child(4)").html());
+            $("input[name=userid]").val($(tr).find(":nth-child(3)").html());
+            $("input[name=title]").val($(tr).find(":nth-child(2)").html());
             $("input[name=money]").val($(tr).find(":nth-child(6)").html());
-            var payway = $(tr).find(":nth-child(5)").html();
+            $("input[name=remark]").val($(tr).find(":nth-child(7)").html());
+            $("input[name=receiveraccount]").val($(tr).find(":nth-child(8)").html());
+            var payway = $(tr).find(":nth-child(5)").html() == null ? -1 : $(tr).find(":nth-child(5)").html();
             $("#payway").find("option:contains("+payway+")").prop("selected",true);
-            $("textarea[name=remark]").val($(tr).find(":nth-child(7)").html());
-            $("input[name=id]").val($(tr).find(":nth-child(9)").html());
+            $("textarea[name=remark]").val($(tr).find(":nth-child(9)").html());
+            // $("input[name=id]").val($(tr).find(":nth-child(9)").html());
         // }
     }
 </script>

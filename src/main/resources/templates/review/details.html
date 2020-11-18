@@ -94,6 +94,8 @@
     <tr>
       <th style="width: 6%;">Index</th>
       <th style="width: 8%;">Title</th>
+      <th style="width: 8%;">UserId</th>
+      <th style="width: 8%;">RequestId</th>
       <th style="width: 8%;">Name</th>
       <th style="width: 10%;">Money</th>
       <!--            <th style="width: 10%;">Payway</th>-->
@@ -202,6 +204,8 @@
         html += '<tr>' +
             '            <td>' + (index + 1 + beginIndex) + '</td>' +
             '            <td>' + item.title + '</td>' +
+            '            <td>' + item.userid + '</td>' +
+            '            <td>' + item.id + '</td>' +
             '            <td>' + item.realname + '</td>' +
             '            <td>' + parseFloat(item.money).toFixed(2) + '</td>' +
             // '            <td>' + item.payway + '</td>' +
@@ -224,6 +228,8 @@
         html += '<tr>' +
             '            <td>' + (index + 1 + beginIndex) + '</td>' +
             '            <td>' + item.title + '</td>' +
+            '            <td>' + item.userid + '</td>' +
+            '            <td>' + item.id + '</td>' +
             '            <td>' + item.realname + '</td>' +
             '            <td>' + parseFloat(item.money).toFixed(2) + '</td>' +
             // '            <td>' + item.payway + '</td>' +
