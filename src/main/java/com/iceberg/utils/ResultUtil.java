@@ -3,7 +3,7 @@ package com.iceberg.utils;
 import java.util.List;
 
 /**
- * 接口访问返回
+ *
  */
 public class ResultUtil {
 
@@ -42,7 +42,6 @@ public class ResultUtil {
     Result result = new Result();
     result.setCode(Config.ERROR);
     result.setMsg("Operation failed, causing exceptions");
-    // 如果启用自定义日志，则在控制台打印错误信息
     Utils.log(e.getMessage());
     return result;
   }
