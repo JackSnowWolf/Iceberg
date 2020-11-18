@@ -229,8 +229,10 @@ public class ReiRequestController {
   }
 
   @RequestMapping("/getReiRequestByNoPage")
-  public Result getReiRequestByNoPage(HttpSession session) {
+  public Result getReiRequestByNoPage(ReimbursementRequest reimbursementRequest,
+    HttpSession session) {
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+
     if (Config.getSessionUser(session) == null) {
       return ResultUtil.unSuccess("No user for current session");
     }

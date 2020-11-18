@@ -38,11 +38,11 @@
             <input type="text" placeholder="real name" id="realname" autocomplete="off" class="layui-input">
             <input type="text" placeholder="title" id="title" autocomplete="off" class="layui-input">
             <div class="layui-input-inline">
-                <select id="payway">
+                <select id="paywayid">
                     <option value="-1">choose payway</option>
                 </select>
             </div>
-            <button class="layui-btn" type="button" lay-submit="" lay-filter="sreach" onclick="getBills()">
+            <button class="layui-btn" type="button" lay-submit="" lay-filter="sreach" onclick="getReiRequests()">
                 <i class="layui-icon">&#xe615;</i>search
             </button>
             <button class="layui-btn layui-btn-primary" type="reset">
@@ -53,12 +53,12 @@
     <fieldset class="layui-elem-field" style="height: 1000px; ">
         <div id="chart1" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>
         <div id="chart11" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>
-        <div id="chart2" style="height: 600px;"></div>
+<!--        <div id="chart2" style="height: 600px;"></div>-->
     </fieldset>
 </div>
 
 <script>
-    getAllPayways();
+    // getAllPayways();
     mPageSize = 10000;
     $(function () {
         layui.use('laydate', function () {
@@ -74,26 +74,30 @@
             });
         });
         initChart();
-        getBills();
+        getReiRequests();
     });
 
-    function getBills() {
-        var date = new Date();
-        date.setDate(1);
-        $("#start").val()==""? $("#start").val(date.toLocaleDateString().replace(/\//g,'-')) : {};
-        $("#end").val()==""? $("#end").val(new Date().toLocaleDateString().replace(/\//g,'-')) : {};
+    function getReiRequests() {
+        // var date = new Date();
+        // date.setDate(1);
+        // $("#start").val()==""? $("#start").val(date.toLocaleDateString().replace(/\//g,'-')) : {};
+        // $("#end").val()==""? $("#end").val(new Date().toLocaleDateString().replace(/\//g,'-')) : {};
+
         // console.log(daysBetween($("#end").val(),$("#start").val()));
-        var bill = {
+        paywayid = $("#paywayid").val();
+        var reimbursement = {
             "startTime": $("#start").val(),
             "endTime": $("#end").val(),
             "realname": $("#realname").val(),
             "title": $("#title").val(),
-            "paywayid": $("#payway").val() == -1 ? null : $("#payway").val(),
-        }
-        // console.log(bill)
+            "paywayid": paywayid == -1 ? null : paywayid,
+        };
+        // console.log(reimbursement)
         // Asynchronously loading
-        $.post('/bills/getBillsToChart',bill, function (res) {
+        $.post('/reirequest/getReiRequestByNoPage', reimbursement, function (res) {
+            console.log(res)
             if (res.code == 200){
+
                     setChart1(res.datas);
                     setChart11(res.datas);
                     setChart2(res.datas);
@@ -112,11 +116,11 @@
         myChart1 = echarts.init(document.getElementById('chart1'));
         // myChart11 = echarts.init(document.getElementById('chart11'));
         myChart11 = echarts.init(document.getElementById('chart11'));
-        myChart2 = echarts.init(document.getElementById('chart2'));
+        // myChart2 = echarts.init(document.getElementById('chart2'));
         // configuration
         myChart1.setOption({
             title : {
-                text: 'income-outcome comparison',
+                text: 'inflight - transferred this month',
                 x: 'center',
                 y: 'bottom',
             },
@@ -233,106 +237,105 @@
             }]
         });
         myChart11.showLoading();
-        myChart2.setOption({
-            title : {
-                text: 'income-outcome comparison',
-                x: 'center',
-                y: 'bottom'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data:['income','outcome','net income'],
-                right: '5%',
-                top: 10,
-            },
-            // dataZoom: [
-            //     {
-            //         type: 'inside',
-            //         start: 60,
-            //         end: 70
-            //     }
-            // ],
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            toolbox: {
-                feature: {
-                    saveAsImage: {},
-                }
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: []
-            },
-            yAxis: {
-                type: 'value'
-            },
-            series: [
-                {
-                    name:'income',
-                    type:'bar',
-                    itemStyle: {
-                        barBorderRadius: [5, 5, 5, 5],
-                        color: "#ed9473",
-                    },
-                    data:[],
-                },
-                {
-                    name:'outcome',
-                    type:'bar',
-                    itemStyle: {
-                        barBorderRadius: [5, 5, 5, 5],
-                        color: "#2fa1dd"
-                    },
-                    data:[]
-                },
-                {
-                    name:'net income',
-                    type:'line',
-                    areaStyle: {},
-                    itemStyle: {
-                        barBorderRadius: [5, 5, 5, 5],
-                        color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-                            {color: '#e0dec6', offset: 0},
-                            {color: '#a1a1dc', offset: 1}
-                        ]),
-                    },
-                    smooth: true,
-                    data:[]
-                }
-            ],
-            animationDuration: function (idx) {
-                return idx * 300;
-            }
-        });
-        myChart2.showLoading();
+        // myChart2.setOption({
+        //     title : {
+        //         text: 'income-outcome comparison',
+        //         x: 'center',
+        //         y: 'bottom'
+        //     },
+        //     tooltip: {
+        //         trigger: 'axis'
+        //     },
+        //     legend: {
+        //         data:['income','outcome','net income'],
+        //         right: '5%',
+        //         top: 10,
+        //     },
+        //     // dataZoom: [
+        //     //     {
+        //     //         type: 'inside',
+        //     //         start: 60,
+        //     //         end: 70
+        //     //     }
+        //     // ],
+        //     grid: {
+        //         left: '3%',
+        //         right: '4%',
+        //         bottom: '3%',
+        //         containLabel: true
+        //     },
+        //     toolbox: {
+        //         feature: {
+        //             saveAsImage: {},
+        //         }
+        //     },
+        //     xAxis: {
+        //         type: 'category',
+        //         boundaryGap: false,
+        //         data: []
+        //     },
+        //     yAxis: {
+        //         type: 'value'
+        //     },
+        //     series: [
+        //         {
+        //             name:'income',
+        //             type:'bar',
+        //             itemStyle: {
+        //                 barBorderRadius: [5, 5, 5, 5],
+        //                 color: "#ed9473",
+        //             },
+        //             data:[],
+        //         },
+        //         {
+        //             name:'outcome',
+        //             type:'bar',
+        //             itemStyle: {
+        //                 barBorderRadius: [5, 5, 5, 5],
+        //                 color: "#2fa1dd"
+        //             },
+        //             data:[]
+        //         },
+        //         {
+        //             name:'net income',
+        //             type:'line',
+        //             areaStyle: {},
+        //             itemStyle: {
+        //                 barBorderRadius: [5, 5, 5, 5],
+        //                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+        //                     {color: '#e0dec6', offset: 0},
+        //                     {color: '#a1a1dc', offset: 1}
+        //                 ]),
+        //             },
+        //             smooth: true,
+        //             data:[]
+        //         }
+        //     ],
+        //     animationDuration: function (idx) {
+        //         return idx * 300;
+        //     }
+        // });
+        // myChart2.showLoading();
     }
 
     function setChart1(datas){
-        var paySum = 0;
-        var incomeSum = 0;
+        var inflightSum = 0;
+        var transferredSum = 0;
         $.each(datas,function (index,item) {
-            if(item.typeid == 1){
-                paySum += parseFloat(item.money);
-            }else if (item.typeid == 2) {
-                incomeSum += parseFloat(item.money);
+            if(item.typeid === "APPROVED"){
+                transferredSum += parseFloat(item.money);
+            }else{
+                inflightSum += parseFloat(item.money);
             }
         });
         myChart1.hideLoading();
         myChart1.setOption({
             series: [{
-                // 根据名字对应到相应的系列
-                name: 'income-outcome this month',
+                name: 'inflight - transferred this month',
                 data: [
-                    {value:incomeSum.toFixed(2), name:'income', selected: true},
-                    {value:paySum.toFixed(2), name:'outcome'},
-                ],
+                    {value:inflightSum.toFixed(2), name:'inflight', selected: true},
+                    {value:transferredSum.toFixed(2), name:'transferred'}
+                ]
             }]
         });
     }
@@ -392,7 +395,7 @@
                 data: x
             },
             series: [
-                // 根据名字对应到相应的系列
+                //
                 {
                     name:'outcome',
                     data: payVal
@@ -410,3 +413,4 @@
     }
 
 </script>
+
