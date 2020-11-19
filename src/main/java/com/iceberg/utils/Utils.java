@@ -5,12 +5,23 @@ import java.util.Date;
 
 public class Utils {
 
+  /**
+   * log function.
+   *
+   * @param msg message
+   */
   public static void log(String msg) {
     if (Config.ENABLE_CUSTOMEIZE_LOG) {
       System.out.println(dateToStr(null) + " : " + msg);
     }
   }
 
+  /**
+   * convert date to string.
+   *
+   * @param date data.
+   * @return data in string.
+   */
   public static String dateToStr(Date date) {
     if (date == null) {
       date = new Date();
