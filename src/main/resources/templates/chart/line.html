@@ -189,7 +189,7 @@
             },
             xAxis: {
                 type: 'category',
-                data: ['Hotel travel', 'Catering', 'Transportation', 'Health', 'Communications logistics', 'Leisure life', 'Others']
+                data: ['Hotel/Travel', 'Catering', 'Transport', 'Health', 'Comms', 'Life', 'Others']
             },
             yAxis: {
                 type: 'value'
@@ -341,11 +341,13 @@
     function setChart11(datas) {
         console.log("chart11 go");
         var money = [0,0,0,0,0,0,0];
-        var remarkList= ['Hotel travel', 'Catering', 'Transportation', 'Health', 'Communications logistics', 'Leisure life', 'Others']
+        var remarkList= ['Hotel/Travel', 'Catering', 'Transport', 'Health', 'Comms', 'Life', 'Others']
         $.each(datas,function (index,item) {
-            for (var i = 0; i < 7; i++) {
+            money[6]+=item.money;
+            for (var i = 0; i < 6; i++) {
                 if (item.remark==remarkList[i]){
                     money[i] += item.money;
+                    money[6] -= item.money;
                 }
             }
         });
