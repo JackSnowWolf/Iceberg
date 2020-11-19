@@ -114,7 +114,7 @@ public class UserInfoControllerTest {
     assertEquals(200, result.getResponse().getStatus());
     String msg = JSONObject.parseObject(result.getResponse().getContentAsString(),
         MockResultParseUserInfoSample.class).getMsg();
-    assertEquals(msg, "Operation successful！");
+    assertEquals(msg, "Operation successful!");
   }
 
   /**
@@ -136,7 +136,7 @@ public class UserInfoControllerTest {
     assertEquals(200, result.getResponse().getStatus());
     String msg = JSONObject.parseObject(result.getResponse().getContentAsString(),
         MockResultParseUserInfoSample.class).getMsg();
-    assertEquals(msg, "Operation successful！");
+    assertEquals(msg, "Operation successful!");
   }
 
   /**
@@ -166,7 +166,7 @@ public class UserInfoControllerTest {
     assertEquals(200, result2.getResponse().getStatus());
     String msg = JSONObject.parseObject(result2.getResponse().getContentAsString(),
         MockResultParseUserInfoSample.class).getMsg();
-    assertEquals(msg, "Operation successful！");
+    assertEquals(msg, "Operation successful!");
   }
 
   /**
