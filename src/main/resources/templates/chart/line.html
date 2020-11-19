@@ -52,7 +52,7 @@
     </div>
     <fieldset class="layui-elem-field" style="height: 1000px; ">
         <div id="chart1" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>
-<!--        <div id="chart11" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>-->
+        <div id="chart11" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>
         <div id="chart2" class="layui-col-md12" style="height: 600px;"></div>
     </fieldset>
 </div>
@@ -97,12 +97,12 @@
             console.log(res);
             if (res.code === 200){
                     setChart1(res.datas);
-                    // setChart11(res.datas);
+                    setChart11(res.datas);
                     setChart2(res.datas);
 
             } else {
                 myChart1.hideLoading();
-                // myChart11.hideLoading();
+                myChart11.hideLoading();
                 myChart2.hideLoading();
             }
         });
@@ -111,12 +111,12 @@
     function initChart() {
         // initia chart
         myChart1 = echarts.init(document.getElementById('chart1'));
-        // myChart11 = echarts.init(document.getElementById('chart11'));
+        myChart11 = echarts.init(document.getElementById('chart11'));
         myChart2 = echarts.init(document.getElementById('chart2'));
         // configuration
         myChart1.setOption({
             title : {
-                text: 'inflight - transferred this month',
+                text: 'Inflight - transferred this month',
                 x: 'center',
                 y: 'bottom',
             },
@@ -139,7 +139,7 @@
             color: [ '#ff9f7b', '#2fa1dd'],
             series : [
                 {
-                    name:'inflight - transferred this month',
+                    name:'Inflight - transferred this month',
                     type:'pie',
                     radius : '55%',
                     center: ['50%', '50%'],
@@ -176,64 +176,64 @@
         });
         myChart1.showLoading();
         //
-        // myChart11.setOption({
-        //     title : {
-        //         text: 'request type',
-        //         x: 'center',
-        //         y: 'bottom',
-        //     },
-        //     toolbox: {
-        //         feature: {
-        //             saveAsImage: {}
-        //         }
-        //     },
-        //     xAxis: {
-        //         type: 'category',
-        //         data: ['Hotel travel', 'Catering', 'Transportation', 'Health', 'Communications logistics', 'Leisure life', 'Others']
-        //     },
-        //     yAxis: {
-        //         type: 'value'
-        //     },
-        //     tooltip : {
-        //         trigger: 'item',
-        //         axisPointer:{
-        //             type: 'shadow',
-        //         },
-        //     },
-        //     series: [{
-        //         data: [],
-        //         type: 'bar',
-        //         barWidth: '40',
-        //         label: {
-        //             show: true,
-        //             // position: 'inside',
-        //             color: '#FFFFFF',
-        //             distance: 20
-        //         },
-        //         itemStyle: {
-        //             barBorderRadius: [5, 5, 5, 5],
-        //             color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-        //                 {color: '#2FAEF2', offset: 0},
-        //                 {color: '#1CD8A8', offset: 1}
-        //             ]),
-        //         },
-        //     },{
-        //         data: [],
-        //         type: 'line',
-        //         smooth: true,
-        //         symbol: 'circle',
-        //         showSymbol: true,
-        //         itemStyle: {
-        //             color: ['#1CD8A8']
-        //         },
-        //         symbolSize: 8,
-        //         lineStyle: {
-        //             width: 2,
-        //             color:  new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#2FAEF2'},{offset: 1, color: '#1CD8A8'}])
-        //         },
-        //     }]
-        // });
-        // myChart11.showLoading();
+        myChart11.setOption({
+            title : {
+                text: 'Request type',
+                x: 'center',
+                y: 'bottom',
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: ['Hotel/Travel', 'Catering', 'Transport', 'Health', 'Comms', 'Life', 'Others']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            tooltip : {
+                trigger: 'item',
+                axisPointer:{
+                    type: 'shadow',
+                },
+            },
+            series: [{
+                data: [],
+                type: 'bar',
+                barWidth: '40',
+                label: {
+                    show: true,
+                    // position: 'inside',
+                    color: '#FFFFFF',
+                    distance: 20
+                },
+                itemStyle: {
+                    barBorderRadius: [5, 5, 5, 5],
+                    color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+                        {color: '#2FAEF2', offset: 0},
+                        {color: '#1CD8A8', offset: 1}
+                    ]),
+                },
+            },{
+                data: [],
+                type: 'line',
+                smooth: true,
+                symbol: 'circle',
+                showSymbol: true,
+                itemStyle: {
+                    color: ['#1CD8A8']
+                },
+                symbolSize: 8,
+                lineStyle: {
+                    width: 2,
+                    color:  new echarts.graphic.LinearGradient(0, 0, 1, 0, [{offset: 0, color: '#2FAEF2'},{offset: 1, color: '#1CD8A8'}])
+                },
+            }]
+        });
+        myChart11.showLoading();
         //
         myChart2.setOption({
             title : {
@@ -338,28 +338,28 @@
         });
     }
     //
-    // function setChart11(datas) {
-    //     var money = [0,0,0,0,0];
-    //     $.each(datas,function (index,item) {
-    //         for (var i = 0; i < 5; i++) {
-    //             if (item.paywayid==(i+1)){
-    //                 if (item.typeid == 1){
-    //                     money[i] -= item.money;
-    //                 }else if(item.typeid == 2){
-    //                     money[i] += item.money;
-    //                 }
-    //             }
-    //         }
-    //     });
-    //     myChart11.hideLoading();
-    //     myChart11.setOption({
-    //         series: [{
-    //             data: money,
-    //         },{
-    //             data: money
-    //         }]
-    //     });
-    // }
+    function setChart11(datas) {
+        console.log("chart11 go");
+        var money = [0,0,0,0,0,0,0];
+        var remarkList= ['Hotel/Travel', 'Catering', 'Transport', 'Health', 'Comms', 'Life', 'Others']
+        $.each(datas,function (index,item) {
+            money[6]+=item.money;
+            for (var i = 0; i < 6; i++) {
+                if (item.remark==remarkList[i]){
+                    money[i] += item.money;
+                    money[6] -= item.money;
+                }
+            }
+        });
+        myChart11.hideLoading();
+        myChart11.setOption({
+            series: [{
+                data: money,
+            },{
+                data: money
+            }]
+        });
+    }
 
     function setChart2(datas) {
         console.log("chart2 go");
