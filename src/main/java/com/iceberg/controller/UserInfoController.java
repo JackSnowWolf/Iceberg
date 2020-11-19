@@ -75,7 +75,7 @@ public class UserInfoController {
       return ResultUtil.success(-1);
     }
     if (userIsExisted && userInfo == null) {
-      return ResultUtil.unSuccess("wrong username or password！");
+      return ResultUtil.unSuccess("wrong username or password!");
     } else {
       // save user info in session
       userInfo = setSessionUserInfo(userInfo, request.getSession());
