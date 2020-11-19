@@ -53,7 +53,7 @@
     <fieldset class="layui-elem-field" style="height: 1000px; ">
         <div id="chart1" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>
 <!--        <div id="chart11" class="layui-col-md6 layui-col-sm12" style="height: 400px;"></div>-->
-<!--        <div id="chart2" class="layui-col-md12" style="height: 600px;"></div>-->
+        <div id="chart2" class="layui-col-md12" style="height: 600px;"></div>
     </fieldset>
 </div>
 
@@ -78,11 +78,10 @@
     });
 
     function getReiRequests() {
-        // var date = new Date();
-        // date.setDate(1);
-        // $("#start").val()==""? $("#start").val(date.toLocaleDateString().replace(/\//g,'-')) : {};
-        // $("#end").val()==""? $("#end").val(new Date().toLocaleDateString().replace(/\//g,'-')) : {};
-
+        var date = new Date();
+        date.setDate(1);
+        $("#start").val()==""? $("#start").val(date.toLocaleDateString().replace(/\//g,'-')) : {};
+        $("#end").val()==""? $("#end").val(new Date().toLocaleDateString().replace(/\//g,'-')) : {};
         // console.log(daysBetween($("#end").val(),$("#start").val()));
         paywayid = $("#paywayid").val();
         var reimbursement = {
@@ -97,9 +96,8 @@
         $.post('/reirequest/getReiRequestByNoPage', reimbursement, function (res) {
             console.log(res);
             if (res.code === 200){
-
                     setChart1(res.datas);
-                    // setChart11(res.datas);
+                    setChart11(res.datas);
                     setChart2(res.datas);
 
             } else {
@@ -107,7 +105,6 @@
                 // myChart11.hideLoading();
                 myChart2.hideLoading();
             }
-
         });
     }
 
@@ -115,8 +112,7 @@
         // initia chart
         myChart1 = echarts.init(document.getElementById('chart1'));
         // myChart11 = echarts.init(document.getElementById('chart11'));
-        // myChart11 = echarts.init(document.getElementById('chart11'));
-        // myChart2 = echarts.init(document.getElementById('chart2'));
+        myChart2 = echarts.init(document.getElementById('chart2'));
         // configuration
         myChart1.setOption({
             title : {
@@ -133,7 +129,7 @@
                 left: '10%',
                 top: '10%',
                 // align: 'left',
-                data:['income', 'outcome'],
+                data:['inflight', 'transferred'],
             },
             toolbox: {
                 feature: {
@@ -143,7 +139,7 @@
             color: [ '#ff9f7b', '#2fa1dd'],
             series : [
                 {
-                    name:'income-outcome this month',
+                    name:'inflight - transferred this month',
                     type:'pie',
                     radius : '55%',
                     center: ['50%', '50%'],
@@ -179,6 +175,7 @@
             ]
         });
         myChart1.showLoading();
+        //
         // myChart11.setOption({
         //     title : {
         //         text: 'payway',
@@ -237,85 +234,85 @@
         //     }]
         // });
         // myChart11.showLoading();
-        // myChart2.setOption({
-        //     title : {
-        //         text: 'income-outcome comparison',
-        //         x: 'center',
-        //         y: 'bottom'
-        //     },
-        //     tooltip: {
-        //         trigger: 'axis'
-        //     },
-        //     legend: {
-        //         data:['income','outcome','net income'],
-        //         right: '5%',
-        //         top: 10,
-        //     },
-        //     // dataZoom: [
-        //     //     {
-        //     //         type: 'inside',
-        //     //         start: 60,
-        //     //         end: 70
-        //     //     }
-        //     // ],
-        //     grid: {
-        //         left: '3%',
-        //         right: '4%',
-        //         bottom: '3%',
-        //         containLabel: true
-        //     },
-        //     toolbox: {
-        //         feature: {
-        //             saveAsImage: {},
-        //         }
-        //     },
-        //     xAxis: {
-        //         type: 'category',
-        //         boundaryGap: false,
-        //         data: []
-        //     },
-        //     yAxis: {
-        //         type: 'value'
-        //     },
-        //     series: [
-        //         {
-        //             name:'income',
-        //             type:'bar',
-        //             itemStyle: {
-        //                 barBorderRadius: [5, 5, 5, 5],
-        //                 color: "#ed9473",
-        //             },
-        //             data:[],
-        //         },
-        //         {
-        //             name:'outcome',
-        //             type:'bar',
-        //             itemStyle: {
-        //                 barBorderRadius: [5, 5, 5, 5],
-        //                 color: "#2fa1dd"
-        //             },
-        //             data:[]
-        //         },
-        //         {
-        //             name:'net income',
-        //             type:'line',
-        //             areaStyle: {},
-        //             itemStyle: {
-        //                 barBorderRadius: [5, 5, 5, 5],
-        //                 color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
-        //                     {color: '#e0dec6', offset: 0},
-        //                     {color: '#a1a1dc', offset: 1}
-        //                 ]),
-        //             },
-        //             smooth: true,
-        //             data:[]
-        //         }
-        //     ],
-        //     animationDuration: function (idx) {
-        //         return idx * 300;
-        //     }
-        // });
-        // myChart2.showLoading();
+        myChart2.setOption({
+            title : {
+                text: 'Requests time series',
+                x: 'center',
+                y: 'bottom'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['Approved request','All request','Existing request'],
+                right: '5%',
+                top: 10,
+            },
+            // dataZoom: [
+            //     {
+            //         type: 'inside',
+            //         start: 60,
+            //         end: 70
+            //     }
+            // ],
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {},
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: []
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name:'Approved request',
+                    type:'bar',
+                    itemStyle: {
+                        barBorderRadius: [5, 5, 5, 5],
+                        color: "#ed9473",
+                    },
+                    data:[],
+                },
+                {
+                    name:'All request',
+                    type:'bar',
+                    itemStyle: {
+                        barBorderRadius: [5, 5, 5, 5],
+                        color: "#2fa1dd"
+                    },
+                    data:[]
+                },
+                {
+                    name:'Existing request',
+                    type:'line',
+                    areaStyle: {},
+                    itemStyle: {
+                        barBorderRadius: [5, 5, 5, 5],
+                        color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
+                            {color: '#e0dec6', offset: 0},
+                            {color: '#a1a1dc', offset: 1}
+                        ]),
+                    },
+                    smooth: true,
+                    data:[]
+                }
+            ],
+            animationDuration: function (idx) {
+                return idx * 300;
+            }
+        });
+        myChart2.showLoading();
     }
 
     function setChart1(datas){
@@ -340,55 +337,54 @@
         });
     }
 
-    function setChart11(datas) {
-        var money = [0,0,0,0,0];
-        $.each(datas,function (index,item) {
-            for (var i = 0; i < 5; i++) {
-                if (item.paywayid==(i+1)){
-                    if (item.typeid == 1){
-                        money[i] -= item.money;
-                    }else if(item.typeid == 2){
-                        money[i] += item.money;
-                    }
-                }
-            }
-        });
-        myChart11.hideLoading();
-        myChart11.setOption({
-            series: [{
-                data: money,
-            },{
-                data: money
-            }]
-        });
-    }
+    // function setChart11(datas) {
+    //     var money = [0,0,0,0,0];
+    //     $.each(datas,function (index,item) {
+    //         for (var i = 0; i < 5; i++) {
+    //             if (item.paywayid==(i+1)){
+    //                 if (item.typeid == 1){
+    //                     money[i] -= item.money;
+    //                 }else if(item.typeid == 2){
+    //                     money[i] += item.money;
+    //                 }
+    //             }
+    //         }
+    //     });
+    //     myChart11.hideLoading();
+    //     myChart11.setOption({
+    //         series: [{
+    //             data: money,
+    //         },{
+    //             data: money
+    //         }]
+    //     });
+    // }
 
     function setChart2(datas) {
-        var x = [], payVal = new Array(30), incomeVal = new Array(30), netIncomeVal = new Array(30);
+        var x = [], requstSum = new Array(30), approvedSum = new Array(30), existingSum = new Array(30);
         var start = new Date($("#start").val());
         var end = new Date($("#end").val());
         var between = daysBetween(end,start);
         for (var i = 0; i<= between; i++){
-            payVal[i]=0; incomeVal[i]=0, netIncomeVal[i]=0;
+            requstSum[i]=0; approvedSum[i]=0, existingSum[i]=0;
             var dateStr = dateAdd(start,i);
             x.push(dateStr);
-            var incomeSum=0, paySum = 0, netIncomeSum = 0;
+            var approvedSum=0, requstSum = 0, existingSum = 0;
             $.each(datas,function (index,item) {
                 if(item.time.split(" ")[0] == dateStr){
-                    if (item.typeid == 1) {
-                        paySum += parseFloat(item.money);
-                    } else if (item.typeid == 2) {
-                        incomeSum += parseFloat(item.money);
+                    if (item.typeid === "APPROVED") {
+                        approvedSum += parseFloat(item.money);
                     }
+                    requstSum += parseFloat(item.money);
                 }
             });
-            netIncomeSum += incomeSum - paySum;
-            payVal[i] = paySum;
-            incomeVal[i] = incomeSum;
-            netIncomeVal[i] = netIncomeSum;
+            existingSum += requstSum-approvedSum;
+            requstSum[i] = requstSum;
+            approvedSum[i] = approvedSum;
+            existingSum[i] = existingSum;
         }
-        // console.log(payVal);
-        // console.log(incomeVal);
+        // console.log(requstSum);
+        // console.log(approvedSum);
         myChart2.hideLoading();
         myChart2.setOption({
             xAxis: {
@@ -397,16 +393,16 @@
             series: [
                 //
                 {
-                    name:'outcome',
-                    data: payVal
+                    name:'All request',
+                    data: requstSum
                 },
                 {
-                    name:'income',
-                    data: incomeVal
+                    name:'Approved request',
+                    data: approvedSum
                 },
                 {
-                    name:'new income',
-                    data: netIncomeVal
+                    name:'Existing request',
+                    data: existingSum
                 }
             ]
         });
