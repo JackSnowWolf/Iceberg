@@ -97,7 +97,7 @@
             console.log(res);
             if (res.code === 200){
                     setChart1(res.datas);
-                    setChart11(res.datas);
+                    // setChart11(res.datas);
                     setChart2(res.datas);
 
             } else {
@@ -178,7 +178,7 @@
         //
         // myChart11.setOption({
         //     title : {
-        //         text: 'payway',
+        //         text: 'request type',
         //         x: 'center',
         //         y: 'bottom',
         //     },
@@ -189,7 +189,7 @@
         //     },
         //     xAxis: {
         //         type: 'category',
-        //         data: ['cash', 'online app(paypal)', 'debit card', 'credit card', 'others']
+        //         data: ['Hotel travel', 'Catering', 'Transportation', 'Health', 'Communications logistics', 'Leisure life', 'Others']
         //     },
         //     yAxis: {
         //         type: 'value'
@@ -234,6 +234,7 @@
         //     }]
         // });
         // myChart11.showLoading();
+        //
         myChart2.setOption({
             title : {
                 text: 'Requests time series',
@@ -336,7 +337,7 @@
             }]
         });
     }
-
+    //
     // function setChart11(datas) {
     //     var money = [0,0,0,0,0];
     //     $.each(datas,function (index,item) {
@@ -361,6 +362,8 @@
     // }
 
     function setChart2(datas) {
+        console.log("chart2 go");
+        console.log(datas);
         var x = [], requstSum = new Array(30), approvedSum = new Array(30), existingSum = new Array(30);
         var start = new Date($("#start").val());
         var end = new Date($("#end").val());
@@ -371,6 +374,10 @@
             x.push(dateStr);
             var approvedSum=0, requstSum = 0, existingSum = 0;
             $.each(datas,function (index,item) {
+                console.log("item:");
+                console.log(item);
+                console.log(item.time.split(" ")[0]);
+                console.log(dateStr);
                 if(item.time.split(" ")[0] == dateStr){
                     if (item.typeid === "APPROVED") {
                         approvedSum += parseFloat(item.money);
