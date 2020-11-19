@@ -146,6 +146,5 @@ public class OAuthController {
     userInfo.setPrivileges(privileges);
     session.setAttribute(Config.CURRENT_USERNAME, userInfo);
     return userInfo;
-
   }
 }

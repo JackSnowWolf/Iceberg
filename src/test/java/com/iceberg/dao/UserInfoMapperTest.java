@@ -125,7 +125,6 @@ public class UserInfoMapperTest {
     @Test
     public void getAllRolesTest() {
         logger.info("getAllRolesTest");
-        UserInfo userInfo = new UserInfo();
         List<Role> allRoles = userInfoMapper.getAllRoles();
         for (Role r :
                 allRoles) {
