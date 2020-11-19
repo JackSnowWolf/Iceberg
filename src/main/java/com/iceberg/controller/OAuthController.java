@@ -6,14 +6,12 @@ import com.iceberg.service.PrivilegeService;
 import com.iceberg.service.UserInfoService;
 import com.iceberg.utils.Config;
 import com.iceberg.utils.HttpClientUtils;
-import com.paypal.http.HttpResponse;
-import java.nio.charset.Charset;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -59,7 +57,7 @@ public class OAuthController {
     conn.setRequestProperty("Content-Type", "application/json");
     conn.setRequestMethod("GET");
 
-    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
+    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
     String output;
     StringBuffer response = new StringBuffer();
     while ((output = in.readLine()) != null) {

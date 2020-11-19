@@ -47,7 +47,7 @@ public class ReiRequestController {
       reimbursementRequest.setUserid(Config.getSessionUser(session).getId());
     }
     Utils.log(reimbursementRequest.toString());
-    //  set default pay way
+    // set default pay way
     if (reimbursementRequest.getPaywayid() == null || reimbursementRequest.getPaywayid() < 0) {
       reimbursementRequest.setPaywayid(0);
     }
@@ -56,8 +56,7 @@ public class ReiRequestController {
       logger.debug(reimbursementRequest.toString());
       int num = reiRequestService.add(reimbursementRequest);
       if (num > 0) {
-        return ResultUtil.success("Reimbursement Request Successfully!",
-          reimbursementRequest);
+        return ResultUtil.success("Reimbursement Request Successfully!", reimbursementRequest);
       } else {
         return ResultUtil.unSuccess();
       }
@@ -70,7 +69,7 @@ public class ReiRequestController {
    * the owen of the reimbursement request can update the reimbursement
    *
    * @param reimbursementRequest reimbursement request
-   * @param session http session
+   * @param session              http session
    * @return result information
    */
   @RequestMapping(value = "/updateRequest", method = RequestMethod.POST)
@@ -83,8 +82,7 @@ public class ReiRequestController {
     int roleId = Config.getSessionUser(session).getRoleid();
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
     reimbursementRequestSearch.setId(reimbursementRequest.getId());
-    Result<ReimbursementRequest> result = reiRequestService
-      .findByWhereNoPage(reimbursementRequestSearch);
+    Result<ReimbursementRequest> result = reiRequestService.findByWhereNoPage(reimbursementRequestSearch);
     if (result.getDatas().size() == 0) {
       return ResultUtil.unSuccess("Such reimbursement request doesn't exist!");
     } else if (result.getDatas().size() > 2) {
@@ -113,13 +111,12 @@ public class ReiRequestController {
    * review reimbursement request only for admin and group manager
    *
    * @param reimbursementRequest reimbursement request
-   * @param session http session
+   * @param session              http session
    * @return result information whether the request has been approved.
    */
   @RequestMapping(value = "/review/{typeid}/{userid}/{reimId}", method = RequestMethod.POST)
-  public Result review(ReimbursementRequest reimbursementRequest, HttpSession session,
-    @PathVariable String typeid
-    , @PathVariable String userid, @PathVariable String reimId) throws IOException {
+  public Result review(ReimbursementRequest reimbursementRequest, HttpSession session, @PathVariable String typeid,
+      @PathVariable String userid, @PathVariable String reimId) throws IOException {
     if (Config.getSessionUser(session) == null) {
       return ResultUtil.unSuccess("No user for current session");
     }
@@ -163,8 +160,8 @@ public class ReiRequestController {
     try {
       int num = reiRequestService.update(request);
       if (num > 0) {
-        return ResultUtil.success(String.format("Update successfully! Status : %s",
-          reimbursementRequest.getTypeid()), null);
+        return ResultUtil.success(String.format("Update successfully! Status : %s", reimbursementRequest.getTypeid()),
+            null);
       } else {
         return ResultUtil.unSuccess();
       }
@@ -186,8 +183,7 @@ public class ReiRequestController {
   }
 
   @RequestMapping("/getReiRequestByUserId/{userid}/{pageNo}/{pageSize}")
-  public Result getReiRequestByUserId(@PathVariable int userid, @PathVariable int pageNo,
-    @PathVariable int pageSize) {
+  public Result getReiRequestByUserId(@PathVariable int userid, @PathVariable int pageNo, @PathVariable int pageSize) {
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setId(userid);
 
@@ -199,7 +195,7 @@ public class ReiRequestController {
 
   @RequestMapping("/getReiRequest/{pageNo}/{pageSize}")
   public Result getReiRequest(ReimbursementRequest reimbursementRequest, @PathVariable int pageNo,
-    @PathVariable int pageSize, HttpSession session) {
+      @PathVariable int pageSize, HttpSession session) {
     if (Config.getSessionUser(session) == null) {
       return ResultUtil.unSuccess("No user for current session");
     }
@@ -229,8 +225,7 @@ public class ReiRequestController {
   }
 
   @RequestMapping("/getReiRequestByNoPage")
-  public Result getReiRequestByNoPage(ReimbursementRequest reimbursementRequest,
-    HttpSession session) {
+  public Result getReiRequestByNoPage(ReimbursementRequest reimbursementRequest, HttpSession session) {
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
 
     if (Config.getSessionUser(session) == null) {

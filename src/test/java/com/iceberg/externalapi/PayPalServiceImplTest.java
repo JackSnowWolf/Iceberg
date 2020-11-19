@@ -24,6 +24,7 @@ public class PayPalServiceImplTest {
 
     @Test
     public void createPayoutBatchTest() throws IOException {
+      logger.info("create payout batch test starts");
         try{
             HttpResponse<CreatePayoutResponse> createPayoutResponse = payPalService.createPayoutBatch();
             boolean res=false;
@@ -46,6 +47,7 @@ public class PayPalServiceImplTest {
 
             if (i < 5) {
                 HttpResponse<PayoutItemResponse> response=payPalService.cancelPayoutItem(getBatchResponse.result().items().get(0).payoutItemId());
+                logger.info(response.toString());
             } else {
                 System.out.println("Payout create request is still not processed");
             }
@@ -56,6 +58,7 @@ public class PayPalServiceImplTest {
 
     @Test
     public void createPayoutTest() throws IOException{
+      logger.info("create payout test starts");
         try{
             HttpResponse<CreatePayoutResponse> createPayoutResponse = payPalService.createPayout("payout-sdk-test@paypal.com", "USD", "1.00");
             boolean res=false;
@@ -66,6 +69,7 @@ public class PayPalServiceImplTest {
             HttpResponse<PayoutBatch> getBatchResponse;
             getBatchResponse = payPalService.getPayoutBatch(createPayoutResponse.result().batchHeader().payoutBatchId());
             HttpResponse<PayoutItemResponse> response=payPalService.cancelPayoutItem(getBatchResponse.result().items().get(0).payoutItemId());
+            logger.info(response.toString());
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -73,6 +77,7 @@ public class PayPalServiceImplTest {
 
     @Test
     public void cancelPayoutItemTest() throws IOException, InterruptedException{
+      logger.info("cancel payout test starts");
         try{
             HttpResponse<CreatePayoutResponse> createPayoutResponse = payPalService.createPayoutBatch();
             int i = 0;
@@ -105,6 +110,7 @@ public class PayPalServiceImplTest {
 
     @Test
     public void getPayoutBatchAndItemTest() throws IOException {
+      logger.info("get payout test starts");
         try{
             HttpResponse<CreatePayoutResponse> createPayoutResponse = payPalService.createPayoutBatch();
             int i = 0;
@@ -133,6 +139,7 @@ public class PayPalServiceImplTest {
 
             if (i < 5) {
                 HttpResponse<PayoutItemResponse> response=payPalService.cancelPayoutItem(getBatchResponse.result().items().get(0).payoutItemId());
+                logger.info(response.toString());
             } else {
                 System.out.println("Payout create request is still not processed");
             }
