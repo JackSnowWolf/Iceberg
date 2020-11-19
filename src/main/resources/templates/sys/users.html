@@ -127,8 +127,10 @@
       "username": $("#username").val(),
       "realname": $("#username").val(),
       "roleid": $("#roleid").val(),
-      "groupid": top.sessionUser.groupid,
     };
+    if (top.sessionUser.roleid === 2){
+      user.groupid=top.sessionUser.groupid;
+    }
     // console.log(user);
     // console.log(user);
     $.post("/users/getUsersByWhere/" + pageNo + "/" + mPageSize, user, function (res) {

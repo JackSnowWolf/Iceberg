@@ -102,6 +102,9 @@ public class ReiRequestController {
         return ResultUtil.unSuccess("Request has already been approved!");
       }
       try {
+        if (reimbursementRequest.getPaywayid() == -1) {
+          reimbursementRequest.setPaywayid(0);
+        }
         reimbursementRequest.setTypeid(PROCESSING.value);
         int num = reiRequestService.update(reimbursementRequest);
         if (num > 0) {
@@ -230,6 +233,7 @@ public class ReiRequestController {
   @RequestMapping("/getReiRequest/{pageNo}/{pageSize}")
   public Result getReiRequest(ReimbursementRequest reimbursementRequest, @PathVariable int pageNo,
       @PathVariable int pageSize, HttpSession session) {
+    System.out.println("reimbursementRequest:" + reimbursementRequest);
     UserInfo currentUser = Config.getSessionUser(session);
     if (currentUser == null) {
       return ResultUtil.unSuccess("No user for current session");
@@ -244,6 +248,12 @@ public class ReiRequestController {
     }
     if (reimbursementRequest.getTypeid() != null) {
       reimbursementRequestSearch.setTypeid(reimbursementRequest.getTypeid().value);
+    }
+    if (reimbursementRequest.getPaywayid() != null && reimbursementRequest.getPaywayid() != -1) {
+      reimbursementRequestSearch.setPaywayid(reimbursementRequest.getPaywayid());
+    }
+    if (reimbursementRequest.getRealname() != null) {
+      reimbursementRequestSearch.setRealname(reimbursementRequest.getRealname());
     }
 
     // search for group reimbursement information if group manager
