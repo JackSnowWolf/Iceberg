@@ -26,7 +26,7 @@ public class ReiRequestMapperTest {
   public void addReiRequestTest() {
     logger.info("add reimbursement request test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
-    reimbursementRequest.setUserid(1);
+    reimbursementRequest.setUserid(123);
     reimbursementRequest.setGroupid("1");
     reimbursementRequest.setRemark("For test");
     reimbursementRequest.setTypeid(APPROVED.value);
@@ -44,7 +44,7 @@ public class ReiRequestMapperTest {
   public void findByWhereNoPage() {
     logger.info("findByWhereNoPage reimbursement request test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
-    reimbursementRequest.setUserid(1);
+    reimbursementRequest.setUserid(123);
     reimbursementRequest.setGroupid("2");
     reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
     reimbursementRequest.setTypeid(APPROVED.value);
@@ -59,19 +59,42 @@ public class ReiRequestMapperTest {
     assertEquals(1, num);
 
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
-    reimbursementRequestSearch.setUserid(1);
+    reimbursementRequestSearch.setUserid(123);
     reimbursementRequestSearch.setReceiveraccount("test@paypal.com");
     System.out.println(reimbursementRequestSearch.toString());
     List<ReimbursementRequest> requestList = reiRequestMapper
-      .findByWhereNoPage(reimbursementRequestSearch);
+        .findByWhereNoPage(reimbursementRequestSearch);
     assertNotEquals(0, requestList.size());
+  }
+
+  @Test
+  public void shouldGetReimRequestById(){
+    logger.info("get reimbursement request by id test");
+    ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
+    reimbursementRequest.setUserid(123);
+    reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
+    reimbursementRequest.setTypeid(APPROVED.value);
+    reimbursementRequest.setMoney((float) 100.0);
+    reimbursementRequest.setTitle("Test Usage");
+    reimbursementRequest.setPaywayid(1);
+
+    int num = reiRequestMapper.add(reimbursementRequest);
+    assertEquals(1, num);
+    ReimbursementRequest resultRequest = reiRequestMapper.getReimRequestById(reimbursementRequest.getId());
+
+    assertEquals(reimbursementRequest.getTitle(), resultRequest.getTitle());
+    assertEquals(reimbursementRequest.getPaywayid(), resultRequest.getPaywayid());
+    assertEquals(reimbursementRequest.getRemark(), resultRequest.getRemark());
+    assertEquals(reimbursementRequest.getMoney(), resultRequest.getMoney());
+    assertEquals(reimbursementRequest.getTypeid(), resultRequest.getTypeid());
+    assertEquals(reimbursementRequest.getUserid(), resultRequest.getUserid());
   }
 
   @Test
   public void updateReiRequestTest() {
     logger.info("update reimbursement request test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
-    reimbursementRequest.setUserid(1);
+    reimbursementRequest.setUserid(123);
     reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
     reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
@@ -81,21 +104,22 @@ public class ReiRequestMapperTest {
     int num = reiRequestMapper.add(reimbursementRequest);
     assertEquals(1, num);
 
-    reimbursementRequest.setTitle("Test Usage Updated");
-    List<ReimbursementRequest> requestList = reiRequestMapper
-      .findByWhereNoPage(reimbursementRequest);
-    if (requestList.size() == 1) {
-      assertEquals("Test Usage Updated", requestList.get(0).getTitle());
-    } else {
-      logger.error("updated request not found!");
-    }
+    ReimbursementRequest updatedReimbursementRequest = new ReimbursementRequest();
+    updatedReimbursementRequest.setId(reimbursementRequest.getId());
+    updatedReimbursementRequest.setTitle("Test Usage Updated");
+
+    num = reiRequestMapper.update(updatedReimbursementRequest);
+    assertEquals(1, num);
+
+    reimbursementRequest = reiRequestMapper.getReimRequestById(reimbursementRequest.getId());
+    assertEquals(updatedReimbursementRequest.getTitle(), reimbursementRequest.getTitle());
   }
 
   @Test
   public void delReiRequestTest() {
     logger.info("del reimbursement request test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
-    reimbursementRequest.setUserid(1);
+    reimbursementRequest.setUserid(123);
     reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
     reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
@@ -117,7 +141,7 @@ public class ReiRequestMapperTest {
     PageModel<ReimbursementRequest> model = new PageModel<>(1, reimbursementRequest);
     model.setPageSize(10);
     List<ReimbursementRequest> requestList = reiRequestMapper
-      .findByWhere(model);
+        .findByWhere(model);
 
     assertEquals(10, requestList.size());
   }
@@ -130,8 +154,9 @@ public class ReiRequestMapperTest {
     PageModel<ReimbursementRequest> model = new PageModel<>(1, reimbursementRequest);
     model.setPageSize(10);
     List<ReimbursementRequest> requestList = reiRequestMapper
-      .findByWhere(model);
+        .findByWhere(model);
 
     assertEquals(10, requestList.size());
   }
+
 }
