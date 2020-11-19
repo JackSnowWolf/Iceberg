@@ -249,7 +249,7 @@ public class ReiRequestController {
     if (reimbursementRequest.getTypeid() != null) {
       reimbursementRequestSearch.setTypeid(reimbursementRequest.getTypeid().value);
     }
-    if (reimbursementRequest.getPaywayid() != -1) {
+    if (reimbursementRequest.getPaywayid() != null && reimbursementRequest.getPaywayid() != -1) {
       reimbursementRequestSearch.setPaywayid(reimbursementRequest.getPaywayid());
     }
     if (reimbursementRequest.getRealname() != null) {
