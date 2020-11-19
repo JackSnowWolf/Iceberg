@@ -59,7 +59,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">Pay way</label>
         <div class="layui-input-inline">
-            <select id="paywayid" autocomplete="off" disabled="">
+            <select name="paywayid" autocomplete="off" disabled="" id="paywayid" >
                 <option selected>Pay way</option>
                 <option value="0">Paypal</option>
                 <option value="1">Cash</option>
@@ -210,8 +210,9 @@
             $("input[name=money]").val($(tr).find(":nth-child(6)").html());
             $("input[name=remark]").val($(tr).find(":nth-child(7)").html());
             $("input[name=receiveraccount]").val($(tr).find(":nth-child(9)").html());
-            var payway = $(tr).find(":nth-child(5)").html() == null ? -1 : $(tr).find(":nth-child(5)").html();
-            $("#payway").find("option:contains("+payway+")").prop("selected",true);
+            var payway = $(tr).find(":nth-child(8)").html() == null ? -1 : $(tr).find(":nth-child(8)").html();
+            console.log(payway + "**********************")
+            $("#paywayid").find("option:contains("+payway+")").prop("selected",true);
             $("textarea[name=remark]").val($(tr).find(":nth-child(9)").html());
             // $("input[name=id]").val($(tr).find(":nth-child(9)").html());
         // }

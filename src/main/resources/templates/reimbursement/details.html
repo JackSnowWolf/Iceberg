@@ -93,10 +93,13 @@
         <tr>
             <th style="width: 6%;">Index</th>
             <th style="width: 8%;">Title</th>
+            <th style="width: 8%;">UserId</th>
+            <th style="width: 8%;">RequestId</th>
             <th style="width: 8%;">Name</th>
             <th style="width: 10%;">Money</th>
 <!--            <th style="width: 10%;">Payway</th>-->
             <th style="width: 10%;">Type</th>
+            <th style="width: 10%;">Payway</th>
             <th style="width: 16%;">Receiver</th>
             <th style="width: 12%;">Time</th>
             <th style="width: 10%;">Status</th>
@@ -148,14 +151,17 @@
             "endTime": $("#end").val(),
             // "realname": $("#realname").val(),
             "title": $("#title").val(),
-            "typeid": typeid === -1 ? null : typeid,
+            "typeid": 3,// show approved request only
             // "paywayid": paywayid === -1 ? null : paywayid,
             "remark": $("#remark").val()
         };
+        // if (paywayid == -1) {
+        //   reimbursement.paywayid = 0;
+        // }
       // for normal user, only approved
-      if (parent.sessionUser.roleid == 3) {
-        reimbursement.typeid = 3;
-      }
+      // if (parent.sessionUser.roleid == 3) {
+      //   reimbursement.typeid = 3;
+      // }
         console.log(reimbursement);
         // TODO: search reimbursement reqeuest by where
         $.post("/reirequest/getReiRequest/" + pageNo + "/" + mPageSize, reimbursement,function (res) {
@@ -198,12 +204,15 @@
         var html = "";
         $.each(reiRequests, function (index, item) {
             html += '<tr>' +
-                  '            <td>' + (index + 1 + beginIndex) + '</td>' +
+                '            <td>' + (index + 1 + beginIndex) + '</td>' +
                 '            <td>' + item.title + '</td>' +
+                '            <td>' + item.userid + '</td>' +
+                '            <td>' + item.id + '</td>' +
                 '            <td>' + item.realname + '</td>' +
                 '            <td>' + parseFloat(item.money).toFixed(2) + '</td>' +
                 // '            <td>' + item.payway + '</td>' +
                 '            <td class="remark" title=' + item.remark + '>' + item.remark + '</td>' +
+                '            <td class="paywayid" title=' + item.paywayid + '>' + item.paywayid + '</td>' +
                 '            <td class="receiveraccount" title=' + item.receiveraccount + '>' + item.receiveraccount + '</td>' +
                 '            <td>' + item.time + '</td>' +
                 '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +

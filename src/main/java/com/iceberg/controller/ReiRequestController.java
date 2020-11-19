@@ -102,6 +102,9 @@ public class ReiRequestController {
         return ResultUtil.unSuccess("Request has already been approved!");
       }
       try {
+        if (reimbursementRequest.getPaywayid() == -1) {
+          reimbursementRequest.setPaywayid(0);
+        }
         reimbursementRequest.setTypeid(PROCESSING.value);
         int num = reiRequestService.update(reimbursementRequest);
         if (num > 0) {
