@@ -61,9 +61,7 @@ public class MailUtils {
       protected PasswordAuthentication getPasswordAuthentication() {
 
         //new PasswordAuthentication(username, password);
-
-        return new PasswordAuthentication("1603118971@qq.com", "urjbvhzgycqvhfdh");
-
+        return new PasswordAuthentication("icebergteam@qq.com","sfdkjvbhuzynbdfg");
       }
 
     });
@@ -72,7 +70,7 @@ public class MailUtils {
 
       Message message = new MimeMessage(session);
 
-      message.setFrom(new InternetAddress("1603118971@qq.com"));
+      message.setFrom(new InternetAddress("icebergteam@qq.com"));
 
       message.setRecipient(RecipientType.TO, new InternetAddress(to));
 
