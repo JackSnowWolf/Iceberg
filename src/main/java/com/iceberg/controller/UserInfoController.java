@@ -5,31 +5,35 @@ import com.iceberg.entity.Role;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.service.PrivilegeService;
 import com.iceberg.service.UserInfoService;
-import com.iceberg.utils.*;
+import com.iceberg.utils.Config;
+import com.iceberg.utils.PageModel;
+import com.iceberg.utils.Result;
+import com.iceberg.utils.ResultUtil;
+import com.iceberg.utils.Utils;
+import java.io.IOException;
+import java.util.List;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.List;
-
 /**
- * description: this class is mainly focus on user's account information
+ * description: this class is mainly focus on user's account information.
  */
 
 @Controller
 public class UserInfoController {
+
   @Resource
   private UserInfoService userInfoService;
   @Resource
   private PrivilegeService privilegeService;
 
-  @RequestMapping(value = { "/", "login.html" })
+  @RequestMapping(value = {"/", "login.html"})
   public String toLogin(HttpServletRequest request, HttpServletResponse response) {
     HttpSession session = request.getSession();
     if (session.getAttribute(Config.CURRENT_USERNAME) == null) {
@@ -48,7 +52,8 @@ public class UserInfoController {
 
   @RequestMapping(value = "/login.do")
   @ResponseBody
-  public Result getUserInfo(UserInfo userInfo, HttpServletRequest request, HttpServletResponse response) {
+  public Result getUserInfo(UserInfo userInfo, HttpServletRequest request,
+      HttpServletResponse response) {
     boolean userIsExisted = userInfoService.userIsExisted(userInfo);
     System.out.println(userIsExisted + " - " + request.getHeader("token"));
     userInfo = getUserInfo(userInfo);
@@ -62,13 +67,29 @@ public class UserInfoController {
       // save user info in session
       userInfo = setSessionUserInfo(userInfo, request.getSession());
       // save user info in cookie
-//            setCookieUser(request,response);
+      // setCookieUser(request,response);
       return ResultUtil.success("login successful", userInfo);
     }
   }
 
+  public UserInfo getUserInfo(UserInfo userInfo) {
+    return userInfoService.getUserInfo(userInfo);
+  }
+
+  /**
+   * get user privilege info through user info and save it in session.
+   */
+  public UserInfo setSessionUserInfo(UserInfo userInfo, HttpSession session) {
+    List<Privilege> privileges = privilegeService.getPrivilegeByRoleid(userInfo.getRoleid());
+    userInfo.setPrivileges(privileges);
+    session.setAttribute(Config.CURRENT_USERNAME, userInfo);
+    return userInfo;
+
+  }
+
   @RequestMapping("/users/getUsersByWhere/{pageNo}/{pageSize}")
-  public @ResponseBody Result getUsersByWhere(UserInfo userInfo, @PathVariable int pageNo, @PathVariable int pageSize,
+  public @ResponseBody
+  Result getUsersByWhere(UserInfo userInfo, @PathVariable int pageNo, @PathVariable int pageSize,
       HttpSession session) {
     if ("".equals(userInfo.getGroupid())) {
       userInfo.setGroupid(null);
@@ -84,7 +105,8 @@ public class UserInfoController {
   }
 
   @RequestMapping("/user/add")
-  public @ResponseBody Result addUser(UserInfo userInfo) {
+  public @ResponseBody
+  Result addUser(UserInfo userInfo) {
     System.out.println(userInfo);
     try {
       int num = userInfoService.add(userInfo);
@@ -99,7 +121,8 @@ public class UserInfoController {
   }
 
   @RequestMapping("/user/update")
-  public @ResponseBody Result updateUser(UserInfo userInfo) {
+  public @ResponseBody
+  Result updateUser(UserInfo userInfo) {
     try {
       int num = userInfoService.update(userInfo);
       if (num > 0) {
@@ -113,7 +136,8 @@ public class UserInfoController {
   }
 
   @RequestMapping("/user/del/{id}")
-  public @ResponseBody Result deleteUser(@PathVariable String id) {
+  public @ResponseBody
+  Result deleteUser(@PathVariable String id) {
     try {
       int num = userInfoService.delete(id);
       if (num > 0) {
@@ -136,7 +160,7 @@ public class UserInfoController {
 
   @RequestMapping("/logout")
   public String logout(HttpServletRequest request, HttpServletResponse response) {
-//        delCookieUser(request, response);
+    //  delCookieUser(request, response);
     request.getSession().removeAttribute(Config.CURRENT_USERNAME);
     return "login";
   }
@@ -147,7 +171,8 @@ public class UserInfoController {
   }
 
   @RequestMapping("/getAllRoles")
-  public @ResponseBody Result<Role> getAllRoles() {
+  public @ResponseBody
+  Result<Role> getAllRoles() {
     try {
       List<Role> roles = userInfoService.getAllRoles();
       if (roles.size() > 0) {
@@ -161,7 +186,8 @@ public class UserInfoController {
   }
 
   @RequestMapping("/role/add")
-  public @ResponseBody Result addRole(Role role) {
+  public @ResponseBody
+  Result addRole(Role role) {
     try {
       int num = userInfoService.addRole(role);
       if (num > 0) {
@@ -176,7 +202,8 @@ public class UserInfoController {
   }
 
   @RequestMapping("/role/update")
-  public @ResponseBody Result updateRole(Role role) {
+  public @ResponseBody
+  Result updateRole(Role role) {
     try {
       int num = userInfoService.updateRole(role);
       if (num > 0) {
@@ -190,7 +217,8 @@ public class UserInfoController {
   }
 
   @RequestMapping("/role/del/{roleid}")
-  public @ResponseBody Result deleteRole(@PathVariable String roleid) {
+  public @ResponseBody
+  Result deleteRole(@PathVariable String roleid) {
     try {
       privilegeService.delPrivilegesWenDelRole(roleid);
       int num = userInfoService.deleteRole(roleid);
@@ -206,7 +234,8 @@ public class UserInfoController {
   }
 
   @RequestMapping("/getRole/{id}")
-  public @ResponseBody Result getRoleById(@PathVariable String id) {
+  public @ResponseBody
+  Result getRoleById(@PathVariable String id) {
     try {
       Role role = userInfoService.getRoleById(id);
       if (role != null) {
@@ -217,24 +246,5 @@ public class UserInfoController {
     } catch (Exception e) {
       return ResultUtil.error(e);
     }
-  }
-
-  /**
-   * get user privilege info through user info and save it in session
-   * 
-   * @param userInfo
-   * @param session
-   * @return
-   */
-  public UserInfo setSessionUserInfo(UserInfo userInfo, HttpSession session) {
-    List<Privilege> privileges = privilegeService.getPrivilegeByRoleid(userInfo.getRoleid());
-    userInfo.setPrivileges(privileges);
-    session.setAttribute(Config.CURRENT_USERNAME, userInfo);
-    return userInfo;
-
-  }
-
-  public UserInfo getUserInfo(UserInfo userInfo) {
-    return userInfoService.getUserInfo(userInfo);
   }
 }

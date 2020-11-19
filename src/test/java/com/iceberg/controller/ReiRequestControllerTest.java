@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.externalapi.PayPalService;
@@ -44,7 +43,6 @@ public class ReiRequestControllerTest {
 
   protected static MockHttpSession session;
 
-  private static Gson gson = new Gson();
 
   private static ObjectMapper objectMapper = new ObjectMapper();
   @Autowired
@@ -52,7 +50,6 @@ public class ReiRequestControllerTest {
 
   @MockBean
   private ReiRequestService reiRequestService;
-  private List<ReimbursementRequest> reimbursementRequestList;
 
   @MockBean
   private UserInfoService userInfoService;

@@ -4,9 +4,8 @@ import com.iceberg.entity.Group;
 import com.iceberg.entity.Role;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.utils.PageModel;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
+import org.springframework.stereotype.Service;
 
 @Service("UserInfoMapper")
 public interface UserInfoMapper {
@@ -16,18 +15,18 @@ public interface UserInfoMapper {
   int addUser(UserInfo userInfo);
 
   /**
-   * 通过username判断该用户是否存在
-   * 
-   * @param userInfo
-   * @return
+   * whether user exists.
+   *
+   * @param userInfo user info.
+   * @return whether user exists
    */
   int userIsExisted(UserInfo userInfo);
 
   /**
-   * 通过条件获取符合条件的优化信息 -- 分页
-   * 
-   * @param model
-   * @return
+   * get user with page.
+   *
+   * @param model page model.
+   * @return list of user info.
    */
   List<UserInfo> getUsersByWhere(PageModel<UserInfo> model);
 

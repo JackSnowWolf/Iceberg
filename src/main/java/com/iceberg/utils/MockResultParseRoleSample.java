@@ -1,7 +1,6 @@
 package com.iceberg.utils;
 
 import com.iceberg.entity.Role;
-import com.iceberg.entity.UserInfo;
 import java.util.List;
 
 public class MockResultParseRoleSample {

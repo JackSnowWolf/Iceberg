@@ -1,7 +1,6 @@
 package com.iceberg.service;
 
 import com.iceberg.entity.Privilege;
-
 import java.util.List;
 
 public interface PrivilegeService {

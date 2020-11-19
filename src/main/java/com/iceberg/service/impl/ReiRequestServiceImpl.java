@@ -8,9 +8,8 @@ import com.iceberg.utils.Result;
 import com.iceberg.utils.ResultUtil;
 import java.util.List;
 import java.util.Map;
-import org.springframework.stereotype.Service;
-
 import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ReiRequestServiceImpl implements ReiRequestService {
@@ -57,7 +56,8 @@ public class ReiRequestServiceImpl implements ReiRequestService {
   @Override
   public Result<ReimbursementRequest> findByWhereNoPage(ReimbursementRequest reimbursementRequest) {
     try {
-      List<ReimbursementRequest> reimbursementRequests = mapper.findByWhereNoPage(reimbursementRequest);
+      List<ReimbursementRequest> reimbursementRequests = mapper
+          .findByWhereNoPage(reimbursementRequest);
       if (reimbursementRequests.size() >= 0) {
         Result<ReimbursementRequest> result = ResultUtil.success(reimbursementRequests);
         result.setMsg("Fetch data successfully");

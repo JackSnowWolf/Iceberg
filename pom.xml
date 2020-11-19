@@ -155,17 +155,27 @@
                     </includes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <formats>
+                        <format>html</format>
+                        <format>xml</format>
+                    </formats>
+                    <check />
+                </configuration>
+            </plugin>
         </plugins>
 
         <resources>
-            <!-- 编译之后包含xml -->
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.xml</include>
                 </includes>
             </resource>
-            <!-- 编译之后包含xml和properties -->
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>

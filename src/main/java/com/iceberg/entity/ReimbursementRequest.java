@@ -29,6 +29,11 @@ public class ReimbursementRequest {
     return startTime;
   }
 
+  /**
+   * start time setter.
+   *
+   * @param startTime start time.
+   */
   public void setStartTime(String startTime) {
     if ("".equals(startTime.trim())) {
       return;
@@ -40,6 +45,11 @@ public class ReimbursementRequest {
     return endTime;
   }
 
+  /**
+   * end time setter.
+   *
+   * @param endTime end time.
+   */
   public void setEndTime(String endTime) {
     if ("".equals(endTime.trim())) {
       return;
@@ -148,6 +158,11 @@ public class ReimbursementRequest {
     return realname;
   }
 
+  /**
+   * real name setter.
+   *
+   * @param realname real name.
+   */
   public void setRealname(String realname) {
     if ("".equals(realname.trim())) {
       return;

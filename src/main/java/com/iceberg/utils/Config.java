@@ -1,7 +1,6 @@
 package com.iceberg.utils;
 
 import com.iceberg.entity.UserInfo;
-
 import javax.servlet.http.HttpSession;
 
 public class Config {
