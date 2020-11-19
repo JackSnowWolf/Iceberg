@@ -33,6 +33,12 @@ public class UserInfoController {
   @Resource
   private PrivilegeService privilegeService;
 
+  /**
+   * login handler.
+   * @param request http request
+   * @param response http response
+   * @return redirect path.
+   */
   @RequestMapping(value = {"/", "login.html"})
   public String toLogin(HttpServletRequest request, HttpServletResponse response) {
     HttpSession session = request.getSession();
@@ -50,6 +56,13 @@ public class UserInfoController {
     }
   }
 
+  /**
+   * get user info for login.
+   * @param userInfo user info
+   * @param request http request
+   * @param response http response
+   * @return result message.
+   */
   @RequestMapping(value = "/login.do")
   @ResponseBody
   public Result getUserInfo(UserInfo userInfo, HttpServletRequest request,
@@ -62,7 +75,7 @@ public class UserInfoController {
       return ResultUtil.success(-1);
     }
     if (userIsExisted && userInfo == null) {
-      return ResultUtil.unSuccess("wrong username or password！");
+      return ResultUtil.unSuccess("wrong username or password!");
     } else {
       // save user info in session
       userInfo = setSessionUserInfo(userInfo, request.getSession());
@@ -72,12 +85,22 @@ public class UserInfoController {
     }
   }
 
+  /**
+   * get user info from service.
+   * @param userInfo user info.
+   * @return user info in the database.
+   */
   public UserInfo getUserInfo(UserInfo userInfo) {
     return userInfoService.getUserInfo(userInfo);
   }
 
+
   /**
    * get user privilege info through user info and save it in session.
+   *
+   * @param userInfo user info.
+   * @param session http session.
+   * @return user info.
    */
   public UserInfo setSessionUserInfo(UserInfo userInfo, HttpSession session) {
     List<Privilege> privileges = privilegeService.getPrivilegeByRoleid(userInfo.getRoleid());
@@ -87,6 +110,14 @@ public class UserInfoController {
 
   }
 
+  /**
+   * get user info by where.
+   * @param userInfo query user info.
+   * @param pageNo page no
+   * @param pageSize page size.
+   * @param session http session.
+   * @return result message
+   */
   @RequestMapping("/users/getUsersByWhere/{pageNo}/{pageSize}")
   public @ResponseBody
   Result getUsersByWhere(UserInfo userInfo, @PathVariable int pageNo, @PathVariable int pageSize,
@@ -109,6 +140,11 @@ public class UserInfoController {
     return userInfoService.getUsersByWhere(model);
   }
 
+  /**
+   * add user.
+   * @param userInfo user info
+   * @return result message in response body.
+   */
   @RequestMapping("/user/add")
   public @ResponseBody
   Result addUser(UserInfo userInfo) {
@@ -125,6 +161,11 @@ public class UserInfoController {
     }
   }
 
+  /**
+   * update user info.
+   * @param userInfo user info.
+   * @return result message in response body.
+   */
   @RequestMapping("/user/update")
   public @ResponseBody
   Result updateUser(UserInfo userInfo) {
@@ -140,6 +181,11 @@ public class UserInfoController {
     }
   }
 
+  /**
+   * delete user.
+   * @param id user id.
+   * @return result message in response body.
+   */
   @RequestMapping("/user/del/{id}")
   public @ResponseBody
   Result deleteUser(@PathVariable String id) {
@@ -155,6 +201,11 @@ public class UserInfoController {
     }
   }
 
+  /**
+   * get session user.
+   * @param session http session.
+   * @return result message.
+   */
   @RequestMapping("/getSessionUser")
   @ResponseBody
   public UserInfo getSessionUser(HttpSession session) {
@@ -163,6 +214,12 @@ public class UserInfoController {
     return sessionUser;
   }
 
+  /**
+   * logout.
+   * @param request http request.
+   * @param response http response
+   * @return redirect url.
+   */
   @RequestMapping("/logout")
   public String logout(HttpServletRequest request, HttpServletResponse response) {
     //  delCookieUser(request, response);
@@ -170,11 +227,20 @@ public class UserInfoController {
     return "login";
   }
 
+  /**
+   * redirect pages.
+   * @param page request page.
+   * @return redirect url.
+   */
   @RequestMapping("/pages/{page}")
   public String toPage(@PathVariable String page) {
     return page.replace("_", "/");
   }
 
+  /**
+   * get all roles.
+   * @return all roles.
+   */
   @RequestMapping("/getAllRoles")
   public @ResponseBody
   Result<Role> getAllRoles() {
@@ -190,6 +256,11 @@ public class UserInfoController {
     }
   }
 
+  /**
+   * add role.
+   * @param role role
+   * @return result message
+   */
   @RequestMapping("/role/add")
   public @ResponseBody
   Result addRole(Role role) {
@@ -206,6 +277,11 @@ public class UserInfoController {
     }
   }
 
+  /**
+   * update role.
+   * @param role role
+   * @return result message.
+   */
   @RequestMapping("/role/update")
   public @ResponseBody
   Result updateRole(Role role) {
@@ -221,6 +297,11 @@ public class UserInfoController {
     }
   }
 
+  /**
+   * delete role.
+   * @param roleid role id.
+   * @return result message
+   */
   @RequestMapping("/role/del/{roleid}")
   public @ResponseBody
   Result deleteRole(@PathVariable String roleid) {
@@ -238,6 +319,11 @@ public class UserInfoController {
     }
   }
 
+  /**
+   * get role by id.
+   * @param id role id
+   * @return result message
+   */
   @RequestMapping("/getRole/{id}")
   public @ResponseBody
   Result getRoleById(@PathVariable String id) {
