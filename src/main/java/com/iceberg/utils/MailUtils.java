@@ -73,7 +73,7 @@ public class MailUtils {
 
         //这个用户名密码就可以登录到邮箱服务器了,用它给别人发送邮件
 
-        return new PasswordAuthentication("1603118971@qq.com","urjbvhzgycqvhfdh");
+        return new PasswordAuthentication("icebergteam@qq.com","sfdkjvbhuzynbdfg");
 
       }
 
@@ -85,7 +85,7 @@ public class MailUtils {
 
       //2.1sender
 
-      message.setFrom(new InternetAddress("1603118971@qq.com"));
+      message.setFrom(new InternetAddress("icebergteam@qq.com"));
 
       //2.2设置收件人 这个TO就是收件人
 
