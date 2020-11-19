@@ -18,7 +18,7 @@ function detaTitle(){
 function getAllPayways() {
     $.ajaxSettings.async = false;
     $.get("/bills/getPayways",function (res) {
-        var html = '<option value="-1">选择支付方式</option>';
+        var html = '<option value="-1">choose your payway</option>';
         if (res.code == 200){
             $.each(res.datas,function (index,item) {
                 html += '<option value="'+item.id+'">'+item.payway+'</option>';

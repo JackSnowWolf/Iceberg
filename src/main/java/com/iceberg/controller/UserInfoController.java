@@ -95,8 +95,13 @@ public class UserInfoController {
       userInfo.setGroupid(null);
     }
     if (userInfo.getRoleid() == -1) {
-      System.out.println("*****" + Config.getSessionUser(session));
+      //System.out.println("*****" + Config.getSessionUser(session));
       userInfo.setRoleid(Config.getSessionUser(session).getRoleid());
+    }
+    //group manager cannot search administrator's userinfo.
+    if (userInfo.getGroupid() != null && userInfo.getRoleid() == 1) {
+      //cannot search user with role 1
+      userInfo.setRoleid(2);
     }
     Utils.log(userInfo.toString());
     PageModel model = new PageModel<>(pageNo, userInfo);

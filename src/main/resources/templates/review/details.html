@@ -54,8 +54,8 @@
 <div class="x-body">
   <div class="layui-row">
     <form class="layui-form layui-col-md12 x-so">
-      <input class="layui-input" placeholder="Start Date" id="start" autocomplete="off">
-      <input class="layui-input" placeholder="End Date" id="end" autocomplete="off">
+<!--      <input class="layui-input" placeholder="Start Date" id="start" autocomplete="off">-->
+<!--      <input class="layui-input" placeholder="End Date" id="end" autocomplete="off">-->
       <input type="text" placeholder="Name" id="realname" autocomplete="off" class="layui-input">
       <input type="text" placeholder="Title" id="title" autocomplete="off" class="layui-input">
       <!--            <div class="layui-input-inline">-->
@@ -76,16 +76,27 @@
       <div class="layui-input-inline">
         <select id="paywayid" autocomplete="off">
           <option value=-1>payway</option>
-          <option value=0>Paypal</option>
+<!--          <option value=0>Paypal</option>-->
           <option value=1>Paypal</option>
           <option value=2>Cash</option>
           <option value=3>Debit</option>
           <option value=4>Venmo</option>
-          <option value=4>Others</option>
+          <option value=5>Others</option>
         </select>
       </div>
+<!--      TODO: make remark as enum-->
+<!--      <div class="layui-input-inline">-->
+<!--        <select id="remark" autocomplete="off">-->
+<!--          <option value=-1>Usage Type</option>-->
+<!--          &lt;!&ndash;          <option value=0>Paypal</option>&ndash;&gt;-->
+<!--          <option value=1>Paypal</option>-->
+<!--          <option value=2>Cash</option>-->
+<!--          <option value=3>Debit</option>-->
+<!--          <option value=4>Venmo</option>-->
+<!--          <option value=5>Others</option>-->
+<!--        </select>-->
+<!--      </div>-->
 
-      <input type="text" placeholder="Remark" id="remark" autocomplete="off" class="layui-input">
       <div class="layui-form-item">
         <button class="layui-btn" type="button" lay-submit="" lay-filter="sreach"
                 onclick="getReiRequests()">
@@ -110,10 +121,10 @@
       <th style="width: 8%;">Title</th>
       <th style="width: 8%;">UserId</th>
       <th style="width: 8%;">RequestId</th>
-      <th style="width: 8%;">Name</th>
+      <th style="width: 8%;">Real Name</th>
       <th style="width: 10%;">Money</th>
       <!--            <th style="width: 10%;">Payway</th>-->
-      <th style="width: 10%;">Type</th>
+      <th style="width: 10%;">Usage Type</th>
       <th style="width: 10%;">Payway</th>
       <th style="width: 16%;">Receiver</th>
       <th style="width: 12%;">Time</th>
@@ -159,15 +170,19 @@
   function getReiRequests(pageNo) {
     pageNo = pageNo || 1;
     typeid = $("#typeid").val();
-    paywayid = $("#payway").val();
+    console.log("typeid :" + typeid);
+    paywayid = $("#paywayid").val();
+    console.log("paywayid :" + paywayid);
     var reimbursement = {
       "startTime": $("#start").val(),
       "endTime": $("#end").val(),
       // "realname": $("#realname").val(),
       "title": $("#title").val(),
-      "typeid": typeid === -1 ? null : typeid,
-      // "paywayid": paywayid === -1 ? null : paywayid,
-      "remark": $("#remark").val()
+      "typeid": typeid,
+      "paywayid": paywayid,
+      "remark": $("#remark").val(),
+      "realname": $("#realname").val()
+
     };
     // for normal user, only approved
     // if (parent.sessionUser.roleid == 3) {
