@@ -363,7 +363,6 @@
 
     function setChart2(datas) {
         console.log("chart2 go");
-        console.log(datas);
         var x = [], requestVal = new Array(30), approvedVal = new Array(30), existingVal = new Array(30);
         var start = new Date($("#start").val());
         var end = new Date($("#end").val());
@@ -374,14 +373,9 @@
             x.push(dateStr);
             var approvedSum=0, requestSum = 0, existingSum = 0;
             $.each(datas,function (index,item) {
-                console.log("item:");
-                console.log(item);
-                console.log(item.time.split(" ")[0]);
-                console.log(dateStr);
                 if(item.time.split(" ")[0] == dateStr){
                     if (item.typeid === "APPROVED") {
                         approvedSum += parseFloat(item.money);
-                        console.log("one approved")
                     }
                     requestSum += parseFloat(item.money);
                 }
@@ -391,10 +385,6 @@
             approvedVal[i] = approvedSum;
             existingVal[i] = existingSum;
         }
-        console.log("existingsum");
-        console.log(existingSum);
-        console.log(approvedSum);
-        console.log(requestSum);
         // console.log(requstSum);
         // console.log(approvedSum);
         myChart2.hideLoading();
