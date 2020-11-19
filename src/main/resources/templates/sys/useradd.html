@@ -25,6 +25,13 @@
 <body>
 <form class="layui-form layui-form-pane">
     <div class="layui-form-item" lay-filter="bill-form">
+        <label class="layui-form-label">User Id</label>
+        <div class="layui-input-block">
+            <input type="text" name="userid" disabled=""
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" lay-filter="bill-form">
         <label class="layui-form-label">User Name</label>
         <div class="layui-input-block">
             <input type="text" name="username" lay-verify="required" placeholder="please enter username" autocomplete="off"
@@ -128,6 +135,8 @@
             layer.confirm("Are you sure to modify?", {btn: ['Yes', 'No'],title: false, closeBtn: false, skin: 'layui-layer-molv'}, function (layno) {
                 layer.close(layno);
                 data.field.password = null;
+                var tr = parent.document.getElementsByTagName("tr")[index];
+                data.field.id= tr.cells[0].innerHTML;
                 $.post("/user/update", data.field, function (res) {
                     if (res.code == 200) {
                         layer.msg(res.msg, {time: 1000}, function () {
@@ -145,11 +154,12 @@
 
     function initForm(tr) {
         // console.log(tr);
+        $("input[name=userid]").val($(tr).find(":nth-child(1)").html());
         $("input[name=username]").val($(tr).find(":nth-child(2)").html());
         $("input[name=realname]").val($(tr).find(":nth-child(3)").html());
-        $("input[name=password]").parent().parent().css("display", "none");
-        $("textarea[name=houseid]").val($(tr).find(":nth-child(6)").html());
-        $("input[name=id]").val($(tr).find(":nth-child(6)").html());
+        // $("input[name=password]").parent().parent().css("display", "none");
+        // $("textarea[name=houseid]").val($(tr).find(":nth-child(6)").html());
+        // $("input[name=id]").val($(tr).find(":nth-child(6)").html());
     }
 
     function initRoles() {

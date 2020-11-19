@@ -59,9 +59,11 @@
         <set>
             <if test="password!=null and password.length()>0"> password = #{password}, </if>
             <if test="realname!=null and realname.length()>0"> realname = #{realname}, </if>
+            <if test="username!=null and username.length()>0"> username = #{username}, </if>
             <if test="roleid!=null"> roleid = #{roleid},</if>
             <if test="groupid!=null and groupid.length()>0"> groupid = #{groupid}, </if>
             <if test="iconUrl!=null and iconUrl.length()>0"> photo = #{iconUrl}, </if>
+            <if test="email!=null and email.length()>0"> email = #{email}, </if>
         </set>
         where id=#{id}
     </update>

@@ -79,7 +79,7 @@
   <table class="layui-table" id="users">
     <thead>
     <tr>
-      <th style="width: 6%;">No.</th>
+      <th style="width: 6%;">UserId</th>
       <th style="width: 10%;">User Name</th>
       <th style="width: 10%;">Real Name</th>
       <th style="width: 12%;">Email</th>
@@ -173,7 +173,8 @@
     var html = "";
     $.each(users, function (index, item) {
       html += '<tr>' +
-          '            <td>' + (index + 1 + beginIndex) + '</td>' +
+          // '            <td>' + (index + 1 + beginIndex) + '</td>' +
+          '            <td>' + item.id + '</td>' +
           '            <td>' + item.username + '</td>' +
           '            <td>' + (item.realname == null ? "-" : item.realname) + '</td>' +
           '            <td>' + (item.email == null ? "-" : item.email) + '</td>' +
