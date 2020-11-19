@@ -209,7 +209,7 @@
             $("input[name=title]").val($(tr).find(":nth-child(2)").html());
             $("input[name=money]").val($(tr).find(":nth-child(6)").html());
             $("input[name=remark]").val($(tr).find(":nth-child(7)").html());
-            $("input[name=receiveraccount]").val($(tr).find(":nth-child(8)").html());
+            $("input[name=receiveraccount]").val($(tr).find(":nth-child(9)").html());
             var payway = $(tr).find(":nth-child(5)").html() == null ? -1 : $(tr).find(":nth-child(5)").html();
             $("#payway").find("option:contains("+payway+")").prop("selected",true);
             $("textarea[name=remark]").val($(tr).find(":nth-child(9)").html());
