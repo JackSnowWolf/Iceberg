@@ -3,13 +3,13 @@ package com.iceberg.service.impl;
 import com.iceberg.dao.PrivilegeMapper;
 import com.iceberg.entity.Privilege;
 import com.iceberg.service.PrivilegeService;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 
 @Service
 public class PrivilegeServiceImpl implements PrivilegeService {
+
   @Resource
   private PrivilegeMapper mapper;
 

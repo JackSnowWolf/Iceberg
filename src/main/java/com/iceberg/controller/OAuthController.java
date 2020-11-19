@@ -6,15 +6,6 @@ import com.iceberg.service.PrivilegeService;
 import com.iceberg.service.UserInfoService;
 import com.iceberg.utils.Config;
 import com.iceberg.utils.HttpClientUtils;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.annotation.Resource;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,19 +14,34 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class OAuthController {
+
   @Resource
   private UserInfoService userInfoService;
   @Resource
   private PrivilegeService privilegeService;
 
+  /**
+   * github login api.
+   * @param code access code
+   * @param request http request
+   * @param httpResponse http response
+   * @return redirect url
+   * @throws IOException exception
+   */
   @RequestMapping("/oauth/github/callback")
-  public String githubLogin(String code, HttpServletRequest request, HttpServletResponse httpResponse)
-      throws IOException {
-    // code is sent by github, need use it to exchange access_token to get userinfo
-    // 1. get access_token
+  public String githubLogin(String code, HttpServletRequest request,
+      HttpServletResponse httpResponse) throws IOException {
+    // code is sent by github, need use it to exchange accessToken to get userinfo
+    // 1. get accessToken
     String s3 = "https://github.com/login/oauth/access_token";
     Map<String, String> paramMap = new HashMap<>();
     paramMap.put("client_id", "d644cfff862d6e5d155a");
@@ -45,15 +51,15 @@ public class OAuthController {
 
     String accessTokenResponse = HttpClientUtils.doPost(s3, paramMap);
     System.out.println(accessTokenResponse);
-    String access_token = parseAccessTokenResponse(accessTokenResponse);
-    System.out.println(access_token);
+    String accessToken = parseAccessTokenResponse(accessTokenResponse);
+    System.out.println(accessToken);
 
-    // 2. access_token get user info
+    // 2. accessToken get user info
 
     URL url = new URL("https://api.github.com/user");
     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-    conn.setRequestProperty("Authorization", "Bearer " + access_token);
+    conn.setRequestProperty("Authorization", "Bearer " + accessToken);
     conn.setRequestProperty("Content-Type", "application/json");
     conn.setRequestMethod("GET");
 
@@ -78,6 +84,7 @@ public class OAuthController {
 
     // if user is existed
     if (userInfoService.userIsExisted(user)) {
+      System.out.println(user);
     } else {
       userInfoService.add(user);
     }
@@ -87,6 +94,11 @@ public class OAuthController {
     return "redirect:http://localhost:8080/";
   }
 
+  /**
+   * parse access token response.
+   * @param accessTokenResponse access token response
+   * @return access token
+   */
   public static String parseAccessTokenResponse(String accessTokenResponse) {
     if (accessTokenResponse == null) {
       return null;
@@ -99,6 +111,11 @@ public class OAuthController {
     return accessToken;
   }
 
+  /**
+   * parse github object.
+   * @param response response
+   * @return key-value pairs.
+   */
   public static Map<String, String> parseGithubObject(String response) {
     if (response == null) {
       return null;
@@ -122,11 +139,7 @@ public class OAuthController {
   }
 
   /**
-   * get user privilege info through user info and save it in session
-   * 
-   * @param userInfo
-   * @param session
-   * @return
+   * get user privilege info through user info and save it in session.
    */
   public UserInfo setSessionUserInfo(UserInfo userInfo, HttpSession session) {
     List<Privilege> privileges = privilegeService.getPrivilegeByRoleid(userInfo.getRoleid());

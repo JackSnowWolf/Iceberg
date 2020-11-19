@@ -3,7 +3,39 @@ package com.iceberg.entity;
 import java.util.List;
 
 public class UserInfo {
+
   private Integer id;
+  private String username;
+  private String password;
+  private String realname;
+  private Integer roleid; //
+  private String rolename;
+  private String groupid;
+  private String iconUrl; // icon path
+  private String signature; // self-defined signature
+  private String oauthProvider; // default Github
+  private List<Privilege> privileges;
+  private String email;
+
+  /**
+   * User info constructor.
+   * @param id user id.
+   * @param username user name.
+   * @param email email
+   */
+  public UserInfo(Integer id, String username, String email) {
+    this.id = id;
+    this.username = username;
+    this.realname = username;
+    this.email = email;
+    this.password = "123456";
+    // normal user default
+    this.roleid = 3;
+  }
+
+  public UserInfo() {
+
+  }
 
   public String getIconUrl() {
     return iconUrl;
@@ -21,16 +53,6 @@ public class UserInfo {
     this.signature = signature;
   }
 
-  private String username;
-  private String password;
-  private String realname;
-  private Integer roleid; //
-  private String rolename;
-  private String groupid;
-  private String iconUrl; // icon path
-  private String signature; // self-defined signature
-  private String oauthProvider; // default Github
-
   public String getOauthProvider() {
     return oauthProvider;
   }
@@ -39,8 +61,6 @@ public class UserInfo {
     this.oauthProvider = oauthProvider;
   }
 
-  private List<Privilege> privileges;
-
   public String getEmail() {
     return email;
   }
@@ -48,32 +68,16 @@ public class UserInfo {
   public void setEmail(String email) {
     this.email = email;
   }
-
-  private String email;
-
-  public UserInfo(Integer id, String username, String email) {
-    this.id = id;
-    this.username = username;
-    this.realname = username;
-    this.email = email;
-    this.password = "123456";
-    // normal user default
-    this.roleid = 3;
-  }
-
-  public UserInfo() {
-
-  }
-//    public AuthenticationProvider getAuthenticationProvider() {
-//        return authenticationProvider;
-//    }
-//
-//    public void setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
-//        this.authenticationProvider = authenticationProvider;
-//    }
-//
-//    //OAuth2 provider info
-//    private AuthenticationProvider authenticationProvider;
+  //    public AuthenticationProvider getAuthenticationProvider() {
+  //        return authenticationProvider;
+  //    }
+  //
+  //    public void setAuthenticationProvider(AuthenticationProvider authenticationProvider) {
+  //        this.authenticationProvider = authenticationProvider;
+  //    }
+  //
+  //    //OAuth2 provider info
+  //    private AuthenticationProvider authenticationProvider;
 
   public Integer getId() {
     return id;
@@ -87,9 +91,14 @@ public class UserInfo {
     return username;
   }
 
+  /**
+   * user name setter.
+   * @param username user name.
+   */
   public void setUsername(String username) {
-    if ("".equals(username.trim()))
+    if ("".equals(username.trim())) {
       return;
+    }
     this.username = username;
   }
 
@@ -143,8 +152,10 @@ public class UserInfo {
 
   @Override
   public String toString() {
-    return "UserInfo{" + "id=" + id + ", username='" + username + '\'' + ", password='" + password + '\''
-        + ", realname='" + realname + '\'' + ", roleid=" + roleid + ", rolename='" + rolename + '\'' + ", groupid='"
+    return "UserInfo{" + "id=" + id + ", username='" + username + '\'' + ", password='" + password
+        + '\''
+        + ", realname='" + realname + '\'' + ", roleid=" + roleid + ", rolename='" + rolename + '\''
+        + ", groupid='"
         + groupid + '\'' + '}';
   }
 }

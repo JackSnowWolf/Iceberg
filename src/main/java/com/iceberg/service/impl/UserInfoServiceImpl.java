@@ -8,10 +8,9 @@ import com.iceberg.service.UserInfoService;
 import com.iceberg.utils.PageModel;
 import com.iceberg.utils.Result;
 import com.iceberg.utils.ResultUtil;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
@@ -45,6 +44,11 @@ public class UserInfoServiceImpl implements UserInfoService {
   }
 
   @Override
+  public boolean userIsExisted(UserInfo userInfo) {
+    return userInfoMapper.userIsExisted(userInfo) > 0 ? true : false;
+  }
+
+  @Override
   public int delete(String id) {
     return userInfoMapper.delete(id);
   }
@@ -52,11 +56,6 @@ public class UserInfoServiceImpl implements UserInfoService {
   @Override
   public UserInfo getUserInfo(UserInfo userInfo) {
     return userInfoMapper.getUserInfo(userInfo);
-  }
-
-  @Override
-  public boolean userIsExisted(UserInfo userInfo) {
-    return userInfoMapper.userIsExisted(userInfo) > 0 ? true : false;
   }
 
   @Override

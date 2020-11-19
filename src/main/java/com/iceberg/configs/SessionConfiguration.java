@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
- * description: Session Configuration
+ * description: Session Configuration.
  * 
  * @author Weijie Huang
  * @date 2020/11/12

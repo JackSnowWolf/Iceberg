@@ -4,7 +4,6 @@ import com.iceberg.entity.Role;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.utils.PageModel;
 import com.iceberg.utils.Result;
-
 import java.util.List;
 
 public interface UserInfoService {

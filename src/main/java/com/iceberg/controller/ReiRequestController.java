@@ -38,9 +38,16 @@ public class ReiRequestController {
   @Resource
   private PayPalService payPalService;
 
-//  @Resource
-//  private EmailSendService emailSendService;
+  //  @Resource
+  //  private EmailSendService emailSendService;
 
+  /**
+   * add reimbursement request.
+   *
+   * @param reimbursementRequest reimbursment request message
+   * @param session http session
+   * @return result message
+   */
   @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
   public Result add(ReimbursementRequest reimbursementRequest, HttpSession session) {
     if (Config.getSessionUser(session) != null) {
@@ -66,10 +73,10 @@ public class ReiRequestController {
   }
 
   /**
-   * the owen of the reimbursement request can update the reimbursement
+   * the owen of the reimbursement request can update the reimbursement.
    *
    * @param reimbursementRequest reimbursement request
-   * @param session              http session
+   * @param session http session
    * @return result information
    */
   @RequestMapping(value = "/updateRequest", method = RequestMethod.POST)
@@ -82,7 +89,8 @@ public class ReiRequestController {
     int roleId = Config.getSessionUser(session).getRoleid();
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
     reimbursementRequestSearch.setId(reimbursementRequest.getId());
-    Result<ReimbursementRequest> result = reiRequestService.findByWhereNoPage(reimbursementRequestSearch);
+    Result<ReimbursementRequest> result = reiRequestService
+        .findByWhereNoPage(reimbursementRequestSearch);
     if (result.getDatas().size() == 0) {
       return ResultUtil.unSuccess("Such reimbursement request doesn't exist!");
     } else if (result.getDatas().size() > 2) {
@@ -108,14 +116,15 @@ public class ReiRequestController {
   }
 
   /**
-   * review reimbursement request only for admin and group manager
+   * review reimbursement request only for admin and group manager.
    *
    * @param reimbursementRequest reimbursement request
-   * @param session              http session
+   * @param session http session
    * @return result information whether the request has been approved.
    */
   @RequestMapping(value = "/review/{typeid}/{userid}/{reimId}", method = RequestMethod.POST)
-  public Result review(ReimbursementRequest reimbursementRequest, HttpSession session, @PathVariable String typeid,
+  public Result review(ReimbursementRequest reimbursementRequest, HttpSession session,
+      @PathVariable String typeid,
       @PathVariable String userid, @PathVariable String reimId) throws IOException {
     if (Config.getSessionUser(session) == null) {
       return ResultUtil.unSuccess("No user for current session");
@@ -149,7 +158,7 @@ public class ReiRequestController {
           return ResultUtil.unSuccess("Please input money");
         }
         payPalService.createPayout(receiver, "USD", money);
-//                return ResultUtil.success("Approved");
+        //  return ResultUtil.success("Approved");
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -160,7 +169,8 @@ public class ReiRequestController {
     try {
       int num = reiRequestService.update(request);
       if (num > 0) {
-        return ResultUtil.success(String.format("Update successfully! Status : %s", reimbursementRequest.getTypeid()),
+        return ResultUtil.success(
+            String.format("Update successfully! Status : %s", reimbursementRequest.getTypeid()),
             null);
       } else {
         return ResultUtil.unSuccess();
@@ -170,6 +180,12 @@ public class ReiRequestController {
     }
   }
 
+  /**
+   * get reimbursement request by request id.
+   *
+   * @param id request id.
+   * @return result messsage
+   */
   @RequestMapping("/getReiRequestById/{id}")
   public Result getReiRequestById(@PathVariable Integer id) {
     ReimbursementRequest reimbursementRequestCondition = new ReimbursementRequest();
@@ -182,8 +198,17 @@ public class ReiRequestController {
     }
   }
 
+  /**
+   * get reimbursement request by user id with page no and page size.
+   *
+   * @param userid user id.
+   * @param pageNo page no
+   * @param pageSize page size
+   * @return result message
+   */
   @RequestMapping("/getReiRequestByUserId/{userid}/{pageNo}/{pageSize}")
-  public Result getReiRequestByUserId(@PathVariable int userid, @PathVariable int pageNo, @PathVariable int pageSize) {
+  public Result getReiRequestByUserId(@PathVariable int userid, @PathVariable int pageNo,
+      @PathVariable int pageSize) {
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setId(userid);
 
@@ -193,14 +218,23 @@ public class ReiRequestController {
     return reiRequestService.findByWhere(model);
   }
 
+  /**
+   * get reimbursement request.
+   *
+   * @param reimbursementRequest reimbursement request query messsage.
+   * @param pageNo page no.
+   * @param pageSize page size
+   * @param session http session.
+   * @return result message.
+   */
   @RequestMapping("/getReiRequest/{pageNo}/{pageSize}")
   public Result getReiRequest(ReimbursementRequest reimbursementRequest, @PathVariable int pageNo,
       @PathVariable int pageSize, HttpSession session) {
-    if (Config.getSessionUser(session) == null) {
+    UserInfo currentUser = Config.getSessionUser(session);
+    if (currentUser == null) {
       return ResultUtil.unSuccess("No user for current session");
     }
     Utils.log(reimbursementRequest.toString());
-    UserInfo currentUser = Config.getSessionUser(session);
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
     if (reimbursementRequest.getTitle() != null && !reimbursementRequest.getTitle().equals("")) {
       reimbursementRequestSearch.setTitle(reimbursementRequest.getTitle());
@@ -224,8 +258,16 @@ public class ReiRequestController {
     return reiRequestService.findByWhere(model);
   }
 
+  /**
+   * get request with no page.
+   *
+   * @param reimbursementRequest eimbursement request query messsage.
+   * @param session http session.
+   * @return result message.
+   */
   @RequestMapping("/getReiRequestByNoPage")
-  public Result getReiRequestByNoPage(ReimbursementRequest reimbursementRequest, HttpSession session) {
+  public Result getReiRequestByNoPage(ReimbursementRequest reimbursementRequest,
+      HttpSession session) {
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
 
     if (Config.getSessionUser(session) == null) {
@@ -241,6 +283,12 @@ public class ReiRequestController {
     return reiRequestService.findByWhereNoPage(reimbursementRequestSearch);
   }
 
+  /**
+   * delete reimbursement request.
+   *
+   * @param id request id.
+   * @return result message.
+   */
   @RequestMapping("/delReiRequest")
   public Result del(int id) {
     try {
@@ -254,5 +302,4 @@ public class ReiRequestController {
       return ResultUtil.error(e);
     }
   }
-
 }

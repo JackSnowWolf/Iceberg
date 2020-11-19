@@ -2,32 +2,32 @@ package com.iceberg.configs;
 
 import com.iceberg.entity.UserInfo;
 import com.iceberg.utils.Config;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.Map;
-
 /**
- * description: Log, Helpful for debug
- * 
+ * description: Log, Helpful for debug.
+ *
  * @author Weijie Huang
  * @date 2020/11/13
  */
 public class LoggerInterceptor implements HandlerInterceptor {
 
   private static Logger logger = LoggerFactory.getLogger(LoggerInterceptor.class);
+  private static StringBuilder sb = new StringBuilder();
   private HttpSession session;
   private String userid;
-  private static StringBuilder sb = new StringBuilder();
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+      throws Exception {
 
     System.out.println("logger preHandler runs @@@@@@@@@@@@@@@@@@@@@@@");
     if ((session = request.getSession()) != null) {
@@ -38,7 +38,8 @@ public class LoggerInterceptor implements HandlerInterceptor {
     }
     sb.setLength(0);
 
-    sb.append("User ID【").append(userid).append("】is visiting：").append(request.getRequestURL().toString());
+    sb.append("User ID【").append(userid).append("】is visiting：")
+      .append(request.getRequestURL().toString());
     logger.info(sb.toString());
     return true;
   }
@@ -71,12 +72,12 @@ public class LoggerInterceptor implements HandlerInterceptor {
   }
 
   @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-      throws Exception {
+  public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+      Object handler, Exception ex) throws Exception {
 
     sb.setLength(0);
     sb.append("User ID【").append(userid).append("】").append(request.getRequestURL().toString())
-        .append("visiting ends... ");
+      .append("visiting ends... ");
 
     logger.info(sb.toString());
 

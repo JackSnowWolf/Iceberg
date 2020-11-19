@@ -22,7 +22,7 @@ public class PayPalClient {
   PayPalHttpClient client = new PayPalHttpClient(environment);
 
   /**
-   * Method to get client object
+   * Method to get client object.
    *
    * @return PayPalHttpClient client
    */

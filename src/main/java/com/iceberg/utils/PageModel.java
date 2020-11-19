@@ -7,6 +7,11 @@ public class PageModel<T> {
   private int pageSize = 20;
   private T data;
 
+  /**
+   * create page model.
+   * @param currentPageNo current page number.
+   * @param data data.
+   */
   public PageModel(int currentPageNo, T data) {
     if (currentPageNo < 1) {
       throw new IllegalArgumentException("currentPageNo can not less than one");
@@ -50,8 +55,8 @@ public class PageModel<T> {
 
   @Override
   public String toString() {
-    return "PageModel{" + "beginIndex=" + beginIndex + ", currentPageNo=" + currentPageNo + ", pageSize=" + pageSize
-        + ", data=" + data + '}';
+    return "PageModel{" + "beginIndex=" + beginIndex + ", currentPageNo=" + currentPageNo
+        + ", pageSize=" + pageSize + ", data=" + data + '}';
   }
 
   @Override
