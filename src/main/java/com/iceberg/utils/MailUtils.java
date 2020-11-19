@@ -61,7 +61,7 @@ public class MailUtils {
       protected PasswordAuthentication getPasswordAuthentication() {
 
         //new PasswordAuthentication(username, password);
-        return new PasswordAuthentication("icebergteam@qq.com","sfdkjvbhuzynbdfg");
+        return new PasswordAuthentication("icebergteam@qq.com", "sfdkjvbhuzynbdfg");
       }
 
     });
