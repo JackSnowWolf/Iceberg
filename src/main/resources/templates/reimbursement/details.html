@@ -121,7 +121,8 @@
           <th style="width: 10%;">Money</th>
           <!--            <th style="width: 10%;">Payway</th>-->
           <th style="width: 10%;">Usage Type</th>
-          <th style="width: 10%;">Payway</th>
+          <th style="width: 10%;">PaywayId</th>
+          <th style="width: 10%;">Payway Name</th>
           <th style="width: 16%;">Receiver</th>
           <th style="width: 12%;">Time</th>
           <th style="width: 10%;">Status</th>
@@ -173,7 +174,7 @@
           "endTime": $("#end").val(),
           // "realname": $("#realname").val(),
           "title": $("#title").val(),
-          "typeid": typeid,
+          "typeid": 3,
           "paywayid": paywayid,
           "remark": $("#remark").val(),
           "realname": $("#realname").val()
@@ -226,6 +227,18 @@
     function fillTable(reiRequests, beginIndex) {
         var html = "";
         $.each(reiRequests, function (index, item) {
+            var paywayname;
+            if (item.paywayid == 1 || item.paywayid == 0) {
+              paywayname = "Paypal";
+            } else if (item.paywayid == 2) {
+              paywayname = "Cash";
+            } else if (item.paywayid == 3) {
+              paywayname = "Debit";
+            } else if (item.paywayid == 4) {
+              paywayname = "Venmo";
+            } else {
+              paywayname = "Others";
+            }
             html += '<tr>' +
                 '            <td>' + (index + 1 + beginIndex) + '</td>' +
                 '            <td>' + item.title + '</td>' +
@@ -236,6 +249,7 @@
                 // '            <td>' + item.payway + '</td>' +
                 '            <td class="remark" title=' + item.remark + '>' + item.remark + '</td>' +
                 '            <td class="paywayid" title=' + item.paywayid + '>' + item.paywayid + '</td>' +
+                '            <td class="paywayname">' + paywayname + '</td>' +
                 '            <td class="receiveraccount" title=' + item.receiveraccount + '>' + item.receiveraccount + '</td>' +
                 '            <td>' + item.time + '</td>' +
                 '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
