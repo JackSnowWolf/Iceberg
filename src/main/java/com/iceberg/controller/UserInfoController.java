@@ -61,7 +61,7 @@ public class UserInfoController {
    * @param userInfo user info
    * @param request http request
    * @param response http response
-   * @return
+   * @return result message.
    */
   @RequestMapping(value = "/login.do")
   @ResponseBody
