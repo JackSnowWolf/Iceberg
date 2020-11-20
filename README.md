@@ -42,8 +42,8 @@ mvn surefire:test
 ### Reference
 
 ## TODO
-[ ] TODO1
-[ ] TODO2
+- [ ] TODO1
+- [ ] TODO2
 
 ## Documentation
 
