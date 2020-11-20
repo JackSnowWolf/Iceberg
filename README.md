@@ -15,7 +15,7 @@ COMS 4156 Advanced software team project. Team Iceberg
 - install `maven`
 - install `java 8`
 - `mvn install -Dmaven.test.skip=true` download prerequisites dependencies
-without test.
+without test. If failed, please `mvn clean` first.
 
 ### Synopsis
 
@@ -25,6 +25,9 @@ mvn spring-boot:run
 ```
 
 Then the spring boot application is running on `localhost:8080`.
+
+We have already configured an AWS database (icegerg) for the system. 
+If failed or slow, you can create a local database `iceberg` and edit the connection string in application.yml. The back up file in sql folder is created for you.
 
 ### How to test
 
