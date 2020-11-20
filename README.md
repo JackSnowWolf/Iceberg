@@ -39,7 +39,7 @@ Our project implement a reimbursement platform to manage reimbursement requests.
 │   │   │   ├── service # -> methods used by controller
 │   │   │   ├── utils # -> support
 │   │   │   └── IcebergApplication.java # -> starter
-│   │   └── resources -> front-end core
+│   │   └── resources # -> front-end core
 │   │       ├── mappers # -> spring boot mabatis mapper files
 │   │       ├── static # -> packages used in front-end
 │   │       ├── templates # -> HTML files shown in front-end
