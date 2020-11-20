@@ -14,7 +14,7 @@ Our project implement a reimbursement platform to manage reimbursement requests.
 
 - IDE: IntelliJ IDEA
 - Back-end: SpringBoot 2.1.1
-  - Database: AWS cloud database/Mysql 5.7.27
+  - Database: AWS RDS/Mysql 5.7.27
   - JDK version: 1.8.0_181
   - Java template engine: Thymeleaf
   - Test: Junit 5/4
