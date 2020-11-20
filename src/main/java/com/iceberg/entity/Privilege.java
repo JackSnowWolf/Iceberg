@@ -16,8 +16,8 @@ public class Privilege {
     return this.ID;
   }
 
-  public void setID(Integer iD) {
-    this.ID = iD;
+  public void setID(Integer id) {
+    this.ID = id;
   }
 
   public String getPrivilegeNumber() {
