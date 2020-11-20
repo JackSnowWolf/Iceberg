@@ -1,13 +1,57 @@
 # Iceberg
-COMS 4156 Advanced software team project. Team Iceberg
+
+COMS 4156 Advanced software team project @ Columbia. Team Iceberg.
+The reimbursement system is based on SpringBoot+Mybatis+Thymeleaf+layui, integrating with external api such as Paypal payout, OAuth, Email sending... 
 
 ![Java CI with Maven](https://github.com/JackSnowWolf/Iceberg/workflows/Java%20CI%20with%20Maven/badge.svg)
 ![CodeQL](https://github.com/JackSnowWolf/Iceberg/workflows/CodeQL/badge.svg)
 
 ## Introduction
 
+Our project implement a reimbursement platform to manage reimbursement requests. The application value of the budget reimbursement system is reflected in three functional parts: the budget function; the reimbursement function and the data visualization function. The administrator(e.g. CEO of the company) can create groups. Groups specify different sectors of a company, such as development group, testing group, hr group. Each group can create an account for each employee. Employees can use this account to apply for financial reimbursement. The group manager can review and approve employee claims. In addition, the employee can view the financial status of the reimbursement data over a period of time. Through the dashboard, one can see the details of the reimbursements in numbers and different charts in order to insight from historical reimbursements and manage expenses. Please check our doc for detail.
+
+## Tech stack
+
+- IDE: IntelliJ IDEA
+- Back-end: SpringBoot 2.1.1
+  - Database: AWS cloud database/Mysql 5.7.27
+  - JDK version: 1.8.0_181
+  - Java template engine: Thymeleaf
+  - Test: Junit 5/4
+- Front-end: 
+  - Base: Html+Css+JavaScipt
+  - Framework: Layui+JQuery
+
 ## Structure
 
+```bash
+.
+├── doc
+├── pic
+├── src 
+│   ├── main # -> source code
+│   │   ├── java/com/iceberg # -> spring boot back-end core
+│   │   │   ├── configs # -> configuration
+│   │   │   ├── controller # -> handle the navigation between the different views
+│   │   │   ├── dao # -> data access object
+│   │   │   ├── entity # -> data model
+│   │   │   ├── externalapi # -> external api used in our reimbursement system
+│   │   │   ├── service # -> methods used by controller
+│   │   │   ├── utils # -> support
+│   │   │   └── IcebergApplication.java # -> starter
+│   │   └── resources -> front-end core
+│   │       ├── mappers # -> spring boot mabatis mapper files
+│   │       ├── static # -> packages used in front-end
+│   │       ├── templates # -> HTML files shown in front-end
+│   │       └── application.yml # -> setting
+│   └── test # -> all tests (63) 
+├── sql # -> sql back up file
+├── .circleci
+├── .github/workflows
+├── LICENSE
+├── CONTRIBUTING.md
+└── README.md
+```
 ## Usage
 
 ### Environment Dependencies
