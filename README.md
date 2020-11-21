@@ -23,7 +23,7 @@ Our project implement a reimbursement platform to manage reimbursement requests.
   - Framework: Layui+JQuery
 ## Architecture: 
 
-https://github.com/JackSnowWolf/Iceberg/blob/master/picture/architecture.png
+![image](https://github.com/JackSnowWolf/Iceberg/blob/master/picture/architecture.png)
 
 ## Structure
 
