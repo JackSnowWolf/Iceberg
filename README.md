@@ -27,7 +27,7 @@ Our project implement a reimbursement platform to manage reimbursement requests.
 ```bash
 .
 ├── doc
-├── pic
+├── pic # -> project architecture
 ├── src 
 │   ├── main # -> source code
 │   │   ├── java/com/iceberg # -> spring boot back-end core
