@@ -1,8 +1,8 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # url: jdbc:mysql://localhost:3306/iceberg?characterEncoding=utf-8&serverTimezone=UTC&AllowPublicKeyRetrieval=True&useSSL=false
-    url: jdbc:mysql://database4156.c45jfzqe0ovx.us-east-1.rds.amazonaws.com:3306/iceberg?characterEncoding=utf-8&serverTimezone=UTC&AllowPublicKeyRetrieval=True&useSSL=false
+    url: jdbc:mysql://localhost:3306/iceberg?characterEncoding=utf-8&serverTimezone=UTC&AllowPublicKeyRetrieval=True&useSSL=false
+#    url : jdbc:mysql://database4156.c45jfzqe0ovx.us-east-1.rds.amazonaws.com:3306/iceberg?characterEncoding=utf-8&serverTimezone=UTC&AllowPublicKeyRetrieval=True&useSSL=false
     username: dbuser
     password: dbuserdbuser
   jpa:

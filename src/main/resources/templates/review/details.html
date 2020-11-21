@@ -394,7 +394,8 @@
           var data = {"id": id};
           $.post("/reirequest/delReiRequest", data, function (res) {
             if (res.code == 200) {
-              getBills();
+              // getBills();
+              getReiRequests();
               layer.msg('Delete Successfully!', {icon: 1, time: 1000});
             } else {
               layer.msg("Delete error!", {icon: 2, time: 1000});
