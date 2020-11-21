@@ -17,7 +17,7 @@
             <if test="money!=null">money = #{money},</if>
             <if test="typeid!=null">typeid = #{typeid.value},</if>
             <if test="remark!=null">remark = #{remark},</if>
-            <if test="title!=null">title = #{title}</if>
+            <if test="title!=null">title = #{title},</if>
             <if test="paywayid!=null">paywayid = #{paywayid},</if>
             <if test="receiveraccount!=null"> receiveraccount = #{receiveraccount},</if>
             <if test="money!=null">typeid = #{typeid.value},</if>
