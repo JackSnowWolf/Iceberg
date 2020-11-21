@@ -21,6 +21,9 @@ Our project implement a reimbursement platform to manage reimbursement requests.
 - Front-end: 
   - Base: Html+Css+JavaScipt
   - Framework: Layui+JQuery
+## Architecture: 
+
+https://github.com/JackSnowWolf/Iceberg/blob/master/picture/architecture.png
 
 ## Structure
 
