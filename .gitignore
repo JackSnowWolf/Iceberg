@@ -31,3 +31,6 @@ hs_err_pid*
 .idea/
 reimbursement.iml
 **/.gitignore
+.classpath
+.project
+.settings/
