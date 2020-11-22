@@ -5,6 +5,7 @@ The reimbursement system is based on SpringBoot+Mybatis+Thymeleaf+layui, integra
 
 ![Java CI with Maven](https://github.com/JackSnowWolf/Iceberg/workflows/Java%20CI%20with%20Maven/badge.svg)
 ![CodeQL](https://github.com/JackSnowWolf/Iceberg/workflows/CodeQL/badge.svg)
+![CheckStyle](https://github.com/JackSnowWolf/Iceberg/workflows/CheckStyle/badge.svg)
 
 ## Introduction
 
@@ -97,8 +98,10 @@ mvn surefire:test
 
 ## Documentation
 
-- Link to proposal
-- Link to report
+- Preliminary Proposal: [preliminary proposal pdf](doc/Preliminary%20Project%20Proposal.pdf)
+- Revised Proposal: [revised proposal pdf](doc/Revised%20Project%20Proposal.pdf)
+- First Iteration Report: [first iteration report pdf](doc/First%20Iteration%20Report.pdf)
+
 
 ## [Contribution](CONTRIBUTING.md)
 
