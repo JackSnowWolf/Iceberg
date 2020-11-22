@@ -70,6 +70,7 @@ public class ReiRequestControllerTest {
     userInfo.setRoleid(1);
     userInfo.setRolename("Administrator");
     userInfo.setRealname("hwj");
+    userInfo.setEmail("admin@example.com");
     session.setAttribute("currentUser", userInfo);
 
 //    mockMvc = MockMvcBuilders.standaloneSetup(new ReiRequestController())

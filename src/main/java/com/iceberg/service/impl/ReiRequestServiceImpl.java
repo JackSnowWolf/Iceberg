@@ -29,7 +29,7 @@ public class ReiRequestServiceImpl implements ReiRequestService {
 
   @Override
   public int del(int id) {
-    return mapper.del(mapper.del(id));
+    return mapper.del(id);
   }
 
   @Override

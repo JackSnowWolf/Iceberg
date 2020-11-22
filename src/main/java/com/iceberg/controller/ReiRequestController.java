@@ -1,6 +1,7 @@
 package com.iceberg.controller;
 
 import static com.iceberg.entity.ReimbursementRequest.Status.APPROVED;
+import static com.iceberg.entity.ReimbursementRequest.Status.DENIED;
 import static com.iceberg.entity.ReimbursementRequest.Status.PROCESSING;
 
 import com.iceberg.entity.ReimbursementRequest;
@@ -53,12 +54,15 @@ public class ReiRequestController {
     if (Config.getSessionUser(session) != null) {
       reimbursementRequest.setUserid(Config.getSessionUser(session).getId());
     }
+    UserInfo requestUserInfo = (UserInfo) session.getAttribute(Config.CURRENT_USERNAME);
     Utils.log(reimbursementRequest.toString());
-    // set default pay way
-    if (reimbursementRequest.getPaywayid() == null || reimbursementRequest.getPaywayid() < 0) {
-      reimbursementRequest.setPaywayid(0);
+    // set default pay way = paypal
+    if (reimbursementRequest.getPaywayid() == null || reimbursementRequest.getPaywayid() <= 0) {
+      reimbursementRequest.setPaywayid(1);
     }
     try {
+      String email = requestUserInfo.getEmail();
+      MailUtils.sendMail(email, MailUtils.posted);
       reimbursementRequest.setTypeid(PROCESSING.value);
       logger.debug(reimbursementRequest.toString());
       int num = reiRequestService.add(reimbursementRequest);
@@ -135,14 +139,12 @@ public class ReiRequestController {
     if (Config.getSessionUser(session).getRoleid() > 2) {
       return ResultUtil.unSuccess("Permission denied. Don't have review access.");
     }
-    // TODO: error handling and check details.
     System.out.println("type id :" + typeid + "userid : " + userid + "reimId : " + reimId);
     reimbursementRequest.setTypeid(Integer.parseInt(typeid));
     UserInfo requestUserInfo = userInfoService.getUserInfoById(userid);
     ReimbursementRequest request = reiRequestService.getReimRequestById(Integer.parseInt(reimId));
     request.setTypeid(Integer.parseInt(typeid));
     if (reimbursementRequest.getTypeid() == APPROVED) {
-      // TODO: approve such request
       // email send service
       try {
         String email = requestUserInfo.getEmail();
@@ -168,6 +170,14 @@ public class ReiRequestController {
 
     } else if (reimbursementRequest.getTypeid() == PROCESSING) {
       return ResultUtil.unSuccess("Not a valid review");
+    } else if (reimbursementRequest.getTypeid() == DENIED) {
+      // send denied email
+      try {
+        String email = requestUserInfo.getEmail();
+        MailUtils.sendMail(email, MailUtils.denied);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     }
     try {
       int num = reiRequestService.update(request);
