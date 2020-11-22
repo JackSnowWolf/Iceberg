@@ -5,7 +5,7 @@
 <mapper namespace="com.iceberg.dao.PrivilegeMapper">
 
     <select id="getPrivilegeByRoleid" resultType="com.iceberg.entity.Privilege" parameterType="Integer">
-		select p.* from roleprivilieges rp LEFT JOIN privilege p on rp.privilegeID=p.ID where rp.roleID=#{roleid} order by privilegeNumber asc;
+		select p.ID id,p.* from roleprivilieges rp LEFT JOIN privilege p on rp.privilegeID=p.ID where rp.roleID=#{roleid} order by privilegeNumber asc;
 	</select>
 
     <insert id="addDefaultPrivilegesWhenAddRole">

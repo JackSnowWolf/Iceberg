@@ -11,7 +11,7 @@ public class ReimbursementRequest {
   private Integer id;
   private Integer userid;
   private String requestdate;
-  private TYPE typeid;
+  private Status typeid;
   private String imageid;
   private String title;
   private Float money;
@@ -90,12 +90,12 @@ public class ReimbursementRequest {
     this.requestdate = requestdate;
   }
 
-  public TYPE getTypeid() {
+  public Status getTypeid() {
     return typeid;
   }
 
   public void setTypeid(int typeid) {
-    this.typeid = TYPE.valueOf(typeid);
+    this.typeid = Status.valueOf(typeid);
   }
 
   public String getImageid() {
@@ -195,25 +195,25 @@ public class ReimbursementRequest {
     return gson.toJson(this);
   }
 
-  public enum TYPE {
+  public enum Status {
     PROCESSING(0), MISSING_INFO(1), DENIED(2), APPROVED(3);
 
     private static Map map = new HashMap<>();
 
     static {
-      for (TYPE type : TYPE.values()) {
+      for (Status type : Status.values()) {
         map.put(type.value, type);
       }
     }
 
     public int value;
 
-    TYPE(int value) {
+    Status(int value) {
       this.value = value;
     }
 
-    public static TYPE valueOf(int pageType) {
-      return (TYPE) map.get(pageType);
+    public static Status valueOf(int pageType) {
+      return (Status) map.get(pageType);
     }
 
     public int getValue() {

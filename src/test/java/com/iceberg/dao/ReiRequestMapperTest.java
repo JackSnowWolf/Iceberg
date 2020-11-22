@@ -1,6 +1,6 @@
 package com.iceberg.dao;
 
-import static com.iceberg.entity.ReimbursementRequest.TYPE.APPROVED;
+import static com.iceberg.entity.ReimbursementRequest.Status.APPROVED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 

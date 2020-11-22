@@ -1,7 +1,7 @@
 package com.iceberg.entity;
 
 public class Privilege {
-  private Integer ID;
+  private Integer id;
   private String privilegeNumber;
   private String privilegeName;
   private String privilegeTipflag;
@@ -12,12 +12,12 @@ public class Privilege {
   public Privilege() {
   }
 
-  public Integer getID() {
-    return this.ID;
+  public Integer getId() {
+    return this.id;
   }
 
-  public void setID(Integer iD) {
-    this.ID = iD;
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   public String getPrivilegeNumber() {

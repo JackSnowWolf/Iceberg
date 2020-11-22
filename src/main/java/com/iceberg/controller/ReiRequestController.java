@@ -1,8 +1,8 @@
 package com.iceberg.controller;
 
-import static com.iceberg.entity.ReimbursementRequest.TYPE.APPROVED;
-import static com.iceberg.entity.ReimbursementRequest.TYPE.DENIED;
-import static com.iceberg.entity.ReimbursementRequest.TYPE.PROCESSING;
+import static com.iceberg.entity.ReimbursementRequest.Status.APPROVED;
+import static com.iceberg.entity.ReimbursementRequest.Status.DENIED;
+import static com.iceberg.entity.ReimbursementRequest.Status.PROCESSING;
 
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
