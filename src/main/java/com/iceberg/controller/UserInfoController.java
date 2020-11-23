@@ -168,10 +168,24 @@ public class UserInfoController {
    */
   @RequestMapping("/user/update")
   public @ResponseBody
-  Result updateUser(UserInfo userInfo) {
+  Result updateUser(UserInfo userInfo, HttpSession session) {
     try {
       int num = userInfoService.update(userInfo);
+      //if he updates his own info, then update the session user.
       if (num > 0) {
+        System.out.println();
+        UserInfo sessionUser = Config.getSessionUser(session);
+        System.out.println("sessionUser is null?" + sessionUser);
+        System.out.println(sessionUser.getId());
+        System.out.println(userInfo.getId());
+        if (sessionUser.getId().equals(userInfo.getId())) {
+          System.out.println("same user update");
+          sessionUser.setUsername(userInfo.getUsername());
+          sessionUser.setRealname(userInfo.getRealname());
+          sessionUser.setEmail(userInfo.getEmail());
+          sessionUser.setPassword(userInfo.getPassword());
+        }
+        System.out.println("SessionUser now is :" + sessionUser);
         return ResultUtil.success();
       } else {
         return ResultUtil.unSuccess();
