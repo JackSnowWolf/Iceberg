@@ -92,6 +92,13 @@
   <!--        </div>-->
   <!--    </div>-->
   <input type="hidden" name="typeid" value="2">
+  <div class="layui-form-item">
+    <label class="layui-form-label">Comments from managers</label>
+    <div class="layui-input-block" style="margin-left: 0;">
+            <textarea name="comments" placeholder="Comments？" class="layui-textarea" autocomplete="off"
+                      id = "comments" disabled=""></textarea>
+    </div>
+  </div>
   <input type="hidden" name="id">
   <div class="layui-form-item">
     <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;">
@@ -199,6 +206,7 @@
     $("input[name=remark]").val($(tr).find(":nth-child(7)").html());
     $("input[name=id]").val($(tr).find(":nth-child(4)").html());
     $("input[name=receiveraccount]").val($(tr).find(":nth-child(10)").html());
+    document.getElementById("comments").innerHTML = $(tr).find(":nth-child(13)").html();
     // }
   }
 </script>

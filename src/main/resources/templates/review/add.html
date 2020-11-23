@@ -82,29 +82,32 @@
             <i class="layui-icon">&#xe67c;</i>Invoice
         </button>
     </div>
-    <form class="layui-form layui-form-pane">
-        <div class="layui-form-item" lay-filter="bill-form">
-            <label class="layui-form-label">Status</label>
-            <div class="layui-input-inline">
-                <select id="typeid" autocomplete="off">
-                    <option>Status</option>
-                    <option value="1">MISSING INFO</option>
-                    <option value="2">DENIED</option>
-                    <option value="3">APPROVED</option>
-                </select>
-            </div>
+    <div class="layui-form-item" lay-filter="bill-form">
+        <label class="layui-form-label">Status</label>
+        <div class="layui-input-inline">
+            <select id="typeid" autocomplete="off">
+                <option>Status</option>
+                <option value="1">MISSING INFO</option>
+                <option value="2">DENIED</option>
+                <option value="3">APPROVED</option>
+            </select>
         </div>
+    </div>
 <!--        <div class="layui-form-item">-->
 <!--            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;">Review</button>-->
 <!--&lt;!&ndash;            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="update"  style="display:none; margin-left: 0;" >submit immediately</button>&ndash;&gt;-->
 <!--        </div>-->
-
-        <div class="layui-form-item">
-            <!--        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;" >Add</button>-->
-            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="review"  style="display:none;" >Review</button>
-            <!--        <button type="reset" id="resetForm" style="display: none;">Reset</button>-->
+    <div class="layui-form-item">
+        <div class="layui-input-block" style="margin-left: 0;">
+            <textarea name="comments" placeholder="Comments？" class="layui-textarea" autocomplete="off"
+            id = "comments"></textarea>
         </div>
-    </form>
+    </div>
+    <div class="layui-form-item">
+        <!--        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;" >Add</button>-->
+        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="review"  style="display:none;" >Review</button>
+        <!--        <button type="reset" id="resetForm" style="display: none;">Reset</button>-->
+    </div>
 <!--    <div class="layui-form-item">-->
 <!--        <label class="layui-form-label">Status</label>-->
 <!--        <div class="layui-input-inline">-->
@@ -180,9 +183,10 @@
                 // var userid =  $("input[name=userid]").val($(tr).find(":nth-child(2)").html());
                 //now the userid is in 0, 1 index get value from it
                 var userid = tr.cells[2].innerHTML;
-                console.log("userid**************************************" + userid)
+                console.log("userid**************************************" + userid);
                 var reimid = tr.cells[3].innerHTML;
-                $.post("/reirequest/review"+ "/" + options + "/" + userid + "/" + reimid,data.field,function (res) {
+                var comments = document.getElementById("comments").value;
+                $.post("/reirequest/review"+ "/" + options + "/" + userid + "/" + reimid + "/" + comments,data.field,function (res) {
                     if (res.code == 200){
                         layer.msg(res.msg,{ time: 1000},function () {
                             x_admin_close();
@@ -211,6 +215,9 @@
             $("input[name=money]").val($(tr).find(":nth-child(6)").html());
             $("input[name=remark]").val($(tr).find(":nth-child(7)").html());
             $("input[name=receiveraccount]").val($(tr).find(":nth-child(10)").html());
+            document.getElementById("comments").innerHTML = $(tr).find(":nth-child(13)").html();
+            console.log("comments" + $(tr).find(":nth-child(13)").html());
+            $("input[name=typeid]").val($(tr).find(":nth-child(12)").html());
             document.getElementById('paywayid').value = $(tr).find(":nth-child(8)").html();
             // $("textarea[name=remark]").val($(tr).find(":nth-child(9)").html());
             // $("input[name=id]").val($(tr).find(":nth-child(9)").html());

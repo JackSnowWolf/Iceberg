@@ -120,16 +120,17 @@
       <th style="width: 6%;">Index</th>
       <th style="width: 8%;">Title</th>
       <th style="width: 8%;">UserId</th>
-      <th style="width: 8%;">RequestId</th>
-      <th style="width: 8%;">Real Name</th>
-      <th style="width: 10%;">Money</th>
+      <th style="width: 6%;">RequestId</th>
+      <th style="width: 8%;" >Real Name</th>
+      <th style="width: 8%;">Money</th>
       <!--            <th style="width: 10%;">Payway</th>-->
       <th style="width: 10%;">Usage Type</th>
-      <th style="width: 10%;">Payway</th>
-      <th style="width: 10%;">Payway Name</th>
-      <th style="width: 16%;">Receiver</th>
-      <th style="width: 12%;">Time</th>
-      <th style="width: 10%;">Status</th>
+      <th style="width: 6%;">Payway</th>
+      <th style="width: 8%;">Payway Name</th>
+      <th style="width: 12%;">Receiver</th>
+      <th style="width: 10%;">Time</th>
+      <th style="width: 8%;">Status</th>
+      <th style="width: 10%;">Comments</th>
       <th style="width: 10%;">Operation</th>
     </thead>
     <tbody></tbody>
@@ -258,10 +259,11 @@
             '            <td class="receiveraccount" title=' + item.receiveraccount + '>' + item.receiveraccount + '</td>' +
             '            <td>' + item.time + '</td>' +
             '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
+            '            <td  class="comments" title=' + item.comments + '>' + item.comments + '</td>' +
             '            <td style="display: none">' + item.id + '</td>' +
             '            <td class="td-manage">' +
             '                <a title="edit" onclick="x_admin_show(\'edit\',\'reimbursement_add.html?index=' + (index + 1) + '#2\',\'460px\',\'80%\')" href="javascript:;">' +
-            '                    <i class="layui-icon">&#xe642;</i>' +
+            '                    <i class="layui-icon">&#xe615;</i>' +
             '                </a>' +
             '                <a title="delete" onclick="del(this,' + item.id + ')" href="javascript:;">' +
             '                    <i class="layui-icon">&#xe640;</i>' +
@@ -296,6 +298,7 @@
             '            <td class="receiveraccount" title=' + item.receiveraccount + '>' + item.receiveraccount + '</td>' +
             '            <td>' + item.time + '</td>' +
             '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
+            '            <td  class="comments" title=' + item.comments + '>' + item.comments + '</td>' +
             '            <td style="display: none">' + item.id + '</td>' +
             '            <td class="td-manage">' +
             '            <button class="layui-btn" onclick="x_admin_show(\'review\',\'review_add.html?index='

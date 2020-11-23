@@ -129,10 +129,10 @@ public class ReiRequestController {
    * @param session http session
    * @return result information whether the request has been approved.
    */
-  @RequestMapping(value = "/review/{typeid}/{userid}/{reimId}", method = RequestMethod.POST)
+  @RequestMapping(value = "/review/{typeid}/{userid}/{reimId}/{comments}", method = RequestMethod.POST)
   public Result review(ReimbursementRequest reimbursementRequest, HttpSession session,
       @PathVariable String typeid,
-      @PathVariable String userid, @PathVariable String reimId) throws IOException {
+      @PathVariable String userid, @PathVariable String reimId, @PathVariable String comments) throws IOException {
     if (Config.getSessionUser(session) == null) {
       return ResultUtil.unSuccess("No user for current session");
     }
@@ -142,11 +142,14 @@ public class ReiRequestController {
     System.out.println("type id :" + typeid + "userid : " + userid + "reimId : " + reimId);
     reimbursementRequest.setTypeid(Integer.parseInt(typeid));
     UserInfo requestUserInfo = userInfoService.getUserInfoById(userid);
+    System.out.println("requestUserInfo is null ? " + requestUserInfo);
     ReimbursementRequest request = reiRequestService.getReimRequestById(Integer.parseInt(reimId));
     request.setTypeid(Integer.parseInt(typeid));
+    request.setComments(comments);
     if (reimbursementRequest.getTypeid() == APPROVED) {
       // email send service
       try {
+        System.out.println("requestUserInfo is null ? " + requestUserInfo);
         String email = requestUserInfo.getEmail();
         MailUtils.sendMail(email, MailUtils.approved);
       } catch (Exception e) {

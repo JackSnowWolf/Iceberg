@@ -24,6 +24,15 @@ public class ReimbursementRequest {
   private String endTime;
   private String realname;
   private String time;
+  private String comments;
+
+  public String getComments() {
+    return comments;
+  }
+
+  public void setComments(String comments) {
+    this.comments = comments;
+  }
 
   public String getStartTime() {
     return startTime;

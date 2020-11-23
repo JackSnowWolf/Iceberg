@@ -189,6 +189,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setPaywayid(1);
     reimbursementRequest1.setMoney((float) 10);
     reimbursementRequest1.setReceiveraccount("normaluser@paypal.com");
+    reimbursementRequest1.setComments("good");
 
     given(reiRequestService.getReimRequestById(190)).willReturn(reimbursementRequest1);
     UserInfo userInfo = new UserInfo();
@@ -223,6 +224,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest2.setPaywayid(1);
     reimbursementRequest2.setMoney((float) 10);
     reimbursementRequest2.setReceiveraccount(receiver);
+    reimbursementRequest2.setComments("good");
     // mock reiRequestService update returnt
     given(reiRequestService.update(reimbursementRequest2)).willReturn(1);
     // mock transfer and send email return
@@ -230,8 +232,8 @@ public class ReiRequestControllerTest {
     given(payPalService.createPayout(receiver, "USD", reimbursementRequest2.getMoney().toString()))
       .willReturn(null);
     MvcResult result = this.mockMvc
-      .perform(MockMvcRequestBuilders.post("/reirequest/review/{typeid}/{userid}/{reimid}",
-        String.valueOf(3), String.valueOf(1), String.valueOf(190))
+      .perform(MockMvcRequestBuilders.post("/reirequest/review/{typeid}/{userid}/{reimid}/{comments}",
+        String.valueOf(3), String.valueOf(1), String.valueOf(190), "good")
         .contentType(MediaType.APPLICATION_JSON)
         .session(session)).andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
       .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
