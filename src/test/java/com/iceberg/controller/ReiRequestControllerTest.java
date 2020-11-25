@@ -3,7 +3,10 @@ package com.iceberg.controller;
 import static com.iceberg.entity.ReimbursementRequest.Status.APPROVED;
 import static com.iceberg.entity.ReimbursementRequest.Status.MISSING_INFO;
 import static com.iceberg.entity.ReimbursementRequest.Status.PROCESSING;
+import static com.iceberg.externalapi.ImageStorageService.getFileBytes;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -12,12 +15,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
+import com.iceberg.externalapi.ImageStorageService;
 import com.iceberg.externalapi.PayPalService;
 import com.iceberg.service.ReiRequestService;
 import com.iceberg.service.UserInfoService;
 import com.iceberg.utils.PageModel;
 import com.iceberg.utils.Result;
 import com.iceberg.utils.ResultUtil;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,11 +31,14 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.AutoConfigureMybatis;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -43,8 +52,9 @@ public class ReiRequestControllerTest {
 
   protected static MockHttpSession session;
 
-
   private static ObjectMapper objectMapper = new ObjectMapper();
+
+  private Logger logger = LoggerFactory.getLogger(ReiRequestControllerTest.class);
   @Autowired
   private MockMvc mockMvc;
 
@@ -57,6 +67,8 @@ public class ReiRequestControllerTest {
   @MockBean
   private PayPalService payPalService;
 
+  @MockBean
+  private ImageStorageService imageStorageService;
 
   @BeforeEach
   void init() throws Exception {
@@ -90,23 +102,23 @@ public class ReiRequestControllerTest {
 //    reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
     given(this.reiRequestService.add(eq(reimbursementRequest1)))
-      .willReturn(1);
+        .willReturn(1);
 
     // fill request params
     MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
     Map<String, String> maps = objectMapper
-      .convertValue(reimbursementRequest1, new TypeReference<Map<String, String>>() {
-      });
+        .convertValue(reimbursementRequest1, new TypeReference<Map<String, String>>() {
+        });
     maps.values().removeAll(Collections.singleton(null));
     paramsMap.setAll(maps);
     reimbursementRequest1.setTypeid(PROCESSING.value);
     this.mockMvc
-      .perform(MockMvcRequestBuilders.post("/reirequest/addRequest")
-        .contentType(MediaType.APPLICATION_JSON)
-        .params(paramsMap)
-        .session(session))
-      .andDo(print())
-      .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
+        .perform(MockMvcRequestBuilders.post("/reirequest/addRequest")
+            .contentType(MediaType.APPLICATION_JSON)
+            .params(paramsMap)
+            .session(session))
+        .andDo(print())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
 
   }
 
@@ -123,7 +135,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
     given(this.reiRequestService.update(reimbursementRequest1))
-      .willReturn(1);
+        .willReturn(1);
 
     List<ReimbursementRequest> reimbursementRequests = new ArrayList<>();
     reimbursementRequests.add(reimbursementRequest1);
@@ -133,7 +145,7 @@ public class ReiRequestControllerTest {
     Result<ReimbursementRequest> willReturnResult = ResultUtil.success(reimbursementRequests);
     willReturnResult.setTotal(1);
     given(this.reiRequestService.findByWhereNoPage(eq(reimbursementRequestSearch)))
-      .willReturn(willReturnResult);
+        .willReturn(willReturnResult);
 
     // set reimbursement request id for test
     ReimbursementRequest reimbursementRequest2 = new ReimbursementRequest();
@@ -148,18 +160,18 @@ public class ReiRequestControllerTest {
     // fill request params
     MultiValueMap<String, String> paramsMap = new LinkedMultiValueMap<>();
     Map<String, String> maps = objectMapper
-      .convertValue(reimbursementRequest2, new TypeReference<Map<String, String>>() {
-      });
+        .convertValue(reimbursementRequest2, new TypeReference<Map<String, String>>() {
+        });
     maps.values().removeAll(Collections.singleton(null));
     paramsMap.setAll(maps);
     paramsMap.set("typeid", "0");
     this.mockMvc
-      .perform(MockMvcRequestBuilders.post("/reirequest/updateRequest")
-        .contentType(MediaType.APPLICATION_JSON)
-        .params(paramsMap)
-        .session(session))
-      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
-      .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
+        .perform(MockMvcRequestBuilders.post("/reirequest/updateRequest")
+            .contentType(MediaType.APPLICATION_JSON)
+            .params(paramsMap)
+            .session(session))
+        .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
   }
 
   @Test
@@ -168,12 +180,12 @@ public class ReiRequestControllerTest {
     given(this.reiRequestService.del(eq(190))).willReturn(1);
 
     this.mockMvc
-      .perform(MockMvcRequestBuilders.post("/reirequest/delReiRequest")
-        .contentType(MediaType.APPLICATION_JSON)
-        .param("id", "190")
-        .session(session))
-      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
-      .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
+        .perform(MockMvcRequestBuilders.post("/reirequest/delReiRequest")
+            .contentType(MediaType.APPLICATION_JSON)
+            .param("id", "190")
+            .session(session))
+        .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200));
   }
 
   @Test
@@ -230,13 +242,14 @@ public class ReiRequestControllerTest {
     // mock transfer and send email return
 //    when(MailUtils.sendMail(receiver, MailUtils.approved)).thenReturn("");
     given(payPalService.createPayout(receiver, "USD", reimbursementRequest2.getMoney().toString()))
-      .willReturn(null);
+        .willReturn(null);
     MvcResult result = this.mockMvc
-      .perform(MockMvcRequestBuilders.post("/reirequest/review/{typeid}/{userid}/{reimid}/{comments}",
-        String.valueOf(3), String.valueOf(1), String.valueOf(190), "good")
-        .contentType(MediaType.APPLICATION_JSON)
-        .session(session)).andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
-      .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
+        .perform(
+            MockMvcRequestBuilders.post("/reirequest/review/{typeid}/{userid}/{reimid}/{comments}",
+                String.valueOf(3), String.valueOf(1), String.valueOf(190), "good")
+                .contentType(MediaType.APPLICATION_JSON)
+                .session(session)).andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
   }
 
   @Test
@@ -259,16 +272,16 @@ public class ReiRequestControllerTest {
     Result<ReimbursementRequest> willReturnResult = ResultUtil.success(reimbursementRequests);
     willReturnResult.setTotal(1);
     given(this.reiRequestService.findByWhereNoPage(eq(reimbursementRequestSearch)))
-      .willReturn(willReturnResult);
+        .willReturn(willReturnResult);
 
     MvcResult result = this.mockMvc
-      .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequestById/{id}", 190)
-        .session(session))
-      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
-      .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
+        .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequestById/{id}", 190)
+            .session(session))
+        .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
 
     Result decodedResponse = objectMapper
-      .readValue(result.getResponse().getContentAsString(), Result.class);
+        .readValue(result.getResponse().getContentAsString(), Result.class);
     assertNotEquals(0, decodedResponse.getTotal());
   }
 
@@ -307,16 +320,16 @@ public class ReiRequestControllerTest {
     PageModel model = new PageModel<>(1, reimbursementRequestSearch);
     model.setPageSize(20);
     given(this.reiRequestService.findByWhere(eq(model)))
-      .willReturn(willReturnResult);
+        .willReturn(willReturnResult);
     MvcResult result = this.mockMvc
-      .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequest/{pageNo}/{pageSize}", 1, 20)
-        .session(session))
+        .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequest/{pageNo}/{pageSize}", 1, 20)
+            .session(session))
 
-      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).
-        andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
+        .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).
+            andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
 
     Result decodedResponse = objectMapper
-      .readValue(result.getResponse().getContentAsString(), Result.class);
+        .readValue(result.getResponse().getContentAsString(), Result.class);
     assertNotEquals(0, decodedResponse.getTotal());
     assertNotEquals(0, decodedResponse.getDatas().size());
   }
@@ -365,16 +378,50 @@ public class ReiRequestControllerTest {
     PageModel model = new PageModel<>(1, reimbursementRequestSearch);
     model.setPageSize(20);
     given(this.reiRequestService.findByWhere(eq(model)))
-      .willReturn(willReturnResult);
+        .willReturn(willReturnResult);
     MvcResult result = this.mockMvc
-      .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequest/{pageNo}/{pageSize}", 1, 20)
-        .session(session))
-      .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).
-        andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
+        .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequest/{pageNo}/{pageSize}", 1, 20)
+            .session(session))
+        .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).
+            andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
 
     Result decodedResponse = objectMapper
-      .readValue(result.getResponse().getContentAsString(), Result.class);
+        .readValue(result.getResponse().getContentAsString(), Result.class);
     assertNotEquals(0, decodedResponse.getTotal());
     assertNotEquals(0, decodedResponse.getDatas().size());
+  }
+
+  @Test
+  void shouldUploadImage() throws Exception {
+
+    ClassLoader classLoader = getClass().getClassLoader();
+    URL testImageResource = classLoader.getResource("images/invoice-test-01.png");
+    assertNotNull(testImageResource);
+    File testImageFile = new File(testImageResource.getFile());
+
+    byte[] imageFileData = getFileBytes(testImageFile.getAbsolutePath());
+    MockMultipartFile mockImageFile = new MockMultipartFile("imageFile", "invoice-test-01.png",
+        MediaType.IMAGE_PNG_VALUE, imageFileData);
+
+    ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
+    reimbursementRequest1.setId(190);
+    reimbursementRequest1.setUserid(1);
+    reimbursementRequest1.setTitle("should upload image For for corresponding request");
+    reimbursementRequest1.setRemark("Travel");
+    reimbursementRequest1.setTypeid(PROCESSING.value);
+    reimbursementRequest1.setPaywayid(1);
+
+    given(reiRequestService.getReimRequestById(any())).willReturn(reimbursementRequest1);
+    given(reiRequestService.update(any())).willReturn(1);
+    given(imageStorageService.putImage(any(), eq(imageFileData))).willReturn("eTag");
+    MvcResult result = this.mockMvc
+        .perform(MockMvcRequestBuilders.multipart("/reirequest/{requestId}/image", 190)
+            .file(mockImageFile).session(session)).andDo(print())
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200))
+        .andReturn();
+    logger.debug(result.toString());
+
+
   }
 }

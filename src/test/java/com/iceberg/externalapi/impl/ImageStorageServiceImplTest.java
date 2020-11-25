@@ -4,6 +4,7 @@ import static com.iceberg.externalapi.ImageStorageService.getFileBytes;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.File;
 import java.net.URL;
@@ -58,5 +59,12 @@ public class ImageStorageServiceImplTest {
 
     assertEquals(Base64.getEncoder().encodeToString(expectedData),
         Base64.getEncoder().encodeToString(data));
+  }
+
+  @Test
+  void shouldNotGetImageBytes() {
+    logger.info("test get image bytes");
+    byte[] data = imageStorageService.getImageBytes("invoice-test-abc.png");
+    assertNull(data, "should not get image");
   }
 }

@@ -4,8 +4,9 @@ import static com.iceberg.externalapi.ImageStorageService.getFileBytes;
 
 import com.iceberg.externalapi.ImageStorageService;
 import javax.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -24,8 +25,11 @@ public class ImageStorageServiceImpl implements ImageStorageService {
   private final Region region = Region.US_EAST_1;
   private S3Client s3Client;
 
+  private Logger logger = LoggerFactory.getLogger(ImageStorageService.class);
+
   @PostConstruct
   public void init() {
+    logger.info("Setting aws access key.");
     System.setProperty("aws.accessKeyId", "AKIAZUGB5BLKN2OTIUWG");
     System.setProperty("aws.secretAccessKey", "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");
 
@@ -46,10 +50,9 @@ public class ImageStorageServiceImpl implements ImageStorageService {
       return response.eTag();
 
     } catch (S3Exception e) {
-      System.err.println(e.getMessage());
-      System.exit(1);
+      logger.error(e.awsErrorDetails().errorMessage());
     }
-    return "";
+    return null;
   }
 
   @Override
@@ -64,15 +67,14 @@ public class ImageStorageServiceImpl implements ImageStorageService {
       return response.eTag();
 
     } catch (S3Exception e) {
-      System.err.println(e.getMessage());
-      System.exit(1);
+      logger.error(e.awsErrorDetails().errorMessage());
     }
-    return "";
+    return null;
   }
 
   @Override
   public byte[] getImageBytes(String keyName) {
-    byte[] data = new byte[0];
+    byte[] data;
     try {
       GetObjectRequest objectRequest = GetObjectRequest
           .builder()
@@ -83,8 +85,8 @@ public class ImageStorageServiceImpl implements ImageStorageService {
       data = objectBytes.asByteArray();
 
     } catch (S3Exception e) {
-      System.err.println(e.awsErrorDetails().errorMessage());
-      System.exit(1);
+      logger.error(e.awsErrorDetails().errorMessage());
+      return null;
     }
     return data;
   }
