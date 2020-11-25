@@ -6,9 +6,9 @@
 
     <insert id="add" parameterType="com.iceberg.entity.ReimbursementRequest" useGeneratedKeys="true"
         keyProperty="id">
-        insert into bill(id, title, userid, money, typeid, remark, paywayid,receiveraccount)
+        insert into bill(id, title, userid, money, typeid, remark, paywayid, receiveraccount, imageid)
             value (null, #{title}, #{userid}, #{money}, #{typeid.value}, #{remark},
-                   #{paywayid}, #{receiveraccount})
+                   #{paywayid}, #{receiveraccount}, #{imageid})
     </insert>
 
     <update id="update" parameterType="com.iceberg.entity.ReimbursementRequest">
@@ -20,6 +20,7 @@
             <if test="title!=null">title = #{title},</if>
             <if test="paywayid!=null">paywayid = #{paywayid},</if>
             <if test="receiveraccount!=null"> receiveraccount = #{receiveraccount},</if>
+            <if test="imageid!=null"> imageid = #{imageid},</if>
             <if test="money!=null">typeid = #{typeid.value},</if>
             <if test="comments!=null">comments = #{comments},</if>
         </set>
@@ -31,7 +32,7 @@
         from bill
         where id = #{id}
     </delete>
-    <!--TODO: groupid's type: int or string?-->
+
     <select id="findByWhereNoPage" resultType="com.iceberg.entity.ReimbursementRequest"
         parameterType="com.iceberg.entity.ReimbursementRequest">
         select *, type.name type from bill left join type on bill.typeid = type.id left join payway

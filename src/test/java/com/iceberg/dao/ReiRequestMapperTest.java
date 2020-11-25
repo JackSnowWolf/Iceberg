@@ -33,6 +33,7 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setTitle("Test Usage");
     reimbursementRequest.setPaywayid(1);
+    reimbursementRequest.setImageid("test.png");
     reimbursementRequest.setReceiveraccount("test@paypal.com");
     int num = reiRequestMapper.add(reimbursementRequest);
     assertEquals(1, num);
@@ -99,6 +100,7 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setTitle("Test Usage");
+    reimbursementRequest.setImageid("test.png");
     reimbursementRequest.setPaywayid(1);
 
     int num = reiRequestMapper.add(reimbursementRequest);
