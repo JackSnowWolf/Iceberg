@@ -352,6 +352,79 @@ public class ReiRequestController {
   }
 
   /**
+   * get request image by request id.
+   *
+   * @param requestId request id
+   * @return image.
+   */
+  @RequestMapping(value = "/{requestId}/image", method = RequestMethod.GET)
+  public ResponseEntity<byte[]> getImageByRequestId(@PathVariable Integer requestId) {
+    ReimbursementRequest request = reiRequestService.getReimRequestById(requestId);
+    String imageId = request.getImageid();
+    return getImageByImageId(imageId);
+  }
+
+  /**
+   * return image to front-end.
+   *
+   * @param imageId image name
+   * @return response entity with image
+   */
+  @RequestMapping(value = "/image/{imageId}", method = RequestMethod.GET)
+  public ResponseEntity<byte[]> getImageByImageId(@PathVariable String imageId) {
+    HttpHeaders headers = new HttpHeaders();
+    byte[] data = imageStorageService.getImageBytes(imageId);
+    if (data == null) {
+      logger.error("No such image in the image storage!");
+      return new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND);
+    }
+    boolean succ = setMediaType(imageId, headers);
+    if (!succ) {
+      return new ResponseEntity<>(null, headers, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    }
+
+    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+    ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(data, headers, HttpStatus.OK);
+    logger.debug("responseEntity: " + responseEntity.toString());
+    return responseEntity;
+  }
+
+  /**
+   * set response media type.
+   *
+   * @param imageId image id.
+   * @param headers http headers.
+   * @return if success
+   */
+  private Boolean setMediaType(String imageId, HttpHeaders headers) {
+    try {
+
+      String ext = getExtension(imageId);
+      switch (ext.toLowerCase()) {
+        case "png":
+          headers.setContentType(MediaType.IMAGE_PNG);
+          break;
+        case "jpg":
+          headers.setContentType(MediaType.IMAGE_JPEG);
+          break;
+        case "jpeg":
+          headers.setContentType(MediaType.IMAGE_JPEG);
+          break;
+        case "gif":
+          headers.setContentType(MediaType.IMAGE_GIF);
+          break;
+        default:
+          return false;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * upload image to image storage.
    *
    * @param requestId corresponding request id
@@ -406,44 +479,5 @@ public class ReiRequestController {
     }
 
   }
-
-  /**
-   * return image to front-end.
-   *
-   * @param imageId image name
-   * @return response entity with image
-   */
-  @RequestMapping(value = "/image/{imageId}", method = RequestMethod.GET)
-  public ResponseEntity<byte[]> getImageByImageId(@PathVariable String imageId) {
-    HttpHeaders headers = new HttpHeaders();
-    byte[] data = imageStorageService.getImageBytes(imageId);
-    if (data == null) {
-      logger.error("No such image in the image storage!");
-      return new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND);
-    }
-    String ext = getExtension(imageId);
-    switch (ext.toLowerCase()) {
-      case "png":
-        headers.setContentType(MediaType.IMAGE_PNG);
-        break;
-      case "jpg":
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        break;
-      case "jpeg":
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        break;
-      case "gif":
-        headers.setContentType(MediaType.IMAGE_GIF);
-        break;
-      default:
-        return new ResponseEntity<>(null, headers, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
-    }
-
-    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
-    ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(data, headers, HttpStatus.OK);
-    logger.debug("responseEntity: " + responseEntity.toString());
-    return responseEntity;
-  }
-
 
 }
