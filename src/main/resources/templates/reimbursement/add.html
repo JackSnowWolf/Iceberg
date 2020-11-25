@@ -23,6 +23,7 @@
 </head>
 
 <body>
+
 <form class="layui-form layui-form-pane">
   <div class="layui-form-item" lay-filter="bill-form">
     <label class="layui-form-label">Title</label>
@@ -81,7 +82,7 @@
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">Invoice</label>
-    <button type="button" class="layui-btn" name="image">
+    <button type="button" class="layui-btn" name="image" id="image">
       <i class="layui-icon">&#xe67c;</i>Upload Invoice
     </button>
   </div>
@@ -140,10 +141,36 @@
     // });
 
     //
+
+    var uploadInst;
+    layui.use('upload', function(){
+    var upload = layui.upload;
+
+    //
+    uploadInst = upload.render({
+      elem: '#image' //
+      ,auto: false
+      ,done: function(res){
+        //
+      }
+      ,accept: 'images'
+      ,field:'imageFile'
+      ,error: function(){
+
+      }
+    });
+    });
+
     form.on('submit(add)', function (data) {
-      console.log(data);
+      console.log(data.field);
+      data.field["imageFile"] = null;
       $.post("/reirequest/addRequest", data.field, function (res) {
-        if (res.code == 200) {
+        if (res.code === 200) {
+          // console.log(res.data);
+          // send image to backend
+          // console.log(uploadInst);
+          uploadInst.config.url = "/reirequest/" + res.data.id + "/image";
+          uploadInst.upload(0);
           layer.confirm("Apply Reimbursement Successfully", {
             btn: ['Yes', 'No'],
             title: false,
@@ -154,6 +181,8 @@
             layer.close(layno);
             $("#resetForm").click();
           }, function () {
+            console.log("response msg: ");
+
             layer.msg(res.msg, {time: 1000}, function () {
               x_admin_close();
               if (parent.location.href.indexOf("details.html") != -1) {

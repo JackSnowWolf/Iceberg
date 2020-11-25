@@ -76,10 +76,10 @@ public class LoggerInterceptor implements HandlerInterceptor {
       Object handler, Exception ex) throws Exception {
 
     sb.setLength(0);
-    sb.append("User ID【").append(userid).append("】").append(request.getRequestURL().toString())
+    sb.append("User ID [").append(userid).append("]").append(request.getRequestURL().toString())
       .append("visiting ends... ");
 
-    logger.info(sb.toString());
+    // logger.info(sb.toString());
 
   }
 }
