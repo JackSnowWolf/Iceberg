@@ -3,9 +3,12 @@ package com.iceberg.controller;
 import static com.iceberg.entity.ReimbursementRequest.Status.APPROVED;
 import static com.iceberg.entity.ReimbursementRequest.Status.DENIED;
 import static com.iceberg.entity.ReimbursementRequest.Status.PROCESSING;
+import static java.util.UUID.randomUUID;
+import static org.apache.commons.io.FilenameUtils.getExtension;
 
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
+import com.iceberg.externalapi.ImageStorageService;
 import com.iceberg.externalapi.PayPalService;
 import com.iceberg.service.ReiRequestService;
 import com.iceberg.service.UserInfoService;
@@ -16,28 +19,48 @@ import com.iceberg.utils.Result;
 import com.iceberg.utils.ResultUtil;
 import com.iceberg.utils.Utils;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 
 @RestController
 @RequestMapping("/reirequest")
 public class ReiRequestController {
 
+  private static final Set<String> supportedImageExt = new HashSet<>();
+
+  static {
+    supportedImageExt.add("png");
+    supportedImageExt.add("jpg");
+    supportedImageExt.add("jpeg");
+    supportedImageExt.add("gif");
+  }
+
   private Logger logger = LoggerFactory.getLogger(ReiRequestController.class);
   @Resource
   private ReiRequestService reiRequestService;
-
   @Resource
   private UserInfoService userInfoService;
-
   @Resource
   private PayPalService payPalService;
+  @Resource
+  private ImageStorageService imageStorageService;
 
   //  @Resource
   //  private EmailSendService emailSendService;
@@ -129,10 +152,12 @@ public class ReiRequestController {
    * @param session http session
    * @return result information whether the request has been approved.
    */
-  @RequestMapping(value = "/review/{typeid}/{userid}/{reimId}/{comments}", method = RequestMethod.POST)
+  @RequestMapping(value = "/review/{typeid}/{userid}/{reimId}/{comments}",
+      method = RequestMethod.POST)
   public Result review(ReimbursementRequest reimbursementRequest, HttpSession session,
-      @PathVariable String typeid,
-      @PathVariable String userid, @PathVariable String reimId, @PathVariable String comments) throws IOException {
+      @PathVariable String typeid, @PathVariable String userid, @PathVariable String reimId,
+      @PathVariable String comments)
+      throws IOException {
     if (Config.getSessionUser(session) == null) {
       return ResultUtil.unSuccess("No user for current session");
     }
@@ -325,4 +350,100 @@ public class ReiRequestController {
       return ResultUtil.error(e);
     }
   }
+
+  /**
+   * upload image to image storage.
+   *
+   * @param requestId corresponding request id
+   * @param imageFile image file
+   * @return upload image result
+   */
+  @RequestMapping(value = "/{requestId}/image", method = RequestMethod.POST)
+  public Result uploadImage(@PathVariable Integer requestId,
+      @RequestParam("imageFile") MultipartFile imageFile, HttpSession session) {
+    if (Config.getSessionUser(session) == null) {
+      return ResultUtil.unSuccess("No user for current session");
+    }
+    // check whether current user is legal to revise.
+
+    ReimbursementRequest reimbursementRequest = reiRequestService.getReimRequestById(requestId);
+    if (reimbursementRequest == null) {
+      return ResultUtil.unSuccess("request not found!");
+    }
+    if (!reimbursementRequest.getUserid().equals(Config.getSessionUser(session).getId())) {
+      return ResultUtil.unSuccess("Not authorized to upload image!");
+    }
+
+    String imageName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+    logger.debug("image name: " + imageName);
+
+    String ext = getExtension(imageName);
+    if (!supportedImageExt.contains(ext.toLowerCase())) {
+      return ResultUtil.unSuccess("Unsupported image type");
+    }
+    String imageId = randomUUID().toString() + "." + getExtension(imageName);
+    logger.debug("image id: " + imageId);
+    try {
+      String putImageResponse = imageStorageService.putImage(imageId, imageFile.getBytes());
+      if (putImageResponse == null) {
+        return ResultUtil.unSuccess("Upload image to image storage fails!");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+      return ResultUtil.error(e);
+    }
+    reimbursementRequest.setImageid(imageId);
+    try {
+      int num = reiRequestService.update(reimbursementRequest);
+      if (num > 0) {
+        return ResultUtil.success("Upload Image successfully!");
+      } else {
+        return ResultUtil.unSuccess("Update image id fails!");
+      }
+    } catch (Exception e) {
+      return ResultUtil.error(e);
+    }
+
+  }
+
+  /**
+   * return image to front-end.
+   *
+   * @param imageId image name
+   * @return response entity with image
+   */
+  @RequestMapping(value = "/image/{imageId}", method = RequestMethod.GET)
+  public ResponseEntity<byte[]> getImageByImageId(@PathVariable String imageId) {
+    HttpHeaders headers = new HttpHeaders();
+    byte[] data = imageStorageService.getImageBytes(imageId);
+    if (data == null) {
+      logger.error("No such image in the image storage!");
+      return new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND);
+    }
+    String ext = getExtension(imageId);
+    switch (ext.toLowerCase()) {
+      case "png":
+        headers.setContentType(MediaType.IMAGE_PNG);
+        break;
+      case "jpg":
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        break;
+      case "jpeg":
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        break;
+      case "gif":
+        headers.setContentType(MediaType.IMAGE_GIF);
+        break;
+      default:
+        return new ResponseEntity<>(null, headers, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    }
+
+    headers.setCacheControl(CacheControl.noCache().getHeaderValue());
+    ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(data, headers, HttpStatus.OK);
+    logger.debug("responseEntity: " + responseEntity.toString());
+    return responseEntity;
+  }
+
+
 }
