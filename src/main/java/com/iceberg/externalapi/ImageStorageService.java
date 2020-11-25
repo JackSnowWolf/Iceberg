@@ -8,6 +8,12 @@ import java.io.OutputStream;
 
 public interface ImageStorageService {
 
+  /**
+   * get image file data in bytes.
+   *
+   * @param filePath file path.
+   * @return file data
+   */
   static byte[] getFileBytes(String filePath) {
     FileInputStream fileInputStream = null;
     byte[] bytesArray = null;
@@ -31,6 +37,12 @@ public interface ImageStorageService {
     return bytesArray;
   }
 
+  /**
+   * write image bytes to files.
+   *
+   * @param data image data in bytes.
+   * @param filePath file path.
+   */
   static void writeToFile(byte[] data, String filePath) {
     try {
       // Write the data to a local file

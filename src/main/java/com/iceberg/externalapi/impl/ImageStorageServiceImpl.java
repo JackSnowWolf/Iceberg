@@ -27,6 +27,9 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
   private Logger logger = LoggerFactory.getLogger(ImageStorageService.class);
 
+  /**
+   * init ImageStorageServiceImpl.
+   */
   @PostConstruct
   public void init() {
     logger.info("Setting aws access key.");

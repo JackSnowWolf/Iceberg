@@ -43,7 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/reirequest")
 public class ReiRequestController {
 
-  private final static Set<String> supportedImageExt = new HashSet<>();
+  private static final Set<String> supportedImageExt = new HashSet<>();
 
   static {
     supportedImageExt.add("png");
