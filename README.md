@@ -91,6 +91,8 @@ mvn surefire:test
 ```
 
 ### Reference
+Front-End Framework: LayUI(www.layui.com), A Chinese framework like Bootstrap.
+Back-End Framework: https://spring.io/projects/spring-boot
 
 ## TODO
 - [ ] TODO1
