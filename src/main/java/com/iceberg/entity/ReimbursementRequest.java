@@ -15,7 +15,7 @@ public class ReimbursementRequest {
   private String imageid;
   private String title;
   private Float money;
-  private String remark;
+  private Remark remark;
   private String groupid;
   private String groupname;
   private Integer paywayid;
@@ -131,14 +131,6 @@ public class ReimbursementRequest {
     this.money = money;
   }
 
-  public String getRemark() {
-    return remark;
-  }
-
-  public void setRemark(String remark) {
-    this.remark = remark;
-  }
-
   public String getGroupid() {
     return groupid;
   }
@@ -167,6 +159,13 @@ public class ReimbursementRequest {
     return realname;
   }
 
+  public Remark getRemark() {
+    return remark;
+  }
+
+  public void setRemark(Remark remark) {
+    this.remark = remark;
+  }
   /**
    * real name setter.
    *
@@ -223,6 +222,33 @@ public class ReimbursementRequest {
 
     public static Status valueOf(int pageType) {
       return (Status) map.get(pageType);
+    }
+
+    public int getValue() {
+      return value;
+    }
+
+  }
+
+  public enum Remark {
+    HOTELORTRAVEL(0), CATERING(1), TRANSPORT(2), HEALTH(3), COMMS(4), LIFE(5), OTHERS(6);
+
+    private static Map map = new HashMap<>();
+
+    static {
+      for (Remark remark1 : Remark.values()) {
+        map.put(remark1.value, remark1);
+      }
+    }
+
+    public int value;
+
+    Remark(int value) {
+      this.value = value;
+    }
+
+    public static Remark valueOf(int pageRemark) {
+      return (Remark) map.get(pageRemark);
     }
 
     public int getValue() {

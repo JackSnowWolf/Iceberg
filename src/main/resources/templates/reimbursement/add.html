@@ -50,8 +50,14 @@
   <div class="layui-form-item">
     <label class="layui-form-label">Type</label>
     <div class="layui-input-block">
-      <input type="text" name="remark" placeholder="Please fill type" autocomplete="off"
-             class="layui-input">
+      <select id="remark" name="remark" autocomplete="off">
+        <option value="HOTELORTRAVEL">HotelOrTravel</option>
+        <option value="TRANSPORT">Transport</option>
+        <option value="CATERING">Catering</option>
+        <option value="LIFE">Life</option>
+        <option value="COMMS">Comms</option>
+        <option value="OTHERS">Others</option>
+      </select>
     </div>
   </div>
   <div class="layui-form-item">
@@ -232,7 +238,7 @@
     $("input[name=title]").val($(tr).find(":nth-child(2)").html());
     $("input[name=money]").val($(tr).find(":nth-child(6)").html());
     document.getElementById('paywayid').value = $(tr).find(":nth-child(8)").html();
-    $("input[name=remark]").val($(tr).find(":nth-child(7)").html());
+    document.getElementById('remark').value = $(tr).find(":nth-child(7)").html();
     $("input[name=id]").val($(tr).find(":nth-child(4)").html());
     $("input[name=receiveraccount]").val($(tr).find(":nth-child(10)").html());
     document.getElementById("comments").innerHTML = $(tr).find(":nth-child(13)").html();

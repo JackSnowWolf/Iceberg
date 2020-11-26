@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import com.iceberg.entity.ReimbursementRequest;
+import com.iceberg.entity.ReimbursementRequest.Remark;
 import com.iceberg.utils.PageModel;
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +29,7 @@ public class ReiRequestMapperTest {
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(123);
     reimbursementRequest.setGroupid("1");
-    reimbursementRequest.setRemark("For test");
+    reimbursementRequest.setRemark(Remark.TRANSPORT);
     reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setTitle("Test Usage");
@@ -47,7 +48,7 @@ public class ReiRequestMapperTest {
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(123);
     reimbursementRequest.setGroupid("2");
-    reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
+    reimbursementRequest.setRemark(Remark.TRANSPORT);
     reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setReceiveraccount("test@paypal.com");
@@ -62,6 +63,7 @@ public class ReiRequestMapperTest {
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
     reimbursementRequestSearch.setUserid(123);
     reimbursementRequestSearch.setReceiveraccount("test@paypal.com");
+    reimbursementRequestSearch.setRemark(Remark.TRANSPORT);
     System.out.println(reimbursementRequestSearch.toString());
     List<ReimbursementRequest> requestList = reiRequestMapper
         .findByWhereNoPage(reimbursementRequestSearch);
@@ -73,7 +75,7 @@ public class ReiRequestMapperTest {
     logger.info("get reimbursement request by id test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(123);
-    reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
+    reimbursementRequest.setRemark(Remark.TRANSPORT);
     reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setTitle("Test Usage");
@@ -96,7 +98,7 @@ public class ReiRequestMapperTest {
     logger.info("update reimbursement request test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(123);
-    reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
+    reimbursementRequest.setRemark(Remark.TRANSPORT);
     reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setTitle("Test Usage");
@@ -122,8 +124,9 @@ public class ReiRequestMapperTest {
     logger.info("del reimbursement request test");
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
     reimbursementRequest.setUserid(123);
-    reimbursementRequest.setRemark("For test:" + UUID.randomUUID().toString());
+    reimbursementRequest.setRemark(Remark.TRANSPORT);
     reimbursementRequest.setTypeid(APPROVED.value);
+    reimbursementRequest.setRemark(Remark.TRANSPORT);
     reimbursementRequest.setMoney((float) 100.0);
     reimbursementRequest.setTitle("Test Usage");
     reimbursementRequest.setPaywayid(1);

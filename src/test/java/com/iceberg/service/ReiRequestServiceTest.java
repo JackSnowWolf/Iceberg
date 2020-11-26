@@ -1,6 +1,7 @@
 package com.iceberg.service;
 
 import com.iceberg.entity.ReimbursementRequest;
+import com.iceberg.entity.ReimbursementRequest.Remark;
 import com.iceberg.utils.PageModel;
 import com.iceberg.utils.Result;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,6 +32,7 @@ public class ReiRequestServiceTest {
     request = new ReimbursementRequest();
     request.setId(8888);
     request.setTitle("ReiRequestTest");
+    request.setRemark(Remark.TRANSPORT);
     request.setUserid(123);
     request.setMoney((float)10);
     request.setTypeid(0);
@@ -53,6 +55,8 @@ public class ReiRequestServiceTest {
   public void updateTest() {
     logger.info("test");
     request.setId(600);
+    reiRequestService.add(request);
+    request.setTypeid(1);
     int update = reiRequestService.update(request);
     assertEquals(1, update);
     logger.info("test success");

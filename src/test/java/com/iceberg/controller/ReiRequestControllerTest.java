@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iceberg.entity.ReimbursementRequest;
+import com.iceberg.entity.ReimbursementRequest.Remark;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.externalapi.ImageStorageService;
 import com.iceberg.externalapi.PayPalService;
@@ -98,7 +99,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setId(190);
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("add reirequest test");
-    reimbursementRequest1.setRemark("Test");
+    reimbursementRequest1.setRemark(Remark.TRANSPORT);
 //    reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
     given(this.reiRequestService.add(eq(reimbursementRequest1)))
@@ -131,7 +132,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setId(190);
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("add reiquest test");
-    reimbursementRequest1.setRemark("Test");
+    reimbursementRequest1.setRemark(Remark.TRANSPORT);
     reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
     given(this.reiRequestService.update(reimbursementRequest1))
@@ -152,7 +153,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest2.setId(190);
     reimbursementRequest2.setUserid(1);
     reimbursementRequest2.setTitle("add reiquest test");
-    reimbursementRequest2.setRemark("Test");
+    reimbursementRequest2.setRemark(Remark.TRANSPORT);
     reimbursementRequest2.setTypeid(MISSING_INFO.value);
     reimbursementRequest2.setPaywayid(1);
 
@@ -196,7 +197,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setId(190);
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("approve request test");
-    reimbursementRequest1.setRemark("Test");
+    reimbursementRequest1.setRemark(Remark.TRANSPORT);
     reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
     reimbursementRequest1.setMoney((float) 10);
@@ -231,7 +232,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest2.setId(190);
     reimbursementRequest2.setUserid(1);
     reimbursementRequest2.setTitle("approve request test");
-    reimbursementRequest2.setRemark("Test");
+    reimbursementRequest2.setRemark(Remark.TRANSPORT);
     reimbursementRequest2.setTypeid(APPROVED.value);
     reimbursementRequest2.setPaywayid(1);
     reimbursementRequest2.setMoney((float) 10);
@@ -259,7 +260,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setId(190);
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("get reiquest by id test");
-    reimbursementRequest1.setRemark("Test");
+    reimbursementRequest1.setRemark(Remark.TRANSPORT);
     reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
 
@@ -306,7 +307,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setId(190);
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("should Get ReiRequst For Normal User test");
-    reimbursementRequest1.setRemark("Test");
+    reimbursementRequest1.setRemark(Remark.TRANSPORT);
     reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
 
@@ -355,7 +356,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setId(190);
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("should Get ReiRequst For Group Manager test");
-    reimbursementRequest1.setRemark("Test");
+    reimbursementRequest1.setRemark(Remark.TRANSPORT);
     reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
 
@@ -363,7 +364,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest2.setId(191);
     reimbursementRequest2.setUserid(2);
     reimbursementRequest2.setTitle("should Get ReiRequst For Group Manager test");
-    reimbursementRequest2.setRemark("Test");
+    reimbursementRequest2.setRemark(Remark.TRANSPORT);
     reimbursementRequest2.setTypeid(PROCESSING.value);
     reimbursementRequest2.setPaywayid(1);
 
@@ -407,7 +408,7 @@ public class ReiRequestControllerTest {
     reimbursementRequest1.setId(190);
     reimbursementRequest1.setUserid(1);
     reimbursementRequest1.setTitle("should upload image For for corresponding request");
-    reimbursementRequest1.setRemark("Travel");
+    reimbursementRequest1.setRemark(Remark.TRANSPORT);
     reimbursementRequest1.setTypeid(PROCESSING.value);
     reimbursementRequest1.setPaywayid(1);
 
