@@ -91,8 +91,9 @@ mvn surefire:test
 ```
 
 ### Reference
-Front-End Framework: LayUI(www.layui.com), A Chinese framework like Bootstrap.
-Back-End Framework: https://spring.io/projects/spring-boot
+- Front-End Framework: LayUI(www.layui.com)
+- Layui is a UI framework written with its own module specification, following the writing and organization of native HTML/CSS/JS, with very low thresholds for ready-to-use. Learning tutorial: https://www.layui.com/doc/
+- Back-End Framework: https://spring.io/projects/spring-boot
 
 ## TODO
 - [ ] TODO1
