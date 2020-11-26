@@ -3,6 +3,8 @@
 COMS 4156 Advanced software team project @ Columbia. Team Iceberg.
 The reimbursement system is based on SpringBoot+Mybatis+Thymeleaf+layui, integrating with external api such as Paypal payout, OAuth, Email sending... 
 
+You can check our back-end API document at [https://jacksnowwolf.github.io/Iceberg/](https://jacksnowwolf.github.io/Iceberg/)
+
 ![Java CI with Maven](https://github.com/JackSnowWolf/Iceberg/workflows/Java%20CI%20with%20Maven/badge.svg)
 ![CodeQL](https://github.com/JackSnowWolf/Iceberg/workflows/CodeQL/badge.svg)
 ![CheckStyle](https://github.com/JackSnowWolf/Iceberg/workflows/CheckStyle/badge.svg)
