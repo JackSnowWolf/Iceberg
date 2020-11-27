@@ -10,6 +10,7 @@ import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.externalapi.ImageStorageService;
 import com.iceberg.externalapi.PayPalService;
+import com.iceberg.externalapi.impl.ProcessingForRequestImpl;
 import com.iceberg.service.ReiRequestService;
 import com.iceberg.service.UserInfoService;
 import com.iceberg.utils.Config;
@@ -61,9 +62,8 @@ public class ReiRequestController {
   private PayPalService payPalService;
   @Resource
   private ImageStorageService imageStorageService;
-
-  //  @Resource
-  //  private EmailSendService emailSendService;
+  @Resource
+  private ProcessingForRequestImpl ocrService;
 
   /**
    * add reimbursement request.
