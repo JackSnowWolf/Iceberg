@@ -1,5 +1,6 @@
 package com.iceberg.externalapi.impl;
 
+
 import com.iceberg.entity.InvoiceDetail;
 import com.iceberg.externalapi.ProcessingApi;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ import java.io.IOException;
 public class ProcessingForRequestImpl {
     @Resource
     private ProcessingApi processingApi;
-
+  
     public InvoiceDetail parseFromDocumentURL(String url){
         InvoiceDetail invoiceDetail=new InvoiceDetail();
         ResponseEntity<String> response=processingApi.processDocumentURL(url);
