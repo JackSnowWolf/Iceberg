@@ -42,9 +42,13 @@ public class ProcessingImplTest {
         ResponseEntity<String> response=processingApi.processDocumentURL("https://s3.amazonaws.com/isc.pricescout.media/receipts/be04115eb8824719914cfbcfd7e792c2.jpg");
         JSONObject test= JSONObject.parseObject(response.getBody());
         String money=test.getString("total");
-        String vendor_name=test.getJSONObject("vendor").getString("name");
+        String vendorname=test.getJSONObject("vendor").getString("name");
+        String vendoraddr=test.getJSONObject("vendor").getString("address");
+        String duedate=test.getString("due_date");
         logger.info(money);
-        logger.info(vendor_name);
+        logger.info(vendorname);
+        logger.info(vendoraddr);
+        logger.info(duedate);
         assertNotNull(response);
     }
 
@@ -55,9 +59,13 @@ public class ProcessingImplTest {
         ResponseEntity<String> response=processingApi.processDocumentBase64(encoded);
         JSONObject test= JSONObject.parseObject(response.getBody());
         String money=test.getString("total");
-        String vendor_name=test.getJSONObject("vendor").getString("name");
+        String vendorname=test.getJSONObject("vendor").getString("name");
+        String vendoraddr=test.getJSONObject("vendor").getString("address");
+        String duedate=test.getString("due_date");
         logger.info(money);
-        logger.info(vendor_name);
+        logger.info(vendorname);
+        logger.info(vendoraddr);
+        logger.info(duedate);
         assertNotNull(response);
     }
 
