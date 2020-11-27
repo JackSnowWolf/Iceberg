@@ -26,6 +26,35 @@ public class ReimbursementRequest {
   private String time;
   private String comments;
 
+  // For ocr
+  private String vendorname;
+  private String vendoraddr;
+  private String duedate;
+
+  public String getVendorname() {
+    return vendorname;
+  }
+
+  public void setVendorname(String vendorname) {
+    this.vendorname = vendorname;
+  }
+
+  public String getVendoraddr() {
+    return vendoraddr;
+  }
+
+  public void setVendoraddr(String vendoraddr) {
+    this.vendoraddr = vendoraddr;
+  }
+
+  public String getDuedate() {
+    return duedate;
+  }
+
+  public void setDuedate(String duedate) {
+    this.duedate = duedate;
+  }
+
   public String getComments() {
     return comments;
   }
