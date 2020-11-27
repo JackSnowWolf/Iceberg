@@ -3,6 +3,7 @@ package com.iceberg.externalapi.impl;
 import com.iceberg.externalapi.ProcessingApi;
 import org.json.JSONObject;
 import org.springframework.http.*;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
@@ -14,17 +15,17 @@ import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
-
+@Service
 public class ProcessingImpl implements ProcessingApi {
-    private final String clientId = "vrfvVZXJ3fFUbwz1F639VpNL0aeMawcaJYMcd5F";
-    private final String apiKey = "apikey jackchonghu:b7bf3a83c40fb631e003f0f0ab92d0f8";
+    private final String clientId = "vrf9P6zMD702DTo06CoKx84BkWfcTn6IzSO1BbO";
+    private final String apiKey = "apikey cchenwenjie0901:bcf35a2054c64c3f203ab6ff05d54c93";
     private final String URL = "https://api.veryfi.com/api/v7/partner/documents/";
 
     @Override
-    public void processDocumentBinary(String inputfilename) throws IOException{
+    public ResponseEntity<String> processDocumentBinary(String inputfilename) throws IOException{
         //
         String filename = "example.png";
-        //filename=inputfilename
+        filename=inputfilename;
 
         File imgPath = new File(filename);
         BufferedImage bufferedImage = ImageIO.read(imgPath);
@@ -52,16 +53,18 @@ public class ProcessingImpl implements ProcessingApi {
                     HttpMethod.POST,
                     requestEntity,
                     String.class);
+            return response;
         } catch (HttpClientErrorException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     @Override
-    public void processDocumentBase64(String filedata) {
+    public ResponseEntity<String> processDocumentBase64(String filedata) {
         //
         String fileData = "image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=";
-        // fileData=filedata
+        fileData=filedata;
 
         String fileName = "example.png";
         RestTemplate restTemplate = new RestTemplate();
@@ -74,13 +77,14 @@ public class ProcessingImpl implements ProcessingApi {
         headers.add("AUTHORIZATION", apiKey);
         HttpEntity<String> entity = new HttpEntity<>(requestBody.toString(), headers);
         ResponseEntity<String> response = restTemplate.postForEntity(URL, entity, String.class);
+        return response;
     }
 
     @Override
-    public void processDocumentURL(String fileurl) {
+    public ResponseEntity<String> processDocumentURL(String fileurl) {
         //
         String fileURL = "https://cdn.veryfi.com/receipts/71f19687-a0f5-48ef-a4d7-1458e83aa6b2_2.png";
-        // fileURL=fileurl;
+        fileURL=fileurl;
 
         String fileName = "invoice.png";
         RestTemplate restTemplate = new RestTemplate();
@@ -93,5 +97,6 @@ public class ProcessingImpl implements ProcessingApi {
         headers.add("AUTHORIZATION", apiKey);
         HttpEntity<String> entity = new HttpEntity<>(requestBody.toString(), headers);
         ResponseEntity<String> response = restTemplate.postForEntity(URL, entity, String.class);
+        return response;
     }
 }
