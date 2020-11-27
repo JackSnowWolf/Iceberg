@@ -6,9 +6,9 @@
 
     <insert id="add" parameterType="com.iceberg.entity.ReimbursementRequest" useGeneratedKeys="true"
         keyProperty="id">
-        insert into bill(id, title, userid, money, typeid, remark, paywayid, receiveraccount, imageid)
+        insert into bill(id, title, userid, money, typeid, remark, paywayid, receiveraccount, imageid, vendorname, vendoraddr, duedate)
             value (null, #{title}, #{userid}, #{money}, #{typeid.value}, #{remark},
-                   #{paywayid}, #{receiveraccount}, #{imageid})
+                   #{paywayid}, #{receiveraccount}, #{imageid}, #{vendorname}, #{vendoraddr}, #{duedate})
     </insert>
 
     <update id="update" parameterType="com.iceberg.entity.ReimbursementRequest">
@@ -23,6 +23,9 @@
             <if test="imageid!=null"> imageid = #{imageid},</if>
             <if test="money!=null">typeid = #{typeid.value},</if>
             <if test="comments!=null">comments = #{comments},</if>
+            <if test="vendorname!=null">vendorname = #{vendorname},</if>
+            <if test="vendoraddr!=null">vendoraddr = #{vendoraddr},</if>
+            <if test="duedate!=null">duedate = #{duedate},</if>
         </set>
         where id = #{id}
     </update>
