@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -23,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ProcessingForRequestImplTest {
     private Logger logger = LoggerFactory.getLogger(ProcessingForRequestImplTest.class);
     private File testImageFile;
-    private String filename;
 
     @Resource
     private ProcessingForRequestImpl processingForRequest;
@@ -33,7 +30,6 @@ public class ProcessingForRequestImplTest {
         ClassLoader classLoader = getClass().getClassLoader();
         URL result = classLoader.getResource("images/invoice-test-01.png");
         assertNotNull(result);
-        filename=result.getFile();
         testImageFile = new File(result.getFile());
     }
 
