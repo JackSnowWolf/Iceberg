@@ -6,6 +6,7 @@ import static com.iceberg.entity.ReimbursementRequest.Status.PROCESSING;
 import static java.util.UUID.randomUUID;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 
+import com.iceberg.entity.InvoiceDetail;
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.externalapi.ImageStorageService;
@@ -20,7 +21,9 @@ import com.iceberg.utils.Result;
 import com.iceberg.utils.ResultUtil;
 import com.iceberg.utils.Utils;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -405,8 +408,6 @@ public class ReiRequestController {
           headers.setContentType(MediaType.IMAGE_PNG);
           break;
         case "jpg":
-          headers.setContentType(MediaType.IMAGE_JPEG);
-          break;
         case "jpeg":
           headers.setContentType(MediaType.IMAGE_JPEG);
           break;
@@ -422,6 +423,68 @@ public class ReiRequestController {
       return false;
     }
     return true;
+  }
+
+  /**
+   * extract information from uploaded image.
+   *
+   * @param imageFile image file.
+   * @param session http session.
+   * @return analysis result
+   */
+  public Result analysisImage(@RequestParam("imageFile") MultipartFile imageFile,
+      HttpSession session) {
+    if (Config.getSessionUser(session) == null) {
+      return ResultUtil.unSuccess("No user for current session");
+    }
+    ReimbursementRequest requestResult = new ReimbursementRequest();
+    Result uploadImageResult = uploadImageToStorage(imageFile);
+    if (uploadImageResult.getCode() != 200) {
+      return uploadImageResult;
+    }
+    try {
+      String imageId = (String) uploadImageResult.getData();
+      requestResult.setImageid(imageId);
+      String imageFileBase64 = Base64.getEncoder().encodeToString(imageFile.getBytes());
+      InvoiceDetail invoiceDetail = ocrService.parseFromDocumentBase64(imageFileBase64);
+      requestResult.setMoney(invoiceDetail.getMoney());
+      requestResult.setVendorname(invoiceDetail.getVendorname());
+      requestResult.setVendoraddr(invoiceDetail.getVendoraddr());
+      requestResult.setDuedate(invoiceDetail.getDuedate());
+
+      return ResultUtil.success(requestResult);
+    } catch (Exception e) {
+      logger.error(e.getMessage());
+      return ResultUtil.unSuccess(e.getMessage());
+    }
+  }
+
+  private Result uploadImageToStorage(MultipartFile imageFile) {
+    String imageName;
+    try {
+      imageName = StringUtils.cleanPath(Objects.requireNonNull(imageFile.getOriginalFilename()));
+      logger.debug("image name: " + imageName);
+    } catch (Exception e) {
+      return ResultUtil.unSuccess("No file name");
+    }
+
+    String ext = getExtension(imageName);
+    if (!supportedImageExt.contains(ext.toLowerCase())) {
+      return ResultUtil.unSuccess("Unsupported image type");
+    }
+    String imageId = randomUUID().toString() + "." + getExtension(imageName);
+    logger.debug("image id: " + imageId);
+    try {
+      String putImageResponse = imageStorageService.putImage(imageId, imageFile.getBytes());
+      if (putImageResponse == null) {
+        return ResultUtil.unSuccess("Upload image to image storage fails!");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+      return ResultUtil.error(e);
+    }
+    return ResultUtil.success("Upload image to storage successfully!", imageId);
   }
 
   /**
@@ -446,26 +509,11 @@ public class ReiRequestController {
     if (!reimbursementRequest.getUserid().equals(Config.getSessionUser(session).getId())) {
       return ResultUtil.unSuccess("Not authorized to upload image!");
     }
-
-    String imageName = StringUtils.cleanPath(imageFile.getOriginalFilename());
-    logger.debug("image name: " + imageName);
-
-    String ext = getExtension(imageName);
-    if (!supportedImageExt.contains(ext.toLowerCase())) {
-      return ResultUtil.unSuccess("Unsupported image type");
+    Result uploadImageResult = uploadImageToStorage(imageFile);
+    if (uploadImageResult.getCode() != 200) {
+      return uploadImageResult;
     }
-    String imageId = randomUUID().toString() + "." + getExtension(imageName);
-    logger.debug("image id: " + imageId);
-    try {
-      String putImageResponse = imageStorageService.putImage(imageId, imageFile.getBytes());
-      if (putImageResponse == null) {
-        return ResultUtil.unSuccess("Upload image to image storage fails!");
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-      logger.error(e.getMessage());
-      return ResultUtil.error(e);
-    }
+    String imageId = (String) uploadImageResult.getData();
     reimbursementRequest.setImageid(imageId);
     try {
       int num = reiRequestService.update(reimbursementRequest);
@@ -477,7 +525,5 @@ public class ReiRequestController {
     } catch (Exception e) {
       return ResultUtil.error(e);
     }
-
   }
-
 }
