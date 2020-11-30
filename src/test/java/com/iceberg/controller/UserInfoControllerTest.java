@@ -1,6 +1,7 @@
 package com.iceberg.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import com.alibaba.fastjson.JSONObject;
 import com.iceberg.entity.Role;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(UserInfoController.class)
 @AutoConfigureMybatis
@@ -49,6 +51,29 @@ public class UserInfoControllerTest {
   }
 
   /**
+   * test using session to redirect to index page.
+   */
+
+  @Test
+  public void testDirectToIndexPage() throws Exception {
+    MockHttpSession session = new MockHttpSession();
+    UserInfo userInfo = new UserInfo();
+    userInfo.setUsername("hwj");
+    userInfo.setPassword("hwj");
+    userInfo.setId(1);
+    userInfo.setRoleid(1);
+    userInfo.setRolename("Administrator");
+    userInfo.setRealname("hwj");
+    userInfo.setEmail("hwj97055@gmail.com");
+    session.setAttribute("currentUser", userInfo);
+    MvcResult result = mockMvc
+        .perform(MockMvcRequestBuilders.get("/").contentType(MediaType.APPLICATION_JSON)
+        .session(session))
+        .andDo(print()).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+        .andReturn();
+  }
+
+  /**
    * test we login in the app. username : hwj. password : hwj.
    */
 
@@ -68,6 +93,24 @@ public class UserInfoControllerTest {
     UserInfo userInfoResult = JSONObject.parseObject(result.getResponse().getContentAsString(),
         MockResultParseUserInfoSample.class).getData().get(0);
     assertEquals("hwj", userInfoResult.getRealname());
+  }
+
+  /**
+   * test using wrong username and password.
+   */
+
+  @Test
+  public void testWronglyLogin() throws Exception {
+    String URI = "/login.do";
+    MvcResult result = mockMvc
+        .perform(MockMvcRequestBuilders.post(URI).contentType(MediaType.APPLICATION_JSON)
+            .param("username", "hwj")
+            .param("password", "123"))
+        .andReturn();
+
+    //Now we have login in to the app, find the user's info other than username and password like roleId
+    assertEquals(200, result.getResponse().getStatus());
+    System.out.println(result.getResponse().getErrorMessage());
   }
 
   /**
@@ -135,6 +178,31 @@ public class UserInfoControllerTest {
   @Test
   public void testUserUpdate() throws Exception {
     MockHttpSession session = getDefaultSession();
+    String URI = "/user/update";
+    String randomPassword = randomUUIDForEveryTimeRunTest;
+    MvcResult result = mockMvc
+        .perform(MockMvcRequestBuilders.post(URI).contentType(MediaType.APPLICATION_JSON)
+            .param("username", "house2")
+            .param("id", "21")
+            .param("password", randomPassword)
+            .session(session))
+        .andReturn();
+    assertEquals(200, result.getResponse().getStatus());
+    String msg = JSONObject.parseObject(result.getResponse().getContentAsString(),
+        MockResultParseUserInfoSample.class).getMsg();
+    assertEquals(msg, "Operation successful!");
+  }
+
+  /**
+   * test updating user by himself.
+   */
+  @Test
+  public void testUpdateByHimself() throws Exception {
+    UserInfo userInfo = new UserInfo();
+    userInfo.setUsername("house2");
+    userInfo.setId(21);
+    MockHttpSession session = new MockHttpSession();
+    session.setAttribute("currentUser", userInfo);
     String URI = "/user/update";
     String randomPassword = randomUUIDForEveryTimeRunTest;
     MvcResult result = mockMvc
