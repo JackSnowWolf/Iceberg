@@ -22,45 +22,6 @@ public class ProcessingImpl implements ProcessingApi {
     private final String URL = "https://api.veryfi.com/api/v7/partner/documents/";
 
     @Override
-    public ResponseEntity<String> processDocumentBinary(String inputfilename) throws IOException{
-        //
-        String filename = "example.png";
-        filename=inputfilename;
-
-        File imgPath = new File(filename);
-        BufferedImage bufferedImage = ImageIO.read(imgPath);
-        WritableRaster raster = bufferedImage .getRaster();
-        DataBufferByte data   = (DataBufferByte) raster.getDataBuffer();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
-        ContentDisposition contentDisposition = ContentDisposition
-                .builder("form-data")
-                .name("file")
-                .filename(filename)
-                .build();
-        fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
-        HttpEntity<byte[]> fileEntity = new HttpEntity<>(data.getData(), fileMap);
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", fileEntity);
-        body.add("file_name", filename);
-        HttpEntity<MultiValueMap<String, Object>> requestEntity =
-                new HttpEntity<>(body, headers);
-        try {
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate.exchange(
-                    URL,
-                    HttpMethod.POST,
-                    requestEntity,
-                    String.class);
-            return response;
-        } catch (HttpClientErrorException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
     public ResponseEntity<String> processDocumentBase64(String filedata) {
         //
         String fileData = "image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQYV2NgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=";

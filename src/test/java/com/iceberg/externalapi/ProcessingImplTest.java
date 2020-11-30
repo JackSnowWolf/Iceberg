@@ -68,9 +68,4 @@ public class ProcessingImplTest {
         logger.info(duedate);
         assertNotNull(response);
     }
-
-    @Test
-    public void processDocumentBinaryTest() throws IOException {
-
-    }
 }

@@ -19,7 +19,7 @@ public class ProcessingForRequestImpl {
         InvoiceDetail invoiceDetail=new InvoiceDetail();
         ResponseEntity<String> response=processingApi.processDocumentURL(url);
         JSONObject jsonObject= JSONObject.parseObject(response.getBody());
-        invoiceDetail.setMoney((Float)(jsonObject.get("total")));
+        invoiceDetail.setMoney(jsonObject.getFloat("total"));
         invoiceDetail.setVendorname(jsonObject.getJSONObject("vendor").getString("name"));
         invoiceDetail.setVendoraddr(jsonObject.getJSONObject("vendor").getString("address"));
         invoiceDetail.setDuedate(jsonObject.getString("due_date"));
@@ -30,21 +30,11 @@ public class ProcessingForRequestImpl {
         InvoiceDetail invoiceDetail=new InvoiceDetail();
         ResponseEntity<String> response=processingApi.processDocumentBase64(filedata);
         JSONObject jsonObject= JSONObject.parseObject(response.getBody());
-        invoiceDetail.setMoney((Float)(jsonObject.get("total")));
+        invoiceDetail.setMoney(jsonObject.getFloat("total"));
         invoiceDetail.setVendorname(jsonObject.getJSONObject("vendor").getString("name"));
         invoiceDetail.setVendoraddr(jsonObject.getJSONObject("vendor").getString("address"));
         invoiceDetail.setDuedate(jsonObject.getString("due_date"));
         return invoiceDetail;
     }
 
-    public InvoiceDetail parseFromDocumentBinary(String inputfilename) throws IOException {
-        InvoiceDetail invoiceDetail=new InvoiceDetail();
-        ResponseEntity<String> response=processingApi.processDocumentBinary(inputfilename);
-        JSONObject jsonObject= JSONObject.parseObject(response.getBody());
-        invoiceDetail.setMoney((Float)(jsonObject.get("total")));
-        invoiceDetail.setVendorname(jsonObject.getJSONObject("vendor").getString("name"));
-        invoiceDetail.setVendoraddr(jsonObject.getJSONObject("vendor").getString("address"));
-        invoiceDetail.setDuedate(jsonObject.getString("due_date"));
-        return invoiceDetail;
-    }
 }
