@@ -48,21 +48,14 @@ public class OAuthController {
     paramMap.put("client_secret", "ac4a5c749e66dcb25bc7f9a216a7983b6326dc5a");
     paramMap.put("code", code);
     paramMap.put("redirect_uri", "http://localhost:8080/oauth/github/callback");
-
     String accessTokenResponse = HttpClientUtils.doPost(s3, paramMap);
-    System.out.println(accessTokenResponse);
     String accessToken = parseAccessTokenResponse(accessTokenResponse);
-    System.out.println(accessToken);
-
     // 2. accessToken get user info
-
     URL url = new URL("https://api.github.com/user");
     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
     conn.setRequestProperty("Authorization", "Bearer " + accessToken);
     conn.setRequestProperty("Content-Type", "application/json");
     conn.setRequestMethod("GET");
-
     BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
     String output;
     StringBuffer response = new StringBuffer();
@@ -71,20 +64,14 @@ public class OAuthController {
     }
 
     in.close();
-    System.out.println("Response:-" + response.toString());
     // 3. down to database, set auth-provider to be github
     Map<String, String> userInfoMap = parseGithubObject(response.toString());
     Integer id = Integer.parseInt(userInfoMap.get("id"));
-    System.out.println(id);
     String username = userInfoMap.get("username");
-    System.out.println(username);
     String email = userInfoMap.get("email");
-    System.out.println(email);
     UserInfo user = new UserInfo(id, username, email);
-
     // if user is existed
     if (userInfoService.userIsExisted(user)) {
-      System.out.println(user);
     } else {
       userInfoService.add(user);
     }
@@ -107,7 +94,6 @@ public class OAuthController {
     String[] res = accessTokenResponse.split("&");
     String accessTokenKV = res[0];
     accessToken = accessTokenKV.substring(13);
-    System.out.println("accessToken is " + accessToken);
     return accessToken;
   }
 

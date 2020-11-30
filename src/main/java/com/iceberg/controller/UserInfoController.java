@@ -70,10 +70,6 @@ public class UserInfoController {
     boolean userIsExisted = userInfoService.userIsExisted(userInfo);
     System.out.println(userIsExisted + " - " + request.getHeader("token"));
     userInfo = getUserInfo(userInfo);
-    if ("client".equals(request.getHeader("token")) && !userIsExisted) {
-      // user doesn't exist
-      return ResultUtil.success(-1);
-    }
     if (userIsExisted && userInfo == null) {
       return ResultUtil.unSuccess("wrong username or password!");
     } else {
