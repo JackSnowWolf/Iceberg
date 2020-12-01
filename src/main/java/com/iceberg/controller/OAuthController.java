@@ -62,7 +62,6 @@ public class OAuthController {
     while ((output = in.readLine()) != null) {
       response.append(output);
     }
-
     in.close();
     // 3. down to database, set auth-provider to be github
     Map<String, String> userInfoMap = parseGithubObject(response.toString());
