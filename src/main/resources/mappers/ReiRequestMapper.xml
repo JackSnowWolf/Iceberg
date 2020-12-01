@@ -124,10 +124,4 @@
         </where>
     </select>
 
-
-    <select id="getAllPayways" resultType="com.iceberg.entity.Payway">
-        select *
-        from payway
-    </select>
-
 </mapper>

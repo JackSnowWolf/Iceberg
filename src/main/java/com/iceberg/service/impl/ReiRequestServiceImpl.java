@@ -36,18 +36,15 @@ public class ReiRequestServiceImpl implements ReiRequestService {
   public Result<ReimbursementRequest> findByWhere(PageModel model) {
     try {
       List<ReimbursementRequest> reimbursementRequests = mapper.findByWhere(model);
-      if (reimbursementRequests.size() >= 0) {
-        Result<ReimbursementRequest> result = ResultUtil.success(reimbursementRequests);
-        result.setTotal(mapper.getTotalByWhere(model));
-        if (result.getTotal() == 0) {
-          result.setMsg("No related data");
-        } else {
-          result.setMsg("Fetch data successfully");
-        }
-        return result;
+      Result<ReimbursementRequest> result = ResultUtil.success(reimbursementRequests);
+      result.setTotal(mapper.getTotalByWhere(model));
+      if (result.getTotal() == 0) {
+        result.setMsg("No related data");
       } else {
-        return ResultUtil.unSuccess("Get data failure");
+        result.setMsg("Fetch data successfully");
       }
+      return result;
+
     } catch (Exception e) {
       return ResultUtil.error(e);
     }

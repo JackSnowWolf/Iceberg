@@ -47,9 +47,12 @@ public interface ImageStorageService {
     try {
       // Write the data to a local file
       File myFile = new File(filePath);
+      if (!myFile.createNewFile()) {
+        System.out.println("file exists.");
+      }
       OutputStream os = new FileOutputStream(myFile);
       os.write(data);
-      System.out.println("Successfully obtained bytes from an S3 object");
+      System.out.println("Successfully write to file");
       os.close();
     } catch (IOException ex) {
       ex.printStackTrace();
