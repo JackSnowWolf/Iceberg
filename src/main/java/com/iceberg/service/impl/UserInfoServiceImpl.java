@@ -62,18 +62,14 @@ public class UserInfoServiceImpl implements UserInfoService {
   public Result getUsersByWhere(PageModel<UserInfo> model) {
     try {
       List<UserInfo> users = userInfoMapper.getUsersByWhere(model);
-      if (users.size() >= 0) {
-        Result<UserInfo> result = ResultUtil.success(users);
-        result.setTotal(userInfoMapper.getToatlByWhere(model));
-        if (result.getTotal() == 0) {
-          result.setMsg("No related data");
-        } else {
-          result.setMsg("Data fetched successfully");
-        }
-        return result;
+      Result<UserInfo> result = ResultUtil.success(users);
+      result.setTotal(userInfoMapper.getToatlByWhere(model));
+      if (result.getTotal() == 0) {
+        result.setMsg("No related data");
       } else {
-        return ResultUtil.unSuccess("no satisfied condition found！");
+        result.setMsg("Data fetched successfully");
       }
+      return result;
     } catch (Exception e) {
       return ResultUtil.error(e);
     }

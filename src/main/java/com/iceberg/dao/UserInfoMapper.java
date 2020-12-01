@@ -51,4 +51,6 @@ public interface UserInfoMapper {
   int addGroupId(Group group);
 
   UserInfo getUserInfoById(String id);
+
+  int deleteGroup(String groupId);
 }

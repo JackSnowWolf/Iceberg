@@ -3,6 +3,9 @@ package com.iceberg.service;
 
 import com.iceberg.entity.Role;
 import com.iceberg.entity.UserInfo;
+import com.iceberg.utils.PageModel;
+import com.iceberg.utils.Result;
+import org.apache.catalina.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -94,8 +97,22 @@ public class UserInfoServiceImplTest {
             result=true;
         }
         assertEquals(true,result);
-
-        logger.info("user add test success");
+        //add group user
+        //UserInfo group = new UserInfo();
+        //group.setUsername("hwjtest");
+        //group.setRealname("hwjtest");
+        //group.setPassword("123456");
+        //group.setGroupid("100");
+        //group.setRoleid(2);
+        //group.setId(12345);
+        //int output2 = userInfoService.add(group);
+        //if (output2 <= 0) {
+        //    result = false;
+        //}
+        //assertEquals(true,result);
+        //logger.info("user add test success");
+        //delete
+        //userInfoService.delete("12345");
     }
 
     @Test
@@ -227,7 +244,32 @@ public class UserInfoServiceImplTest {
         logger.info("role get test");
         Role role=userInfoService.getRoleById("1");
         assertEquals("Administrator",role.getRolename());
-
         logger.info("role get test success");
+    }
+
+    @Test
+    public void testGetUserById() {
+        UserInfo userInfo = userInfoService.getUserInfoById("1");
+        assertEquals("hwj", userInfo.getRealname());
+        assertEquals("hwj", userInfo.getUsername());
+    }
+
+    @Test
+    public void testGetUserByNoWhere1() {
+        UserInfo userInfo3 = new UserInfo();
+        userInfo3.setUsername("hwj");
+        userInfo3.setPassword("hwj");
+        userInfo3.setId(1);
+        userInfo3.setRoleid(1);
+        userInfo3.setRealname("hwj");
+        PageModel model = new PageModel<>(1, userInfo3);
+        model.setPageSize(10);
+        Result res = userInfoService.getUsersByWhere(model);
+        assertEquals(res.getMsg(), "Data fetched successfully");
+        userInfo3.setUsername("notexistedname");
+        userInfo3.setRealname("notexistedname");
+        PageModel model1 = new PageModel<>(1, userInfo3);
+        Result res1 = userInfoService.getUsersByWhere(model1);
+        assertEquals(res1.getMsg(), "No related data");
     }
 }
