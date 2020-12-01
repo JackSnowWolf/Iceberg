@@ -8,8 +8,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class ProcessingImpl implements ProcessingApi {
-    private final String clientId = "vrf9P6zMD702DTo06CoKx84BkWfcTn6IzSO1BbO";
-    private final String apiKey = "apikey cchenwenjie0901:bcf35a2054c64c3f203ab6ff05d54c93";
+    private final String clientId = "vrf9AXE1sCrpn0G8nonehgPcBPBnf74LZ4REixK";
+    private final String apiKey = "apikey 229054463:43088d557fcef244e31d34829440abde";
     private final String URL = "https://api.veryfi.com/api/v7/partner/documents/";
 
     @Override
