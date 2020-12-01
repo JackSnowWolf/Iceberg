@@ -4,6 +4,8 @@ import static com.iceberg.entity.ReimbursementRequest.Status.APPROVED;
 import static com.iceberg.entity.ReimbursementRequest.Status.MISSING_INFO;
 import static com.iceberg.entity.ReimbursementRequest.Status.PROCESSING;
 import static com.iceberg.externalapi.ImageStorageService.getFileBytes;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -13,11 +15,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.iceberg.entity.InvoiceDetail;
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.entity.ReimbursementRequest.Remark;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.externalapi.ImageStorageService;
 import com.iceberg.externalapi.PayPalService;
+import com.iceberg.externalapi.impl.ProcessingForRequestImpl;
 import com.iceberg.service.ReiRequestService;
 import com.iceberg.service.UserInfoService;
 import com.iceberg.utils.PageModel;
@@ -26,6 +30,7 @@ import com.iceberg.utils.ResultUtil;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -71,6 +76,11 @@ public class ReiRequestControllerTest {
   @MockBean
   private ImageStorageService imageStorageService;
 
+  @MockBean
+  private ProcessingForRequestImpl ocrService;
+
+  private File testImageFile;
+
   @BeforeEach
   void init() throws Exception {
     System.out.println("init test");
@@ -86,6 +96,10 @@ public class ReiRequestControllerTest {
     userInfo.setEmail("admin@example.com");
     session.setAttribute("currentUser", userInfo);
 
+    ClassLoader classLoader = getClass().getClassLoader();
+    URL result = classLoader.getResource("images/invoice-test-01.png");
+    assertNotNull(result);
+    testImageFile = new File(result.getFile());
 //    mockMvc = MockMvcBuilders.standaloneSetup(new ReiRequestController())
 //      .apply(sharedHttpSession()).build();
   }
@@ -394,12 +408,7 @@ public class ReiRequestControllerTest {
 
   @Test
   void shouldUploadImage() throws Exception {
-
-    ClassLoader classLoader = getClass().getClassLoader();
-    URL testImageResource = classLoader.getResource("images/invoice-test-01.png");
-    assertNotNull(testImageResource);
-    File testImageFile = new File(testImageResource.getFile());
-
+    logger.info("test should upload image");
     byte[] imageFileData = getFileBytes(testImageFile.getAbsolutePath());
     MockMultipartFile mockImageFile = new MockMultipartFile("imageFile", "invoice-test-01.png",
         MediaType.IMAGE_PNG_VALUE, imageFileData);
@@ -421,8 +430,151 @@ public class ReiRequestControllerTest {
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200))
         .andReturn();
-    logger.debug(result.toString());
+    logger.debug("finished");
+  }
 
+  @Test
+  void shouldGetImageByRequestId() throws Exception {
+    logger.info("test should get image by request id");
+    String imageName = "invoice-test-01.png";
+    byte[] expectedImageFileData = getFileBytes(testImageFile.getAbsolutePath());
+    int requestId = 190;
+    ReimbursementRequest returnedRequest = new ReimbursementRequest();
+    returnedRequest.setId(190);
+    returnedRequest.setImageid(imageName);
+    given(reiRequestService.getReimRequestById(requestId)).willReturn(returnedRequest);
+    given(imageStorageService.getImageBytes(eq(imageName))).willReturn(expectedImageFileData);
 
+    MvcResult result = this.mockMvc
+        .perform(MockMvcRequestBuilders.get("/reirequest/{requestId}/image", requestId)
+            .session(session)).andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+        .andReturn();
+    String contentType = result.getResponse().getContentType();
+    byte[] resultData = result.getResponse().getContentAsByteArray();
+
+    assertEquals(MediaType.IMAGE_PNG_VALUE, contentType);
+    assertArrayEquals(expectedImageFileData, resultData);
+
+    logger.debug("finished");
+  }
+
+  @Test
+  void shouldGetImageByRequestIdForOtherType() throws Exception {
+    logger.info("test should get image by request id");
+    String imageName = "invoice-test-01.jpg";
+    byte[] expectedImageFileData = getFileBytes(testImageFile.getAbsolutePath());
+    int requestId = 190;
+    ReimbursementRequest returnedRequest = new ReimbursementRequest();
+    returnedRequest.setId(190);
+    returnedRequest.setImageid(imageName);
+    given(reiRequestService.getReimRequestById(requestId)).willReturn(returnedRequest);
+    given(imageStorageService.getImageBytes(eq(imageName))).willReturn(expectedImageFileData);
+
+    MvcResult result = this.mockMvc
+        .perform(MockMvcRequestBuilders.get("/reirequest/{requestId}/image", requestId)
+            .session(session)).andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+        .andReturn();
+    String contentType = result.getResponse().getContentType();
+    byte[] resultData = result.getResponse().getContentAsByteArray();
+
+    assertEquals(MediaType.IMAGE_JPEG_VALUE, contentType);
+    assertArrayEquals(expectedImageFileData, resultData);
+
+    imageName = "invoice-test-01.gif";
+    returnedRequest.setImageid(imageName);
+    given(reiRequestService.getReimRequestById(requestId)).willReturn(returnedRequest);
+    given(imageStorageService.getImageBytes(eq(imageName))).willReturn(expectedImageFileData);
+
+    result = this.mockMvc
+        .perform(MockMvcRequestBuilders.get("/reirequest/{requestId}/image", requestId)
+            .session(session)).andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+        .andReturn();
+    contentType = result.getResponse().getContentType();
+    resultData = result.getResponse().getContentAsByteArray();
+
+    assertEquals(MediaType.IMAGE_GIF_VALUE, contentType);
+    assertArrayEquals(expectedImageFileData, resultData);
+
+    logger.debug("finished");
+  }
+
+  @Test
+  void shouldGetImageByImageId() throws Exception {
+    logger.info("test should get image by image id");
+    String imageId = "invoice-test-01.png";
+    byte[] expectedImageFileData = getFileBytes(testImageFile.getAbsolutePath());
+
+    given(imageStorageService.getImageBytes(eq(imageId))).willReturn(expectedImageFileData);
+
+    MvcResult result = this.mockMvc
+        .perform(MockMvcRequestBuilders.get("/reirequest/image/{imageId}", imageId)
+            .session(session)).andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+        .andReturn();
+    String contentType = result.getResponse().getContentType();
+    byte[] resultData = result.getResponse().getContentAsByteArray();
+
+    assertEquals(MediaType.IMAGE_PNG_VALUE, contentType);
+    assertArrayEquals(expectedImageFileData, resultData);
+
+    logger.debug("finished");
+  }
+
+  @Test
+  void shouldNotGetImageByImageIdForOtherType() throws Exception {
+    logger.info("test should get image by image id");
+    String imageId = "invoice-test-01.pdf";
+
+    this.mockMvc
+        .perform(MockMvcRequestBuilders.get("/reirequest/image/{imageId}", imageId)
+            .session(session)).andDo(print())
+        .andExpect(MockMvcResultMatchers.status().is4xxClientError());
+
+    logger.debug("finished");
+  }
+
+  @Test
+  void shouldNotGetImageByImageId() throws Exception {
+    logger.info("test should get image by image id");
+    String imageId = "invoice-test-01.png";
+    given(imageStorageService.getImageBytes(eq(imageId))).willReturn(null);
+
+    this.mockMvc
+        .perform(MockMvcRequestBuilders.get("/reirequest/image/{imageId}", imageId)
+            .session(session)).andDo(print())
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
+    logger.debug("finished");
+  }
+
+  @Test
+  void ShouldAnalysisImage() throws Exception {
+    logger.info("test should analysis image");
+    byte[] mockImageFileData = getFileBytes(testImageFile.getAbsolutePath());
+    String mockImageFileBase64 = Base64.getEncoder().encodeToString(mockImageFileData);
+    InvoiceDetail mockInvoiceDetail = new InvoiceDetail();
+    mockInvoiceDetail.setVendorname("example vendor");
+    mockInvoiceDetail.setVendoraddr("example vendor address");
+    mockInvoiceDetail.setDuedate("2020-12-31");
+    mockInvoiceDetail.setMoney((float) 12.0);
+    MockMultipartFile mockImageFile = new MockMultipartFile("imageFile", "invoice-test-01.png",
+        MediaType.IMAGE_PNG_VALUE, mockImageFileData);
+    given(ocrService.parseFromDocumentBase64(eq(mockImageFileBase64)))
+        .willReturn(mockInvoiceDetail);
+    given(imageStorageService.putImage(any(), eq(mockImageFileData))).willReturn("eTag");
+    this.mockMvc
+        .perform(MockMvcRequestBuilders.multipart("/reirequest/image/analysis")
+            .file(mockImageFile).session(session)).andDo(print())
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200))
+        .andExpect(
+            MockMvcResultMatchers.jsonPath("$.data.money").value(mockInvoiceDetail.getMoney()))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.data.vendoraddr")
+            .value(mockInvoiceDetail.getVendoraddr()))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.data.vendorname")
+            .value(mockInvoiceDetail.getVendorname()))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.data.duedate")
+            .value(mockInvoiceDetail.getDuedate()))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.data.imageid").exists())
+        .andReturn();
+    logger.info("finished");
   }
 }

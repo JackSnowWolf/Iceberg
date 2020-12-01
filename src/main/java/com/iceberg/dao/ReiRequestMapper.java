@@ -1,6 +1,5 @@
 package com.iceberg.dao;
 
-import com.iceberg.entity.Payway;
 import com.iceberg.entity.ReimbursementRequest;
 import com.iceberg.utils.PageModel;
 import java.util.List;
@@ -23,8 +22,6 @@ public interface ReiRequestMapper {
   int getTotalByWhere(PageModel<ReimbursementRequest> model);
 
   List<Map<String, Float>> getMonthlyInfo(PageModel<ReimbursementRequest> model);
-
-  List<Payway> getAllPayways();
 
   ReimbursementRequest getReimRequestById(Integer id);
 }

@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -32,12 +33,8 @@ public class ImageStorageServiceImpl implements ImageStorageService {
    */
   @PostConstruct
   public void init() {
-    logger.info("Setting aws access key.");
-    System.setProperty("aws.accessKeyId", "AKIAZUGB5BLKN2OTIUWG");
-    System.setProperty("aws.secretAccessKey", "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");
-
     s3Client = S3Client.builder().region(this.region)
-        .credentialsProvider(SystemPropertyCredentialsProvider.create())
+        .credentialsProvider(EnvironmentVariableCredentialsProvider.create())
         .build();
   }
 

@@ -55,6 +55,9 @@ public class ImageStorageServiceImplTest {
   void shouldGetImageBytes() {
     logger.info("test get image bytes");
     byte[] expectedData = getFileBytes(testImageFile.getAbsolutePath());
+    String response = imageStorageService.putImage("invoice-test-01.png", expectedData);
+    assertNotEquals("", response);
+
     byte[] data = imageStorageService.getImageBytes("invoice-test-01.png");
 
     assertEquals(Base64.getEncoder().encodeToString(expectedData),

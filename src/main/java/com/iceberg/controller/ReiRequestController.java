@@ -432,6 +432,7 @@ public class ReiRequestController {
    * @param session http session.
    * @return analysis result
    */
+  @RequestMapping(value = "/image/analysis", method = RequestMethod.POST)
   public Result analysisImage(@RequestParam("imageFile") MultipartFile imageFile,
       HttpSession session) {
     if (Config.getSessionUser(session) == null) {
