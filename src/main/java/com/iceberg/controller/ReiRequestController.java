@@ -447,15 +447,15 @@ public class ReiRequestController {
       String imageId = (String) uploadImageResult.getData();
       requestResult.setImageid(imageId);
       String imageFileBase64 = Base64.getEncoder().encodeToString(imageFile.getBytes());
-//      InvoiceDetail invoiceDetail = ocrService.parseFromDocumentBase64(imageFileBase64);
-//      requestResult.setMoney(invoiceDetail.getMoney());
-//      requestResult.setVendorname(invoiceDetail.getVendorname());
-//      requestResult.setVendoraddr(invoiceDetail.getVendoraddr());
-//      requestResult.setDuedate(invoiceDetail.getDuedate());
-      requestResult.setMoney((float)1.23);
-      requestResult.setVendorname("Apple");
-      requestResult.setVendoraddr("NYC");
-      requestResult.setDuedate("2020-12-01");
+      InvoiceDetail invoiceDetail = ocrService.parseFromDocumentBase64(imageFileBase64);
+      requestResult.setMoney(invoiceDetail.getMoney());
+      requestResult.setVendorname(invoiceDetail.getVendorname());
+      requestResult.setVendoraddr(invoiceDetail.getVendoraddr());
+      requestResult.setDuedate(invoiceDetail.getDuedate());
+//      requestResult.setMoney((float)1.23);
+//      requestResult.setVendorname("Apple");
+//      requestResult.setVendoraddr("NYC");
+//      requestResult.setDuedate("2020-12-01");
 
       return ResultUtil.success(requestResult);
     } catch (Exception e) {

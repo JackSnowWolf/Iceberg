@@ -37,9 +37,9 @@
 </head>
 
 <body>
-<div class="layui-row">
+<!--<div class="layui-row">-->
 
-  <div class="layui-col-xs6 layui-col-md4">
+<!--  <div class="layui-col-xs6 layui-col-md4">-->
 
     <form class="layui-form layui-form-pane">
       <div class="layui-form-item">
@@ -122,6 +122,30 @@
       <!--&lt;!&ndash;            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="update"  style="display:none; margin-left: 0;" >submit immediately</button>&ndash;&gt;-->
       <!--        </div>-->
       <div class="layui-form-item">
+        <label class="layui-form-label">Vendor Name</label>
+        <div class="layui-input-block">
+          <input type="text" name="vendorname" placeholder="Please fill vendor name"
+                 autocomplete="off" class="layui-input" id = "vendorname">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">Vendor Address</label>
+        <div class="layui-input-block">
+          <input type="text" name="vendoraddress" placeholder="Please fill vendor address"
+                 autocomplete="off" class="layui-input" id = "vendoraddress">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">Invoice Due Date</label>
+        <div class="layui-input-block">
+          <input type="text" name="duedate" placeholder="Please fill due date"
+                 autocomplete="off" class="layui-input" id = "duedate">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
         <div class="layui-input-block" style="margin-left: 0;">
             <textarea name="comments" placeholder="Comments？" class="layui-textarea"
                       autocomplete="off"
@@ -135,38 +159,20 @@
         </button>
         <!--        <button type="reset" id="resetForm" style="display: none;">Reset</button>-->
       </div>
-      <!--    <div class="layui-form-item">-->
-      <!--        <label class="layui-form-label">Status</label>-->
-      <!--        <div class="layui-input-inline">-->
-      <!--            <select id="typeid" autocomplete="off">-->
-      <!--                <option>Status</option>-->
-      <!--                <option value="1">MISSING INFO</option>-->
-      <!--                <option value="2">DENIED</option>-->
-      <!--                <option value="3">APPROVED</option>-->
-      <!--            </select>-->
-      <!--        </div>-->
-      <!--    </div>-->
-      <!--    <div class="layui-form-item">-->
-      <!--        <div class="layui-input-block" style="margin-left: 0;">-->
-      <!--            <textarea name="remark" placeholder="Remark" class="layui-textarea" autocomplete="off"></textarea>-->
-      <!--        </div>-->
-      <!--    </div>-->
-      <!--    <input type="hidden" name="typeid" value="2">-->
-      <!--    <input type="hidden" name="id">-->
 
     </form>
 
-  </div>
+<!--  </div>-->
 
-  <div class="layui-col-xs12 layui-col-md8">
-    <div id="draggableHelper" style="display:inline-block">
-      <img id="reviewImage" src=""/>
-    </div>
+<!--&lt;!&ndash;  <div class="layui-col-xs12 layui-col-md8">&ndash;&gt;-->
+<!--&lt;!&ndash;    <div id="draggableHelper" style="display:inline-block">&ndash;&gt;-->
+<!--&lt;!&ndash;      <img id="reviewImage" src=""/>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
 
-  </div>
+<!--&lt;!&ndash;  </div>&ndash;&gt;-->
 
 
-</div>
+<!--</div>-->
 
 
 <script>
@@ -279,8 +285,10 @@
     // $("input[name=id]").val($(tr).find(":nth-child(9)").html());
     // var tr = parent.document.getElementsByTagName("tr")[index];
     var requestId = tr.cells[3].innerHTML;
-
-    document.getElementById("reviewImage").src = "/reirequest/" + requestId + "/image";
+    document.getElementById("vendorname").value = $(tr).find(":nth-child(14)").html();
+    document.getElementById("vendoraddress").value = $(tr).find(":nth-child(15)").html();
+    document.getElementById("duedate").value = $(tr).find(":nth-child(16)").html();
+    // document.getElementById("reviewImage").src = "/reirequest/" + requestId + "/image";
     // document.getElementById("draggableHelper").style.width = document.getElementById("reviewImage").style.width;
     // document.getElementById("draggableHelper").style.height = document.getElementById("reviewImage").style.height;
 
