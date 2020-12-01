@@ -17,7 +17,7 @@
   <script type="text/javascript" src="/static/js/index.js"></script>
   <style>
     .layui-form {
-      padding: 20px 50px;
+      padding: 40px 80px;
     }
   </style>
 </head>
@@ -93,19 +93,31 @@
     </div>
   </div>
 
-  <!--    <div class="layui-form-item">-->
-  <!--        <div class="layui-input-block" style="margin-left: 0;">-->
-  <!--            <textarea name="remark" placeholder="Remark" class="layui-textarea" autocomplete="off"></textarea>-->
-  <!--        </div>-->
-  <!--    </div>-->
-  <input type="hidden" name="typeid" value="2">
   <div class="layui-form-item">
-    <label class="layui-form-label">Comments from managers</label>
-    <div class="layui-input-block" style="margin-left: 0;">
-            <textarea name="comments" placeholder="Comments？" class="layui-textarea" autocomplete="off"
-                      id = "comments" disabled=""></textarea>
+    <label class="layui-form-label">Vendor Name</label>
+    <div class="layui-input-block">
+      <input type="text" name="vendorname" placeholder="Please fill vendor name"
+             autocomplete="off" class="layui-input">
     </div>
   </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">Vendor Address</label>
+    <div class="layui-input-block">
+      <input type="text" name="vendoraddress" placeholder="Please fill vendor address"
+             autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">Due Date</label>
+    <div class="layui-input-block">
+      <input type="text" name="duedate" placeholder="Please fill duedate"
+             autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <input type="hidden" name="typeid" value="2">
   <input type="hidden" name="id">
   <div class="layui-form-item">
     <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;">
@@ -155,9 +167,13 @@
     //
     uploadInst = upload.render({
       elem: '#image' //
-      ,auto: false
-      ,done: function(res){
-        //
+      ,url: '/reirequest/image/analysis'
+      ,done: function(res, index, upload){
+        if(res.code == 200) {
+          // ocrFillTable(res.data)
+          console.log(res.data);
+          initForm(res.data)
+        }
       }
       ,accept: 'images'
       ,field:'imageFile'
@@ -172,11 +188,6 @@
       data.field["imageFile"] = null;
       $.post("/reirequest/addRequest", data.field, function (res) {
         if (res.code === 200) {
-          // console.log(res.data);
-          // send image to backend
-          // console.log(uploadInst);
-          uploadInst.config.url = "/reirequest/" + res.data.id + "/image";
-          uploadInst.upload(0);
           layer.confirm("Apply Reimbursement Successfully", {
             btn: ['Yes', 'No'],
             title: false,
@@ -207,22 +218,11 @@
   });
 
   function initForm(tr) {
-    // // console.log(tr);
-    // if (tr==undefined){
-    //     $("input[name=title]").val("");
-    //     var date = new Date();
-    //     var dateStr = date.getFullYear()+""+(date.getMonth()+1)+"";
-    //     $("textarea[name=remark]").val(dateStr+"");
-    //     return;
-    // }else {
-    $("input[name=title]").val($(tr).find(":nth-child(2)").html());
-    $("input[name=money]").val($(tr).find(":nth-child(6)").html());
-    document.getElementById('paywayid').value = $(tr).find(":nth-child(8)").html();
-    document.getElementById('remark').value = $(tr).find(":nth-child(7)").html();
-    $("input[name=id]").val($(tr).find(":nth-child(4)").html());
-    $("input[name=receiveraccount]").val($(tr).find(":nth-child(10)").html());
-    document.getElementById("comments").innerHTML = $(tr).find(":nth-child(13)").html();
-    // }
+    console.log("goes in ??")
+    $("input[name=money]").val(tr.money);
+    $("input[name=vendorname]").val(tr.vendorname);
+    $("input[name=vendoraddress]").val(tr.vendoraddr);
+    $("input[name=duedate]").val(tr.duedate);
   }
 </script>
 </body>
