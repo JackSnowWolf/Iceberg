@@ -1047,6 +1047,69 @@ public class ReiRequestControllerTest {
   }
 
   @Test
+  void shouldNotApproveReviewForMissingInfoType() throws Exception {
+
+    // set reimbursement request id for test
+    ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
+    reimbursementRequest1.setId(190);
+    reimbursementRequest1.setUserid(1);
+    reimbursementRequest1.setTitle("approve request test");
+    reimbursementRequest1.setRemark(Remark.TRANSPORT);
+    reimbursementRequest1.setTypeid(MISSING_INFO.value);
+    reimbursementRequest1.setPaywayid(1);
+    reimbursementRequest1.setMoney((float) 10);
+    reimbursementRequest1.setReceiveraccount("normaluser@paypal.com");
+    reimbursementRequest1.setComments("good");
+
+    given(reiRequestService.getReimRequestById(190)).willReturn(reimbursementRequest1);
+    UserInfo userInfo = new UserInfo();
+    userInfo.setUsername("group1");
+    userInfo.setPassword("m123");
+    userInfo.setId(2);
+    userInfo.setRoleid(2);
+    userInfo.setRolename("Group Manager");
+    userInfo.setRealname("123");
+    userInfo.setEmail("groupmanger@gmail.com");
+    session.setAttribute("currentUser", userInfo);
+
+    String normalUserEmail = "normaluser@gmail.com";
+    String receiver = "normaluser@paypal.com";
+    // set userInfoService return
+    UserInfo normalUserInfo = new UserInfo();
+    normalUserInfo.setUsername("normal user");
+    normalUserInfo.setPassword("m123");
+    normalUserInfo.setId(1);
+    normalUserInfo.setRoleid(2);
+    normalUserInfo.setRolename("Normal User");
+    normalUserInfo.setRealname("Normal User");
+    normalUserInfo.setEmail(normalUserEmail);
+    given(userInfoService.getUserInfoById("1")).willReturn(normalUserInfo);
+
+    ReimbursementRequest reimbursementRequest2 = new ReimbursementRequest();
+    reimbursementRequest2.setId(190);
+    reimbursementRequest2.setUserid(1);
+    reimbursementRequest2.setTitle("approve request test");
+    reimbursementRequest2.setRemark(Remark.TRANSPORT);
+    reimbursementRequest2.setTypeid(MISSING_INFO.value);
+    reimbursementRequest2.setPaywayid(1);
+    reimbursementRequest2.setMoney((float) 10);
+    reimbursementRequest2.setReceiveraccount(receiver);
+    reimbursementRequest2.setComments("good");
+    // mock reiRequestService update return
+    given(reiRequestService.update(reimbursementRequest2)).willReturn(1);
+    // mock transfer and send email return
+    given(payPalService.createPayout(receiver, "USD", reimbursementRequest2.getMoney().toString()))
+        .willReturn(null);
+    this.mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/reirequest/review/{typeid}/{userid}/{reimid}/{comments}",
+                String.valueOf(MISSING_INFO.value), String.valueOf(1), String.valueOf(190), "good")
+                .contentType(MediaType.APPLICATION_JSON)
+                .session(session)).andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
+        .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
+  }
+
+  @Test
   void shouldNotApproveReviewForErrorUpdate() throws Exception {
 
     // set reimbursement request id for test
@@ -1306,6 +1369,56 @@ public class ReiRequestControllerTest {
   }
 
   @Test
+  void shouldGetReiRequestForNormalUser2() throws Exception {
+    MockHttpSession session = new MockHttpSession();
+
+    UserInfo userInfo = new UserInfo();
+    userInfo.setUsername("ch");
+    userInfo.setPassword("ch");
+    userInfo.setId(1);
+    userInfo.setRoleid(3);
+    userInfo.setGroupid("1");
+    userInfo.setRolename("NormalUser");
+    userInfo.setRealname("ch");
+    session.setAttribute("currentUser", userInfo);
+
+    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+    reimbursementRequestSearch.setUserid(1);
+
+    ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
+    reimbursementRequest1.setId(190);
+    reimbursementRequest1.setUserid(1);
+    reimbursementRequest1.setTitle("should Get ReiRequst For Normal User test");
+    reimbursementRequest1.setRemark(Remark.TRANSPORT);
+    reimbursementRequest1.setTypeid(PROCESSING.value);
+    reimbursementRequest1.setPaywayid(1);
+
+    // simulate response
+    List<ReimbursementRequest> reimbursementRequests = new ArrayList<>();
+    reimbursementRequests.add(reimbursementRequest1);
+
+    Result<ReimbursementRequest> willReturnResult = ResultUtil.success(reimbursementRequests);
+    willReturnResult.setTotal(1);
+
+    PageModel model = new PageModel<>(1, reimbursementRequestSearch);
+    model.setPageSize(20);
+    given(this.reiRequestService.findByWhere(eq(model)))
+        .willReturn(willReturnResult);
+    MvcResult result = this.mockMvc
+        .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequest/{pageNo}/{pageSize}", 1, 20)
+            .session(session)
+            .param("title", "")
+            .param("paywayid", "-1"))
+        .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).
+            andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
+
+    Result decodedResponse = objectMapper
+        .readValue(result.getResponse().getContentAsString(), Result.class);
+    assertNotEquals(0, decodedResponse.getTotal());
+    assertNotEquals(0, decodedResponse.getDatas().size());
+  }
+
+  @Test
   void shouldGetReiRequestForCertainType() throws Exception {
     MockHttpSession session = new MockHttpSession();
 
@@ -1418,6 +1531,61 @@ public class ReiRequestControllerTest {
     assertNotEquals(0, decodedResponse.getDatas().size());
   }
 
+  @Test
+  void shouldGetReiRequestForAdmin() throws Exception {
+    MockHttpSession session = new MockHttpSession();
+
+    UserInfo userInfo = new UserInfo();
+    userInfo.setUsername("ch");
+    userInfo.setPassword("ch");
+    userInfo.setId(1);
+    userInfo.setRoleid(1);
+    userInfo.setGroupid("1");
+    userInfo.setRolename("Admin");
+    userInfo.setRealname("ch");
+    session.setAttribute("currentUser", userInfo);
+
+    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+
+    ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
+    reimbursementRequest1.setId(190);
+    reimbursementRequest1.setUserid(1);
+    reimbursementRequest1.setTitle("should Get ReiRequst For Admin test");
+    reimbursementRequest1.setRemark(Remark.TRANSPORT);
+    reimbursementRequest1.setTypeid(PROCESSING.value);
+    reimbursementRequest1.setPaywayid(1);
+
+    ReimbursementRequest reimbursementRequest2 = new ReimbursementRequest();
+    reimbursementRequest2.setId(191);
+    reimbursementRequest2.setUserid(2);
+    reimbursementRequest2.setTitle("should Get ReiRequst For Admin test");
+    reimbursementRequest2.setRemark(Remark.TRANSPORT);
+    reimbursementRequest2.setTypeid(PROCESSING.value);
+    reimbursementRequest2.setPaywayid(1);
+
+    // simulate response
+    List<ReimbursementRequest> reimbursementRequests = new ArrayList<>();
+    reimbursementRequests.add(reimbursementRequest1);
+    reimbursementRequests.add(reimbursementRequest2);
+
+    Result<ReimbursementRequest> willReturnResult = ResultUtil.success(reimbursementRequests);
+    willReturnResult.setTotal(2);
+
+    PageModel model = new PageModel<>(1, reimbursementRequestSearch);
+    model.setPageSize(20);
+    given(this.reiRequestService.findByWhere(eq(model)))
+        .willReturn(willReturnResult);
+    MvcResult result = this.mockMvc
+        .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequest/{pageNo}/{pageSize}", 1, 20)
+            .session(session))
+        .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).
+            andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
+
+    Result decodedResponse = objectMapper
+        .readValue(result.getResponse().getContentAsString(), Result.class);
+    assertNotEquals(0, decodedResponse.getTotal());
+    assertNotEquals(0, decodedResponse.getDatas().size());
+  }
 
   @Test
   void shouldGetReiRequestByNoPageForNormalUser() throws Exception {
@@ -1494,6 +1662,61 @@ public class ReiRequestControllerTest {
     reimbursementRequest2.setId(191);
     reimbursementRequest2.setUserid(2);
     reimbursementRequest2.setTitle("should Get ReiRequst For Group Manager test");
+    reimbursementRequest2.setRemark(Remark.TRANSPORT);
+    reimbursementRequest2.setTypeid(PROCESSING.value);
+    reimbursementRequest2.setPaywayid(1);
+
+    // simulate response
+    List<ReimbursementRequest> reimbursementRequests = new ArrayList<>();
+    reimbursementRequests.add(reimbursementRequest1);
+    reimbursementRequests.add(reimbursementRequest2);
+
+    Result<ReimbursementRequest> willReturnResult = ResultUtil.success(reimbursementRequests);
+    willReturnResult.setTotal(2);
+
+    given(this.reiRequestService.findByWhereNoPage(eq(reimbursementRequestSearch)))
+        .willReturn(willReturnResult);
+    MvcResult result = this.mockMvc
+        .perform(MockMvcRequestBuilders.get("/reirequest/getReiRequestByNoPage")
+            .session(session))
+        .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).
+            andExpect(MockMvcResultMatchers.jsonPath("$.code").value(200)).andReturn();
+
+    Result decodedResponse = objectMapper
+        .readValue(result.getResponse().getContentAsString(), Result.class);
+    assertNotEquals(0, decodedResponse.getTotal());
+    assertNotEquals(0, decodedResponse.getDatas().size());
+  }
+
+
+  @Test
+  void shouldGetReiRequestByNoPageForAdmin() throws Exception {
+    MockHttpSession session = new MockHttpSession();
+
+    UserInfo userInfo = new UserInfo();
+    userInfo.setUsername("ch");
+    userInfo.setPassword("ch");
+    userInfo.setId(1);
+    userInfo.setRoleid(1);
+    userInfo.setGroupid("1");
+    userInfo.setRolename("Admin");
+    userInfo.setRealname("ch");
+    session.setAttribute("currentUser", userInfo);
+
+    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
+
+    ReimbursementRequest reimbursementRequest1 = new ReimbursementRequest();
+    reimbursementRequest1.setId(190);
+    reimbursementRequest1.setUserid(1);
+    reimbursementRequest1.setTitle("should Get ReiRequst For Admin test");
+    reimbursementRequest1.setRemark(Remark.TRANSPORT);
+    reimbursementRequest1.setTypeid(PROCESSING.value);
+    reimbursementRequest1.setPaywayid(1);
+
+    ReimbursementRequest reimbursementRequest2 = new ReimbursementRequest();
+    reimbursementRequest2.setId(191);
+    reimbursementRequest2.setUserid(2);
+    reimbursementRequest2.setTitle("should Get ReiRequst For Admin test");
     reimbursementRequest2.setRemark(Remark.TRANSPORT);
     reimbursementRequest2.setTypeid(PROCESSING.value);
     reimbursementRequest2.setPaywayid(1);

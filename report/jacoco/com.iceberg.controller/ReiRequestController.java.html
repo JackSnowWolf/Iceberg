@@ -76,28 +76,27 @@ import org.springframework.web.multipart.MultipartFile;
    */
   @RequestMapping(value = &quot;/addRequest&quot;, method = RequestMethod.POST)
   public Result add(ReimbursementRequest reimbursementRequest, HttpSession session) {
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">    if (Config.getSessionUser(session) != null) {</span>
-<span class="fc" id="L80">      reimbursementRequest.setUserid(Config.getSessionUser(session).getId());</span>
-    }
-<span class="fc" id="L82">    UserInfo requestUserInfo = (UserInfo) session.getAttribute(Config.CURRENT_USERNAME);</span>
-<span class="fc" id="L83">    Utils.log(reimbursementRequest.toString());</span>
+<span class="fc" id="L79">    reimbursementRequest.setUserid(Config.getSessionUser(session).getId());</span>
+
+<span class="fc" id="L81">    UserInfo requestUserInfo = (UserInfo) session.getAttribute(Config.CURRENT_USERNAME);</span>
+<span class="fc" id="L82">    Utils.log(reimbursementRequest.toString());</span>
     // set default pay way = paypal
-<span class="fc bfc" id="L85" title="All 4 branches covered.">    if (reimbursementRequest.getPaywayid() == null || reimbursementRequest.getPaywayid() &lt;= 0) {</span>
-<span class="fc" id="L86">      reimbursementRequest.setPaywayid(1);</span>
+<span class="fc bfc" id="L84" title="All 4 branches covered.">    if (reimbursementRequest.getPaywayid() == null || reimbursementRequest.getPaywayid() &lt;= 0) {</span>
+<span class="fc" id="L85">      reimbursementRequest.setPaywayid(1);</span>
     }
     try {
-<span class="fc" id="L89">      String email = requestUserInfo.getEmail();</span>
-<span class="fc" id="L90">      MailUtils.sendMail(email, MailUtils.posted);</span>
-<span class="fc" id="L91">      reimbursementRequest.setTypeid(PROCESSING.value);</span>
-<span class="fc" id="L92">      logger.debug(reimbursementRequest.toString());</span>
-<span class="fc" id="L93">      int num = reiRequestService.add(reimbursementRequest);</span>
-<span class="fc bfc" id="L94" title="All 2 branches covered.">      if (num &gt; 0) {</span>
-<span class="fc" id="L95">        return ResultUtil.success(&quot;Reimbursement Request Successfully!&quot;, reimbursementRequest);</span>
+<span class="fc" id="L88">      String email = requestUserInfo.getEmail();</span>
+<span class="fc" id="L89">      MailUtils.sendMail(email, MailUtils.posted);</span>
+<span class="fc" id="L90">      reimbursementRequest.setTypeid(PROCESSING.value);</span>
+<span class="fc" id="L91">      logger.debug(reimbursementRequest.toString());</span>
+<span class="fc" id="L92">      int num = reiRequestService.add(reimbursementRequest);</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L94">        return ResultUtil.success(&quot;Reimbursement Request Successfully!&quot;, reimbursementRequest);</span>
       } else {
-<span class="fc" id="L97">        return ResultUtil.unSuccess();</span>
+<span class="fc" id="L96">        return ResultUtil.unSuccess();</span>
       }
-<span class="fc" id="L99">    } catch (Exception e) {</span>
-<span class="fc" id="L100">      return ResultUtil.error(e);</span>
+<span class="fc" id="L98">    } catch (Exception e) {</span>
+<span class="fc" id="L99">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -110,32 +109,32 @@ import org.springframework.web.multipart.MultipartFile;
    */
   @RequestMapping(value = &quot;/updateRequest&quot;, method = RequestMethod.POST)
   public Result update(ReimbursementRequest reimbursementRequest, HttpSession session) {
-<span class="fc" id="L113">    Utils.log(reimbursementRequest.toString());</span>
-<span class="fc" id="L114">    int userId = Config.getSessionUser(session).getId();</span>
-<span class="fc" id="L115">    int roleId = Config.getSessionUser(session).getRoleid();</span>
-<span class="fc" id="L116">    ReimbursementRequest result = reiRequestService</span>
-<span class="fc" id="L117">        .getReimRequestById(reimbursementRequest.getId());</span>
-<span class="fc bfc" id="L118" title="All 2 branches covered.">    if (result == null) {</span>
-<span class="fc" id="L119">      return ResultUtil.unSuccess(&quot;Such reimbursement request doesn't exist!&quot;);</span>
+<span class="fc" id="L112">    Utils.log(reimbursementRequest.toString());</span>
+<span class="fc" id="L113">    int userId = Config.getSessionUser(session).getId();</span>
+<span class="fc" id="L114">    int roleId = Config.getSessionUser(session).getRoleid();</span>
+<span class="fc" id="L115">    ReimbursementRequest result = reiRequestService</span>
+<span class="fc" id="L116">        .getReimRequestById(reimbursementRequest.getId());</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">    if (result == null) {</span>
+<span class="fc" id="L118">      return ResultUtil.unSuccess(&quot;Such reimbursement request doesn't exist!&quot;);</span>
     } else {
-<span class="pc bpc" id="L121" title="1 of 4 branches missed.">      if (roleId == 3 &amp;&amp; result.getUserid() != userId) {</span>
-<span class="fc" id="L122">        return ResultUtil.unSuccess(&quot;Permission denied!&quot;);</span>
-<span class="fc bfc" id="L123" title="All 2 branches covered.">      } else if (result.getTypeid() == APPROVED) {</span>
-<span class="fc" id="L124">        return ResultUtil.unSuccess(&quot;Request has already been approved!&quot;);</span>
+<span class="pc bpc" id="L120" title="1 of 4 branches missed.">      if (roleId == 3 &amp;&amp; result.getUserid() != userId) {</span>
+<span class="fc" id="L121">        return ResultUtil.unSuccess(&quot;Permission denied!&quot;);</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">      } else if (result.getTypeid() == APPROVED) {</span>
+<span class="fc" id="L123">        return ResultUtil.unSuccess(&quot;Request has already been approved!&quot;);</span>
       }
       try {
-<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (reimbursementRequest.getPaywayid() == -1) {</span>
-<span class="fc" id="L128">          reimbursementRequest.setPaywayid(0);</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (reimbursementRequest.getPaywayid() == -1) {</span>
+<span class="fc" id="L127">          reimbursementRequest.setPaywayid(0);</span>
         }
-<span class="fc" id="L130">        reimbursementRequest.setTypeid(PROCESSING.value);</span>
-<span class="fc" id="L131">        int num = reiRequestService.update(reimbursementRequest);</span>
-<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (num &gt; 0) {</span>
-<span class="fc" id="L133">          return ResultUtil.success(&quot;Update successfully!&quot;, null);</span>
+<span class="fc" id="L129">        reimbursementRequest.setTypeid(PROCESSING.value);</span>
+<span class="fc" id="L130">        int num = reiRequestService.update(reimbursementRequest);</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (num &gt; 0) {</span>
+<span class="fc" id="L132">          return ResultUtil.success(&quot;Update successfully!&quot;, null);</span>
         } else {
-<span class="fc" id="L135">          return ResultUtil.unSuccess();</span>
+<span class="fc" id="L134">          return ResultUtil.unSuccess();</span>
         }
-<span class="fc" id="L137">      } catch (Exception e) {</span>
-<span class="fc" id="L138">        return ResultUtil.error(e);</span>
+<span class="fc" id="L136">      } catch (Exception e) {</span>
+<span class="fc" id="L137">        return ResultUtil.error(e);</span>
       }
     }
   }
@@ -153,52 +152,52 @@ import org.springframework.web.multipart.MultipartFile;
       @PathVariable String typeid, @PathVariable String userid, @PathVariable String reimId,
       @PathVariable String comments)
       throws IOException {
-<span class="fc bfc" id="L156" title="All 2 branches covered.">    if (Config.getSessionUser(session).getRoleid() &gt; 2) {</span>
-<span class="fc" id="L157">      return ResultUtil.unSuccess(&quot;Permission denied. Don't have review access.&quot;);</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">    if (Config.getSessionUser(session).getRoleid() &gt; 2) {</span>
+<span class="fc" id="L156">      return ResultUtil.unSuccess(&quot;Permission denied. Don't have review access.&quot;);</span>
     }
-<span class="fc" id="L159">    System.out.println(&quot;type id :&quot; + typeid + &quot;userid : &quot; + userid + &quot;reimId : &quot; + reimId);</span>
-<span class="fc" id="L160">    reimbursementRequest.setTypeid(Integer.parseInt(typeid));</span>
-<span class="fc" id="L161">    UserInfo requestUserInfo = userInfoService.getUserInfoById(userid);</span>
-<span class="fc" id="L162">    System.out.println(&quot;requestUserInfo is null ? &quot; + requestUserInfo);</span>
-<span class="fc" id="L163">    ReimbursementRequest request = reiRequestService.getReimRequestById(Integer.parseInt(reimId));</span>
-<span class="fc" id="L164">    request.setTypeid(Integer.parseInt(typeid));</span>
-<span class="fc" id="L165">    request.setComments(comments);</span>
-<span class="fc bfc" id="L166" title="All 2 branches covered.">    if (reimbursementRequest.getTypeid() == APPROVED) {</span>
+<span class="fc" id="L158">    System.out.println(&quot;type id :&quot; + typeid + &quot;userid : &quot; + userid + &quot;reimId : &quot; + reimId);</span>
+<span class="fc" id="L159">    reimbursementRequest.setTypeid(Integer.parseInt(typeid));</span>
+<span class="fc" id="L160">    UserInfo requestUserInfo = userInfoService.getUserInfoById(userid);</span>
+<span class="fc" id="L161">    System.out.println(&quot;requestUserInfo is null ? &quot; + requestUserInfo);</span>
+<span class="fc" id="L162">    ReimbursementRequest request = reiRequestService.getReimRequestById(Integer.parseInt(reimId));</span>
+<span class="fc" id="L163">    request.setTypeid(Integer.parseInt(typeid));</span>
+<span class="fc" id="L164">    request.setComments(comments);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">    if (reimbursementRequest.getTypeid() == APPROVED) {</span>
       // email send service
-<span class="fc" id="L168">      sendEmailHelper(requestUserInfo, MailUtils.approved);</span>
+<span class="fc" id="L167">      sendEmailHelper(requestUserInfo, MailUtils.approved);</span>
       // paypal send service
       try {
-<span class="fc" id="L171">        String receiver = request.getReceiveraccount();</span>
-<span class="fc" id="L172">        Float money = request.getMoney();</span>
-<span class="fc bfc" id="L173" title="All 4 branches covered.">        if (receiver == null || receiver.equals(&quot;&quot;)) {</span>
-<span class="fc" id="L174">          return ResultUtil.unSuccess(&quot;No receiver account&quot;);</span>
+<span class="fc" id="L170">        String receiver = request.getReceiveraccount();</span>
+<span class="fc" id="L171">        Float money = request.getMoney();</span>
+<span class="fc bfc" id="L172" title="All 4 branches covered.">        if (receiver == null || receiver.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L173">          return ResultUtil.unSuccess(&quot;No receiver account&quot;);</span>
         }
-<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (money == null) {</span>
-<span class="fc" id="L177">          return ResultUtil.unSuccess(&quot;Please input money&quot;);</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (money == null) {</span>
+<span class="fc" id="L176">          return ResultUtil.unSuccess(&quot;Please input money&quot;);</span>
         }
-<span class="fc" id="L179">        payPalService.createPayout(receiver, &quot;USD&quot;, money.toString());</span>
+<span class="fc" id="L178">        payPalService.createPayout(receiver, &quot;USD&quot;, money.toString());</span>
         //  return ResultUtil.success(&quot;Approved&quot;);
-<span class="fc" id="L181">      } catch (Exception e) {</span>
-<span class="fc" id="L182">        e.printStackTrace();</span>
-<span class="fc" id="L183">      }</span>
+<span class="fc" id="L180">      } catch (Exception e) {</span>
+<span class="fc" id="L181">        e.printStackTrace();</span>
+<span class="fc" id="L182">      }</span>
 
-<span class="fc bfc" id="L185" title="All 2 branches covered.">    } else if (reimbursementRequest.getTypeid() == PROCESSING) {</span>
-<span class="fc" id="L186">      return ResultUtil.unSuccess(&quot;Not a valid review&quot;);</span>
-<span class="pc bpc" id="L187" title="1 of 2 branches missed.">    } else if (reimbursementRequest.getTypeid() == DENIED) {</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">    } else if (reimbursementRequest.getTypeid() == PROCESSING) {</span>
+<span class="fc" id="L185">      return ResultUtil.unSuccess(&quot;Not a valid review&quot;);</span>
+<span class="fc bfc" id="L186" title="All 2 branches covered.">    } else if (reimbursementRequest.getTypeid() == DENIED) {</span>
       // send denied email
-<span class="fc" id="L189">      sendEmailHelper(requestUserInfo, MailUtils.denied);</span>
+<span class="fc" id="L188">      sendEmailHelper(requestUserInfo, MailUtils.denied);</span>
     }
     try {
-<span class="fc" id="L192">      int num = reiRequestService.update(request);</span>
-<span class="fc bfc" id="L193" title="All 2 branches covered.">      if (num &gt; 0) {</span>
-<span class="fc" id="L194">        return ResultUtil.success(</span>
-<span class="fc" id="L195">            String.format(&quot;Update successfully! Status : %s&quot;, reimbursementRequest.getTypeid()),</span>
+<span class="fc" id="L191">      int num = reiRequestService.update(request);</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L193">        return ResultUtil.success(</span>
+<span class="fc" id="L194">            String.format(&quot;Update successfully! Status : %s&quot;, reimbursementRequest.getTypeid()),</span>
             null);
       } else {
-<span class="fc" id="L198">        return ResultUtil.unSuccess();</span>
+<span class="fc" id="L197">        return ResultUtil.unSuccess();</span>
       }
-<span class="fc" id="L200">    } catch (Exception e) {</span>
-<span class="fc" id="L201">      return ResultUtil.error(e);</span>
+<span class="fc" id="L199">    } catch (Exception e) {</span>
+<span class="fc" id="L200">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -210,13 +209,13 @@ import org.springframework.web.multipart.MultipartFile;
    */
   private void sendEmailHelper(UserInfo requestUserInfo, String content) {
     try {
-<span class="fc" id="L213">      System.out.println(&quot;requestUserInfo is null ? &quot; + requestUserInfo);</span>
-<span class="fc" id="L214">      String email = requestUserInfo.getEmail();</span>
-<span class="fc" id="L215">      MailUtils.sendMail(email, content);</span>
-<span class="fc" id="L216">    } catch (Exception e) {</span>
-<span class="fc" id="L217">      e.printStackTrace();</span>
-<span class="fc" id="L218">    }</span>
-<span class="fc" id="L219">  }</span>
+<span class="fc" id="L212">      System.out.println(&quot;requestUserInfo is null ? &quot; + requestUserInfo);</span>
+<span class="fc" id="L213">      String email = requestUserInfo.getEmail();</span>
+<span class="fc" id="L214">      MailUtils.sendMail(email, content);</span>
+<span class="fc" id="L215">    } catch (Exception e) {</span>
+<span class="fc" id="L216">      e.printStackTrace();</span>
+<span class="fc" id="L217">    }</span>
+<span class="fc" id="L218">  }</span>
 
   /**
    * get reimbursement request by request id.
@@ -226,9 +225,9 @@ import org.springframework.web.multipart.MultipartFile;
    */
   @RequestMapping(&quot;/getReiRequestById/{id}&quot;)
   public Result getReiRequestById(@PathVariable Integer id) {
-<span class="fc" id="L229">    ReimbursementRequest reimbursementRequestCondition = new ReimbursementRequest();</span>
-<span class="fc" id="L230">    reimbursementRequestCondition.setId(id);</span>
-<span class="fc" id="L231">    return reiRequestService.findByWhereNoPage(reimbursementRequestCondition);</span>
+<span class="fc" id="L228">    ReimbursementRequest reimbursementRequestCondition = new ReimbursementRequest();</span>
+<span class="fc" id="L229">    reimbursementRequestCondition.setId(id);</span>
+<span class="fc" id="L230">    return reiRequestService.findByWhereNoPage(reimbursementRequestCondition);</span>
 
   }
 
@@ -243,13 +242,13 @@ import org.springframework.web.multipart.MultipartFile;
   @RequestMapping(&quot;/getReiRequestByUserId/{userid}/{pageNo}/{pageSize}&quot;)
   public Result getReiRequestByUserId(@PathVariable int userid, @PathVariable int pageNo,
       @PathVariable int pageSize) {
-<span class="fc" id="L246">    ReimbursementRequest reimbursementRequest = new ReimbursementRequest();</span>
-<span class="fc" id="L247">    reimbursementRequest.setUserid(userid);</span>
+<span class="fc" id="L245">    ReimbursementRequest reimbursementRequest = new ReimbursementRequest();</span>
+<span class="fc" id="L246">    reimbursementRequest.setUserid(userid);</span>
 
-<span class="fc" id="L249">    PageModel model = new PageModel&lt;&gt;(pageNo, reimbursementRequest);</span>
-<span class="fc" id="L250">    model.setPageSize(pageSize);</span>
+<span class="fc" id="L248">    PageModel model = new PageModel&lt;&gt;(pageNo, reimbursementRequest);</span>
+<span class="fc" id="L249">    model.setPageSize(pageSize);</span>
 
-<span class="fc" id="L252">    return reiRequestService.findByWhere(model);</span>
+<span class="fc" id="L251">    return reiRequestService.findByWhere(model);</span>
   }
 
   /**
@@ -264,35 +263,35 @@ import org.springframework.web.multipart.MultipartFile;
   @RequestMapping(&quot;/getReiRequest/{pageNo}/{pageSize}&quot;)
   public Result getReiRequest(ReimbursementRequest reimbursementRequest, @PathVariable int pageNo,
       @PathVariable int pageSize, HttpSession session) {
-<span class="fc" id="L267">    System.out.println(&quot;reimbursementRequest:&quot; + reimbursementRequest);</span>
-<span class="fc" id="L268">    Utils.log(reimbursementRequest.toString());</span>
-<span class="fc" id="L269">    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();</span>
-<span class="pc bpc" id="L270" title="1 of 4 branches missed.">    if (reimbursementRequest.getTitle() != null &amp;&amp; !reimbursementRequest.getTitle().equals(&quot;&quot;)) {</span>
-<span class="fc" id="L271">      reimbursementRequestSearch.setTitle(reimbursementRequest.getTitle());</span>
+<span class="fc" id="L266">    System.out.println(&quot;reimbursementRequest:&quot; + reimbursementRequest);</span>
+<span class="fc" id="L267">    Utils.log(reimbursementRequest.toString());</span>
+<span class="fc" id="L268">    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();</span>
+<span class="fc bfc" id="L269" title="All 4 branches covered.">    if (reimbursementRequest.getTitle() != null &amp;&amp; !reimbursementRequest.getTitle().equals(&quot;&quot;)) {</span>
+<span class="fc" id="L270">      reimbursementRequestSearch.setTitle(reimbursementRequest.getTitle());</span>
     }
-<span class="fc bfc" id="L273" title="All 2 branches covered.">    if (reimbursementRequest.getRemark() != null) {</span>
-<span class="fc" id="L274">      reimbursementRequestSearch.setRemark(reimbursementRequest.getRemark());</span>
+<span class="fc bfc" id="L272" title="All 2 branches covered.">    if (reimbursementRequest.getRemark() != null) {</span>
+<span class="fc" id="L273">      reimbursementRequestSearch.setRemark(reimbursementRequest.getRemark());</span>
     }
-<span class="fc bfc" id="L276" title="All 2 branches covered.">    if (reimbursementRequest.getTypeid() != null) {</span>
-<span class="fc" id="L277">      reimbursementRequestSearch.setTypeid(reimbursementRequest.getTypeid().value);</span>
+<span class="fc bfc" id="L275" title="All 2 branches covered.">    if (reimbursementRequest.getTypeid() != null) {</span>
+<span class="fc" id="L276">      reimbursementRequestSearch.setTypeid(reimbursementRequest.getTypeid().value);</span>
     }
-<span class="pc bpc" id="L279" title="1 of 4 branches missed.">    if (reimbursementRequest.getPaywayid() != null &amp;&amp; reimbursementRequest.getPaywayid() != -1) {</span>
-<span class="fc" id="L280">      reimbursementRequestSearch.setPaywayid(reimbursementRequest.getPaywayid());</span>
+<span class="fc bfc" id="L278" title="All 4 branches covered.">    if (reimbursementRequest.getPaywayid() != null &amp;&amp; reimbursementRequest.getPaywayid() != -1) {</span>
+<span class="fc" id="L279">      reimbursementRequestSearch.setPaywayid(reimbursementRequest.getPaywayid());</span>
     }
-<span class="fc bfc" id="L282" title="All 2 branches covered.">    if (reimbursementRequest.getRealname() != null) {</span>
-<span class="fc" id="L283">      reimbursementRequestSearch.setRealname(reimbursementRequest.getRealname());</span>
+<span class="fc bfc" id="L281" title="All 2 branches covered.">    if (reimbursementRequest.getRealname() != null) {</span>
+<span class="fc" id="L282">      reimbursementRequestSearch.setRealname(reimbursementRequest.getRealname());</span>
     }
-<span class="fc" id="L285">    UserInfo currentUser = Config.getSessionUser(session);</span>
+<span class="fc" id="L284">    UserInfo currentUser = Config.getSessionUser(session);</span>
     // search for group reimbursement information if group manager
-<span class="fc bfc" id="L287" title="All 2 branches covered.">    if (currentUser.getRoleid() == 2) {</span>
-<span class="fc" id="L288">      reimbursementRequestSearch.setGroupid(currentUser.getGroupid());</span>
-<span class="pc bpc" id="L289" title="1 of 2 branches missed.">    } else if (currentUser.getRoleid() == 3) {</span>
-<span class="fc" id="L290">      reimbursementRequestSearch.setUserid(currentUser.getId());</span>
+<span class="fc bfc" id="L286" title="All 2 branches covered.">    if (currentUser.getRoleid() == 2) {</span>
+<span class="fc" id="L287">      reimbursementRequestSearch.setGroupid(currentUser.getGroupid());</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">    } else if (currentUser.getRoleid() == 3) {</span>
+<span class="fc" id="L289">      reimbursementRequestSearch.setUserid(currentUser.getId());</span>
     }
-<span class="fc" id="L292">    PageModel model = new PageModel&lt;&gt;(pageNo, reimbursementRequestSearch);</span>
-<span class="fc" id="L293">    model.setPageSize(pageSize);</span>
+<span class="fc" id="L291">    PageModel model = new PageModel&lt;&gt;(pageNo, reimbursementRequestSearch);</span>
+<span class="fc" id="L292">    model.setPageSize(pageSize);</span>
 
-<span class="fc" id="L295">    return reiRequestService.findByWhere(model);</span>
+<span class="fc" id="L294">    return reiRequestService.findByWhere(model);</span>
   }
 
   /**
@@ -305,16 +304,16 @@ import org.springframework.web.multipart.MultipartFile;
   @RequestMapping(&quot;/getReiRequestByNoPage&quot;)
   public Result getReiRequestByNoPage(ReimbursementRequest reimbursementRequest,
       HttpSession session) {
-<span class="fc" id="L308">    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();</span>
+<span class="fc" id="L307">    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();</span>
 
-<span class="fc" id="L310">    UserInfo currentUser = Config.getSessionUser(session);</span>
+<span class="fc" id="L309">    UserInfo currentUser = Config.getSessionUser(session);</span>
     // search for group reimbursement information if group manager
-<span class="fc bfc" id="L312" title="All 2 branches covered.">    if (currentUser.getRoleid() == 2) {</span>
-<span class="fc" id="L313">      reimbursementRequestSearch.setGroupid(currentUser.getGroupid());</span>
-<span class="pc bpc" id="L314" title="1 of 2 branches missed.">    } else if (currentUser.getRoleid() == 3) {</span>
-<span class="fc" id="L315">      reimbursementRequestSearch.setUserid(currentUser.getId());</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">    if (currentUser.getRoleid() == 2) {</span>
+<span class="fc" id="L312">      reimbursementRequestSearch.setGroupid(currentUser.getGroupid());</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">    } else if (currentUser.getRoleid() == 3) {</span>
+<span class="fc" id="L314">      reimbursementRequestSearch.setUserid(currentUser.getId());</span>
     }
-<span class="fc" id="L317">    return reiRequestService.findByWhereNoPage(reimbursementRequestSearch);</span>
+<span class="fc" id="L316">    return reiRequestService.findByWhereNoPage(reimbursementRequestSearch);</span>
   }
 
   /**
@@ -326,14 +325,14 @@ import org.springframework.web.multipart.MultipartFile;
   @RequestMapping(&quot;/delReiRequest&quot;)
   public Result del(int id) {
     try {
-<span class="fc" id="L329">      int num = reiRequestService.del(id);</span>
-<span class="fc bfc" id="L330" title="All 2 branches covered.">      if (num &gt; 0) {</span>
-<span class="fc" id="L331">        return ResultUtil.success(&quot;delete successfully!&quot;, null);</span>
+<span class="fc" id="L328">      int num = reiRequestService.del(id);</span>
+<span class="fc bfc" id="L329" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L330">        return ResultUtil.success(&quot;delete successfully!&quot;, null);</span>
       } else {
-<span class="fc" id="L333">        return ResultUtil.unSuccess();</span>
+<span class="fc" id="L332">        return ResultUtil.unSuccess();</span>
       }
-<span class="fc" id="L335">    } catch (Exception e) {</span>
-<span class="fc" id="L336">      return ResultUtil.error(e);</span>
+<span class="fc" id="L334">    } catch (Exception e) {</span>
+<span class="fc" id="L335">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -345,9 +344,9 @@ import org.springframework.web.multipart.MultipartFile;
    */
   @RequestMapping(value = &quot;/{requestId}/image&quot;, method = RequestMethod.GET)
   public ResponseEntity&lt;byte[]&gt; getImageByRequestId(@PathVariable Integer requestId) {
-<span class="fc" id="L348">    ReimbursementRequest request = reiRequestService.getReimRequestById(requestId);</span>
-<span class="fc" id="L349">    String imageId = request.getImageid();</span>
-<span class="fc" id="L350">    return getImageByImageId(imageId);</span>
+<span class="fc" id="L347">    ReimbursementRequest request = reiRequestService.getReimRequestById(requestId);</span>
+<span class="fc" id="L348">    String imageId = request.getImageid();</span>
+<span class="fc" id="L349">    return getImageByImageId(imageId);</span>
   }
 
   /**
@@ -358,21 +357,21 @@ import org.springframework.web.multipart.MultipartFile;
    */
   @RequestMapping(value = &quot;/image/{imageId}&quot;, method = RequestMethod.GET)
   public ResponseEntity&lt;byte[]&gt; getImageByImageId(@PathVariable String imageId) {
-<span class="fc" id="L361">    HttpHeaders headers = new HttpHeaders();</span>
-<span class="fc" id="L362">    byte[] data = imageStorageService.getImageBytes(imageId);</span>
-<span class="fc bfc" id="L363" title="All 2 branches covered.">    if (data == null) {</span>
-<span class="fc" id="L364">      logger.error(&quot;No such image in the image storage!&quot;);</span>
-<span class="fc" id="L365">      return new ResponseEntity&lt;&gt;(null, headers, HttpStatus.NOT_FOUND);</span>
+<span class="fc" id="L360">    HttpHeaders headers = new HttpHeaders();</span>
+<span class="fc" id="L361">    byte[] data = imageStorageService.getImageBytes(imageId);</span>
+<span class="fc bfc" id="L362" title="All 2 branches covered.">    if (data == null) {</span>
+<span class="fc" id="L363">      logger.error(&quot;No such image in the image storage!&quot;);</span>
+<span class="fc" id="L364">      return new ResponseEntity&lt;&gt;(null, headers, HttpStatus.NOT_FOUND);</span>
     }
-<span class="fc" id="L367">    boolean succ = setMediaType(imageId, headers);</span>
-<span class="fc bfc" id="L368" title="All 2 branches covered.">    if (!succ) {</span>
-<span class="fc" id="L369">      return new ResponseEntity&lt;&gt;(null, headers, HttpStatus.UNSUPPORTED_MEDIA_TYPE);</span>
+<span class="fc" id="L366">    boolean succ = setMediaType(imageId, headers);</span>
+<span class="fc bfc" id="L367" title="All 2 branches covered.">    if (!succ) {</span>
+<span class="fc" id="L368">      return new ResponseEntity&lt;&gt;(null, headers, HttpStatus.UNSUPPORTED_MEDIA_TYPE);</span>
     }
 
-<span class="fc" id="L372">    headers.setCacheControl(CacheControl.noCache().getHeaderValue());</span>
-<span class="fc" id="L373">    ResponseEntity&lt;byte[]&gt; responseEntity = new ResponseEntity&lt;&gt;(data, headers, HttpStatus.OK);</span>
-<span class="fc" id="L374">    logger.debug(&quot;responseEntity: &quot; + responseEntity.toString());</span>
-<span class="fc" id="L375">    return responseEntity;</span>
+<span class="fc" id="L371">    headers.setCacheControl(CacheControl.noCache().getHeaderValue());</span>
+<span class="fc" id="L372">    ResponseEntity&lt;byte[]&gt; responseEntity = new ResponseEntity&lt;&gt;(data, headers, HttpStatus.OK);</span>
+<span class="fc" id="L373">    logger.debug(&quot;responseEntity: &quot; + responseEntity.toString());</span>
+<span class="fc" id="L374">    return responseEntity;</span>
   }
 
   /**
@@ -385,27 +384,27 @@ import org.springframework.web.multipart.MultipartFile;
   private Boolean setMediaType(String imageId, HttpHeaders headers) {
     try {
 
-<span class="fc" id="L388">      String ext = getExtension(imageId);</span>
-<span class="fc bfc" id="L389" title="All 4 branches covered.">      switch (ext.toLowerCase()) {</span>
+<span class="fc" id="L387">      String ext = getExtension(imageId);</span>
+<span class="fc bfc" id="L388" title="All 4 branches covered.">      switch (ext.toLowerCase()) {</span>
         case &quot;png&quot;:
-<span class="fc" id="L391">          headers.setContentType(MediaType.IMAGE_PNG);</span>
-<span class="fc" id="L392">          break;</span>
+<span class="fc" id="L390">          headers.setContentType(MediaType.IMAGE_PNG);</span>
+<span class="fc" id="L391">          break;</span>
         case &quot;jpg&quot;:
         case &quot;jpeg&quot;:
-<span class="fc" id="L395">          headers.setContentType(MediaType.IMAGE_JPEG);</span>
-<span class="fc" id="L396">          break;</span>
+<span class="fc" id="L394">          headers.setContentType(MediaType.IMAGE_JPEG);</span>
+<span class="fc" id="L395">          break;</span>
         case &quot;gif&quot;:
-<span class="fc" id="L398">          headers.setContentType(MediaType.IMAGE_GIF);</span>
-<span class="fc" id="L399">          break;</span>
+<span class="fc" id="L397">          headers.setContentType(MediaType.IMAGE_GIF);</span>
+<span class="fc" id="L398">          break;</span>
         default:
-<span class="fc" id="L401">          return false;</span>
+<span class="fc" id="L400">          return false;</span>
       }
-<span class="nc" id="L403">    } catch (Exception e) {</span>
-<span class="nc" id="L404">      e.printStackTrace();</span>
-<span class="nc" id="L405">      logger.error(e.getMessage());</span>
-<span class="nc" id="L406">      return false;</span>
-<span class="fc" id="L407">    }</span>
-<span class="fc" id="L408">    return true;</span>
+<span class="nc" id="L402">    } catch (Exception e) {</span>
+<span class="nc" id="L403">      e.printStackTrace();</span>
+<span class="nc" id="L404">      logger.error(e.getMessage());</span>
+<span class="nc" id="L405">      return false;</span>
+<span class="fc" id="L406">    }</span>
+<span class="fc" id="L407">    return true;</span>
   }
 
   /**
@@ -418,55 +417,55 @@ import org.springframework.web.multipart.MultipartFile;
   @RequestMapping(value = &quot;/image/analysis&quot;, method = RequestMethod.POST)
   public Result analysisImage(@RequestParam(&quot;imageFile&quot;) MultipartFile imageFile,
       HttpSession session) {
-<span class="fc" id="L421">    ReimbursementRequest requestResult = new ReimbursementRequest();</span>
-<span class="fc" id="L422">    Result uploadImageResult = uploadImageToStorage(imageFile);</span>
-<span class="fc bfc" id="L423" title="All 2 branches covered.">    if (uploadImageResult.getCode() != 200) {</span>
-<span class="fc" id="L424">      return uploadImageResult;</span>
+<span class="fc" id="L420">    ReimbursementRequest requestResult = new ReimbursementRequest();</span>
+<span class="fc" id="L421">    Result uploadImageResult = uploadImageToStorage(imageFile);</span>
+<span class="fc bfc" id="L422" title="All 2 branches covered.">    if (uploadImageResult.getCode() != 200) {</span>
+<span class="fc" id="L423">      return uploadImageResult;</span>
     }
     try {
-<span class="fc" id="L427">      String imageId = (String) uploadImageResult.getData();</span>
-<span class="fc" id="L428">      requestResult.setImageid(imageId);</span>
-<span class="fc" id="L429">      String imageFileBase64 = Base64.getEncoder().encodeToString(imageFile.getBytes());</span>
-<span class="fc" id="L430">      InvoiceDetail invoiceDetail = ocrService.parseFromDocumentBase64(imageFileBase64);</span>
-<span class="fc" id="L431">      requestResult.setMoney(invoiceDetail.getMoney());</span>
-<span class="fc" id="L432">      requestResult.setVendorname(invoiceDetail.getVendorname());</span>
-<span class="fc" id="L433">      requestResult.setVendoraddr(invoiceDetail.getVendoraddr());</span>
-<span class="fc" id="L434">      requestResult.setDuedate(invoiceDetail.getDuedate());</span>
+<span class="fc" id="L426">      String imageId = (String) uploadImageResult.getData();</span>
+<span class="fc" id="L427">      requestResult.setImageid(imageId);</span>
+<span class="fc" id="L428">      String imageFileBase64 = Base64.getEncoder().encodeToString(imageFile.getBytes());</span>
+<span class="fc" id="L429">      InvoiceDetail invoiceDetail = ocrService.parseFromDocumentBase64(imageFileBase64);</span>
+<span class="fc" id="L430">      requestResult.setMoney(invoiceDetail.getMoney());</span>
+<span class="fc" id="L431">      requestResult.setVendorname(invoiceDetail.getVendorname());</span>
+<span class="fc" id="L432">      requestResult.setVendoraddr(invoiceDetail.getVendoraddr());</span>
+<span class="fc" id="L433">      requestResult.setDuedate(invoiceDetail.getDuedate());</span>
       //      requestResult.setMoney((float)1.23);
       //      requestResult.setVendorname(&quot;Apple&quot;);
       //      requestResult.setVendoraddr(&quot;NYC&quot;);
       //      requestResult.setDuedate(&quot;2020-12-01&quot;);
 
-<span class="fc" id="L440">      return ResultUtil.success(requestResult);</span>
-<span class="nc" id="L441">    } catch (Exception e) {</span>
-<span class="nc" id="L442">      logger.error(e.getMessage());</span>
-<span class="nc" id="L443">      return ResultUtil.unSuccess(e.getMessage());</span>
+<span class="fc" id="L439">      return ResultUtil.success(requestResult);</span>
+<span class="nc" id="L440">    } catch (Exception e) {</span>
+<span class="nc" id="L441">      logger.error(e.getMessage());</span>
+<span class="nc" id="L442">      return ResultUtil.unSuccess(e.getMessage());</span>
     }
   }
 
   private Result uploadImageToStorage(MultipartFile imageFile) {
     String imageName;
 
-<span class="fc" id="L450">    imageName = StringUtils.cleanPath(imageFile.getOriginalFilename());</span>
-<span class="fc" id="L451">    logger.debug(&quot;image name: &quot; + imageName);</span>
+<span class="fc" id="L449">    imageName = StringUtils.cleanPath(imageFile.getOriginalFilename());</span>
+<span class="fc" id="L450">    logger.debug(&quot;image name: &quot; + imageName);</span>
 
-<span class="fc" id="L453">    String ext = getExtension(imageName);</span>
-<span class="fc bfc" id="L454" title="All 2 branches covered.">    if (!supportedImageExt.contains(ext.toLowerCase())) {</span>
-<span class="fc" id="L455">      return ResultUtil.unSuccess(&quot;Unsupported image type&quot;);</span>
+<span class="fc" id="L452">    String ext = getExtension(imageName);</span>
+<span class="fc bfc" id="L453" title="All 2 branches covered.">    if (!supportedImageExt.contains(ext.toLowerCase())) {</span>
+<span class="fc" id="L454">      return ResultUtil.unSuccess(&quot;Unsupported image type&quot;);</span>
     }
-<span class="fc" id="L457">    String imageId = randomUUID().toString() + &quot;.&quot; + getExtension(imageName);</span>
-<span class="fc" id="L458">    logger.debug(&quot;image id: &quot; + imageId);</span>
+<span class="fc" id="L456">    String imageId = randomUUID().toString() + &quot;.&quot; + getExtension(imageName);</span>
+<span class="fc" id="L457">    logger.debug(&quot;image id: &quot; + imageId);</span>
     try {
-<span class="fc" id="L460">      String putImageResponse = imageStorageService.putImage(imageId, imageFile.getBytes());</span>
-<span class="fc bfc" id="L461" title="All 2 branches covered.">      if (putImageResponse == null) {</span>
-<span class="fc" id="L462">        return ResultUtil.unSuccess(&quot;Upload image to image storage fails!&quot;);</span>
+<span class="fc" id="L459">      String putImageResponse = imageStorageService.putImage(imageId, imageFile.getBytes());</span>
+<span class="fc bfc" id="L460" title="All 2 branches covered.">      if (putImageResponse == null) {</span>
+<span class="fc" id="L461">        return ResultUtil.unSuccess(&quot;Upload image to image storage fails!&quot;);</span>
       }
-<span class="fc" id="L464">    } catch (Exception e) {</span>
-<span class="fc" id="L465">      e.printStackTrace();</span>
-<span class="fc" id="L466">      logger.error(e.getMessage());</span>
-<span class="fc" id="L467">      return ResultUtil.error(e);</span>
-<span class="fc" id="L468">    }</span>
-<span class="fc" id="L469">    return ResultUtil.success(&quot;Upload image to storage successfully!&quot;, imageId);</span>
+<span class="fc" id="L463">    } catch (Exception e) {</span>
+<span class="fc" id="L464">      e.printStackTrace();</span>
+<span class="fc" id="L465">      logger.error(e.getMessage());</span>
+<span class="fc" id="L466">      return ResultUtil.error(e);</span>
+<span class="fc" id="L467">    }</span>
+<span class="fc" id="L468">    return ResultUtil.success(&quot;Upload image to storage successfully!&quot;, imageId);</span>
   }
 
   /**
@@ -481,28 +480,28 @@ import org.springframework.web.multipart.MultipartFile;
       @RequestParam(&quot;imageFile&quot;) MultipartFile imageFile, HttpSession session) {
     // check whether current user is legal to revise.
 
-<span class="fc" id="L484">    ReimbursementRequest reimbursementRequest = reiRequestService.getReimRequestById(requestId);</span>
-<span class="fc bfc" id="L485" title="All 2 branches covered.">    if (reimbursementRequest == null) {</span>
-<span class="fc" id="L486">      return ResultUtil.unSuccess(&quot;request not found!&quot;);</span>
+<span class="fc" id="L483">    ReimbursementRequest reimbursementRequest = reiRequestService.getReimRequestById(requestId);</span>
+<span class="fc bfc" id="L484" title="All 2 branches covered.">    if (reimbursementRequest == null) {</span>
+<span class="fc" id="L485">      return ResultUtil.unSuccess(&quot;request not found!&quot;);</span>
     }
-<span class="fc bfc" id="L488" title="All 2 branches covered.">    if (!reimbursementRequest.getUserid().equals(Config.getSessionUser(session).getId())) {</span>
-<span class="fc" id="L489">      return ResultUtil.unSuccess(&quot;Not authorized to upload image!&quot;);</span>
+<span class="fc bfc" id="L487" title="All 2 branches covered.">    if (!reimbursementRequest.getUserid().equals(Config.getSessionUser(session).getId())) {</span>
+<span class="fc" id="L488">      return ResultUtil.unSuccess(&quot;Not authorized to upload image!&quot;);</span>
     }
-<span class="fc" id="L491">    Result uploadImageResult = uploadImageToStorage(imageFile);</span>
-<span class="fc bfc" id="L492" title="All 2 branches covered.">    if (uploadImageResult.getCode() != 200) {</span>
-<span class="fc" id="L493">      return uploadImageResult;</span>
+<span class="fc" id="L490">    Result uploadImageResult = uploadImageToStorage(imageFile);</span>
+<span class="fc bfc" id="L491" title="All 2 branches covered.">    if (uploadImageResult.getCode() != 200) {</span>
+<span class="fc" id="L492">      return uploadImageResult;</span>
     }
-<span class="fc" id="L495">    String imageId = (String) uploadImageResult.getData();</span>
-<span class="fc" id="L496">    reimbursementRequest.setImageid(imageId);</span>
+<span class="fc" id="L494">    String imageId = (String) uploadImageResult.getData();</span>
+<span class="fc" id="L495">    reimbursementRequest.setImageid(imageId);</span>
     try {
-<span class="fc" id="L498">      int num = reiRequestService.update(reimbursementRequest);</span>
-<span class="fc bfc" id="L499" title="All 2 branches covered.">      if (num &gt; 0) {</span>
-<span class="fc" id="L500">        return ResultUtil.success(&quot;Upload Image successfully!&quot;);</span>
+<span class="fc" id="L497">      int num = reiRequestService.update(reimbursementRequest);</span>
+<span class="fc bfc" id="L498" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L499">        return ResultUtil.success(&quot;Upload Image successfully!&quot;);</span>
       } else {
-<span class="fc" id="L502">        return ResultUtil.unSuccess(&quot;Update image id fails!&quot;);</span>
+<span class="fc" id="L501">        return ResultUtil.unSuccess(&quot;Update image id fails!&quot;);</span>
       }
-<span class="fc" id="L504">    } catch (Exception e) {</span>
-<span class="fc" id="L505">      return ResultUtil.error(e);</span>
+<span class="fc" id="L503">    } catch (Exception e) {</span>
+<span class="fc" id="L504">      return ResultUtil.error(e);</span>
     }
   }
 }

@@ -76,9 +76,8 @@ public class ReiRequestController {
    */
   @RequestMapping(value = "/addRequest", method = RequestMethod.POST)
   public Result add(ReimbursementRequest reimbursementRequest, HttpSession session) {
-    if (Config.getSessionUser(session) != null) {
-      reimbursementRequest.setUserid(Config.getSessionUser(session).getId());
-    }
+    reimbursementRequest.setUserid(Config.getSessionUser(session).getId());
+
     UserInfo requestUserInfo = (UserInfo) session.getAttribute(Config.CURRENT_USERNAME);
     Utils.log(reimbursementRequest.toString());
     // set default pay way = paypal

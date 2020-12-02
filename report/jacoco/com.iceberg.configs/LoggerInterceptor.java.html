@@ -57,7 +57,7 @@ import org.springframework.web.servlet.ModelAndView;
 <span class="fc" id="L57">        sb.append(&quot;Parameters: {&quot;);</span>
 <span class="fc bfc" id="L58" title="All 2 branches covered.">        for (Map.Entry&lt;String, String[]&gt; entrySet : parameters.entrySet()) {</span>
 <span class="fc" id="L59">          String value = entrySet.getValue()[0];</span>
-<span class="pc bpc" id="L60" title="2 of 4 branches missed.">          if (value != null &amp;&amp; !value.isEmpty()) {</span>
+<span class="pc bpc" id="L60" title="1 of 4 branches missed.">          if (value != null &amp;&amp; !value.isEmpty()) {</span>
 <span class="fc" id="L61">            sb.append(entrySet.getKey() + &quot;:&quot; + value + &quot;,&quot;);</span>
           }
 <span class="fc" id="L63">        }</span>
