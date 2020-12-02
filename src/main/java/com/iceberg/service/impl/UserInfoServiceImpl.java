@@ -8,9 +8,10 @@ import com.iceberg.service.UserInfoService;
 import com.iceberg.utils.PageModel;
 import com.iceberg.utils.Result;
 import com.iceberg.utils.ResultUtil;
-import java.util.List;
-import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
@@ -21,21 +22,26 @@ public class UserInfoServiceImpl implements UserInfoService {
   @Override
   public int add(UserInfo userInfo) {
     // add user
-    int result = userInfoMapper.add(userInfo);
-    System.out.println(userInfo);
-    if (userInfo.getRoleid() == 2) {
-      // if the user is group manager, then set the managerid
-      Group newGroup = new Group();
-      newGroup.setManagerid(userInfo.getId());
-      int r = userInfoMapper.addGroupId(newGroup);
+    Integer roleid = userInfo.getRoleid();
+    if (roleid > 0 && roleid < 4) {
+      int result = userInfoMapper.add(userInfo);
+      System.out.println(userInfo);
+      if (userInfo.getRoleid() == 2) {
+        // if the user is group manager, then set the managerid
+        Group newGroup = new Group();
+        newGroup.setManagerid(userInfo.getId());
+        int r = userInfoMapper.addGroupId(newGroup);
 
-      // successful, then bind members to this user
-      if (r == 1) {
-        userInfo.setGroupid(newGroup.getId().toString());
-        result = userInfoMapper.update(userInfo);
+        // successful, then bind members to this user
+        if (r == 1) {
+          userInfo.setGroupid(newGroup.getId().toString());
+          result = userInfoMapper.update(userInfo);
+        }
       }
+      return result;
+    } else {
+      return 0;
     }
-    return result;
   }
 
   @Override

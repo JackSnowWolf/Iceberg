@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.annotation.Order;
 
 import javax.annotation.Resource;
-
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +25,7 @@ public class ReiRequestServiceTest {
   @Resource
   ReiRequestService reiRequestService;
   private static ReimbursementRequest request;
+  private static ReimbursementRequest invalidRequest;
 
   @BeforeAll
   public static void init() throws Exception{
@@ -38,6 +38,12 @@ public class ReiRequestServiceTest {
     request.setTypeid(0);
     request.setPaywayid(1);
     request.setReceiveraccount("test@paypal.com");
+    invalidRequest = new ReimbursementRequest();
+    invalidRequest.setTitle("Invalid");
+    invalidRequest.setUserid(7777);
+    invalidRequest.setMoney((float)-1);
+    invalidRequest.setTypeid(0);
+
   }
 
   @Test
@@ -45,7 +51,10 @@ public class ReiRequestServiceTest {
   public void addReiRequestTest() {
     logger.info("add test");
     int add = reiRequestService.add(request);
+//    reiRequestService.add(invalidRequest);
     assertEquals(1, add);
+    add = reiRequestService.add(invalidRequest);
+    assertEquals(0, add);
     logger.info("add test success");
 
   }
@@ -59,6 +68,8 @@ public class ReiRequestServiceTest {
     request.setTypeid(1);
     int update = reiRequestService.update(request);
     assertEquals(1, update);
+    update = reiRequestService.update(invalidRequest);
+    assertEquals(0, update);
     logger.info("test success");
   }
 
@@ -83,6 +94,13 @@ public class ReiRequestServiceTest {
     PageModel<ReimbursementRequest> pageModel
             = new PageModel<ReimbursementRequest>(2,request);
     Result<ReimbursementRequest> byWhere = reiRequestService.findByWhere(pageModel);
+
+    ReimbursementRequest request2 = new ReimbursementRequest();
+    request2.setPaywayid(1);
+    PageModel<ReimbursementRequest> pageModel1
+            = new PageModel<>(1,request2);
+    Result<ReimbursementRequest> byWhere1 = reiRequestService.findByWhere(pageModel1);
+
     boolean res = false;
     if(byWhere.getMsg() != "Fetch data successfully"){
       res = true;
@@ -98,10 +116,18 @@ public class ReiRequestServiceTest {
     PageModel<ReimbursementRequest> pageModel
             = new PageModel<ReimbursementRequest>(2,request);
     Result<ReimbursementRequest> byWhere = reiRequestService.findByWhereNoPage(request);
+
+    ReimbursementRequest request2 = new ReimbursementRequest();
+    request2.setPaywayid(1);
+    PageModel<ReimbursementRequest> pageModel1
+            = new PageModel<>(1,request2);
+    Result<ReimbursementRequest> byWhere1 = reiRequestService.findByWhereNoPage(request2);
+
     boolean res = false;
     if(byWhere.getMsg() == "Fetch data successfully"){
       res = true;
     }
+
     assertEquals(true, res);
     logger.info("findByWhereNoPagetest success");
   }

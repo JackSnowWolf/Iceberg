@@ -3,9 +3,11 @@ package com.iceberg.service.impl;
 import com.iceberg.dao.PrivilegeMapper;
 import com.iceberg.entity.Privilege;
 import com.iceberg.service.PrivilegeService;
-import java.util.List;
-import javax.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class PrivilegeServiceImpl implements PrivilegeService {
@@ -20,11 +22,19 @@ public class PrivilegeServiceImpl implements PrivilegeService {
 
   @Override
   public int addDefaultPrivilegesWhenAddRole(String roleid) {
-    return mapper.addDefaultPrivilegesWhenAddRole(roleid);
+    if(StringUtils.isNumeric(roleid)) {
+      return mapper.addDefaultPrivilegesWhenAddRole(roleid);
+    } else {
+      return 0;
+    }
   }
 
   @Override
   public int delPrivilegesWenDelRole(String roleid) {
-    return mapper.delPrivilegesWenDelRole(roleid);
+    if(StringUtils.isNumeric(roleid)) {
+      return mapper.delPrivilegesWenDelRole(roleid);
+    } else {
+      return 0;
+    }
   }
 }
