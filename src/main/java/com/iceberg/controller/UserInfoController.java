@@ -50,7 +50,6 @@ public class UserInfoController {
         response.sendRedirect("/pages/index");
         return null;
       } catch (IOException e) {
-        e.printStackTrace();
         return "login";
       }
     }
@@ -118,13 +117,13 @@ public class UserInfoController {
   public @ResponseBody
   Result getUsersByWhere(UserInfo userInfo, @PathVariable int pageNo, @PathVariable int pageSize,
       HttpSession session) {
-    if ("".equals(userInfo.getGroupid())) {
+    if ("".equals(userInfo.getGroupid()) || userInfo.getGroupid() == null) {
       userInfo.setGroupid(null);
     }
-    if (userInfo.getRoleid() == -1) {
-      //System.out.println("*****" + Config.getSessionUser(session));
-      userInfo.setRoleid(Config.getSessionUser(session).getRoleid());
-    }
+    //    if (userInfo.getRoleid() == -1) {
+    //      //System.out.println("*****" + Config.getSessionUser(session));
+    //      userInfo.setRoleid(Config.getSessionUser(session).getRoleid());
+    //    }
     //group manager cannot search administrator's userinfo.
     if (userInfo.getGroupid() != null && userInfo.getRoleid() == 1) {
       //cannot search user with role 1
@@ -256,11 +255,7 @@ public class UserInfoController {
   Result<Role> getAllRoles() {
     try {
       List<Role> roles = userInfoService.getAllRoles();
-      if (roles.size() > 0) {
-        return ResultUtil.success(roles);
-      } else {
-        return ResultUtil.unSuccess();
-      }
+      return ResultUtil.success(roles);
     } catch (Exception e) {
       return ResultUtil.error(e);
     }
