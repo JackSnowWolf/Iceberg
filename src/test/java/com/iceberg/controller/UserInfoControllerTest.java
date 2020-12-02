@@ -65,6 +65,7 @@ public class UserInfoControllerTest {
     userInfo.setRolename("Administrator");
     userInfo.setRealname("hwj");
     userInfo.setEmail("hwj97055@gmail.com");
+    userInfo.setGroupid("3");
     session.setAttribute("currentUser", userInfo);
     MvcResult result = mockMvc
         .perform(MockMvcRequestBuilders.get("/").contentType(MediaType.APPLICATION_JSON)
@@ -124,7 +125,6 @@ public class UserInfoControllerTest {
         .perform(MockMvcRequestBuilders.post(URI, 1, 100).contentType(MediaType.APPLICATION_JSON)
             .param("username", "hwj")
             .param("password", "hwj")
-            .param("roleid", "1")
             .session(session))
         .andReturn();
     assertEquals(200, result.getResponse().getStatus());
@@ -136,6 +136,32 @@ public class UserInfoControllerTest {
     System.out.println("result 2 ******" + userInfoResult);
     assertEquals("Administrator", userInfoResult.getRolename());
     assertEquals("hwj97055@gmail.com", userInfoResult.getEmail());
+  }
+
+  /**
+   * test getting user by where by group manager.
+   */
+  @Test
+  public void testGetUserByWhereByGroupManager() throws Exception {
+    MockHttpSession session = new MockHttpSession();
+    UserInfo userInfo = new UserInfo();
+    userInfo.setUsername("test1118");
+    userInfo.setPassword("123456");
+    userInfo.setId(20);
+    userInfo.setRoleid(2);
+    userInfo.setRolename("Group Manager");
+    userInfo.setRealname("test1118");
+    session.setAttribute("currentUser", userInfo);
+    String URI = "/users/getUsersByWhere/{pageNo}/{pageSize}";
+    MvcResult result = mockMvc
+        .perform(MockMvcRequestBuilders.post(URI, 1, 100).contentType(MediaType.APPLICATION_JSON)
+            .param("username", "hwj")
+            .param("password", "hwj")
+            .param("roleid", "1")
+            .param("groupid", "2")
+            .session(session))
+        .andReturn();
+    assertEquals(200, result.getResponse().getStatus());
   }
 
   private MockHttpSession getDefaultSession() {
@@ -173,6 +199,25 @@ public class UserInfoControllerTest {
   }
 
   /**
+   * test adding user failed.
+   */
+  @Test
+  public void testUserAddFailed() throws Exception {
+    MockHttpSession session = getDefaultSession();
+    String URI = "/user/add";
+    String randomUserName = randomUUIDForEveryTimeRunTest;
+    MvcResult result = mockMvc
+        .perform(MockMvcRequestBuilders.post(URI).contentType(MediaType.APPLICATION_JSON)
+            .param("id", "123")
+            .param("username", "test" + randomUserName)
+            .param("password", "123456")
+            .param("roleid", "3")
+            .session(session))
+        .andReturn();
+    assertEquals(200, result.getResponse().getStatus());
+  }
+
+  /**
    * test updating user with session. Using UUID to generate random password. for username: house2.
    */
   @Test
@@ -191,6 +236,24 @@ public class UserInfoControllerTest {
     String msg = JSONObject.parseObject(result.getResponse().getContentAsString(),
         MockResultParseUserInfoSample.class).getMsg();
     assertEquals(msg, "Operation successful!");
+  }
+
+  /**
+   * test updating failed.
+   */
+  @Test
+  public void testUserUpdateFailed() throws Exception {
+    MockHttpSession session = getDefaultSession();
+    String URI = "/user/update";
+    String randomPassword = randomUUIDForEveryTimeRunTest;
+    MvcResult result = mockMvc
+        .perform(MockMvcRequestBuilders.post(URI).contentType(MediaType.APPLICATION_JSON)
+            .param("username", "house2")
+            .param("id", "99999")
+            .param("password", randomPassword)
+            .session(session))
+        .andReturn();
+    assertEquals(200, result.getResponse().getStatus());
   }
 
   /**
@@ -246,6 +309,20 @@ public class UserInfoControllerTest {
     String msg = JSONObject.parseObject(result2.getResponse().getContentAsString(),
         MockResultParseUserInfoSample.class).getMsg();
     assertEquals(msg, "Operation successful!");
+  }
+
+  /**
+   * test deleting failed.
+   */
+  @Test
+  public void testUserDelFailed() throws Exception {
+    MockHttpSession session = getDefaultSession();
+    String URI2 = "/user/del/{id}";
+    MvcResult result2 = mockMvc
+        .perform(MockMvcRequestBuilders.post(URI2, 999999).contentType(MediaType.APPLICATION_JSON)
+            .session(session))
+        .andReturn();
+    assertEquals(200, result2.getResponse().getStatus());
   }
 
   /**
@@ -333,6 +410,22 @@ public class UserInfoControllerTest {
   }
 
   /**
+   * test adding role failed.
+   */
+  @Test
+  public void testRoleAddFailed() throws Exception {
+    MockHttpSession session = getDefaultSession();
+    String URI = "/role/add";
+    MvcResult result = mockMvc
+        .perform(MockMvcRequestBuilders.post(URI).contentType(MediaType.APPLICATION_JSON)
+            .param("roleid", "99")
+            .param("rolename", "CU Students")
+            .session(session))
+        .andReturn();
+    assertEquals(200, result.getResponse().getStatus());
+  }
+
+  /**
    * test updating role. find the last role in db. roleid = 99.
    */
   @Test
@@ -349,10 +442,40 @@ public class UserInfoControllerTest {
   }
 
   /**
+   * test updating role failed.
+   */
+  @Test
+  public void testRoleUpdateFailed() throws Exception {
+    MockHttpSession session = getDefaultSession();
+    String URI = "/role/update";
+    MvcResult result = mockMvc
+        .perform(MockMvcRequestBuilders.post(URI).contentType(MediaType.APPLICATION_JSON)
+            .param("rolename", "Columbia Students")
+            .param("roleid", "99999")
+            .session(session))
+        .andReturn();
+    assertEquals(200, result.getResponse().getStatus());
+  }
+
+  /**
    * test deleting role. delete role with roleid = 99.
    */
   @Test
   public void testRoleDel() throws Exception {
+    MockHttpSession session = getDefaultSession();
+    String URI = "/role/del/{roleid}";
+    MvcResult result = mockMvc
+        .perform(MockMvcRequestBuilders.post(URI, 99).contentType(MediaType.APPLICATION_JSON)
+            .session(session))
+        .andReturn();
+    assertEquals(200, result.getResponse().getStatus());
+  }
+
+  /**
+   * test deleting role failed.
+   */
+  @Test
+  public void testRoleDelFailed() throws Exception {
     MockHttpSession session = getDefaultSession();
     String URI = "/role/del/{roleid}";
     MvcResult result = mockMvc
@@ -382,4 +505,17 @@ public class UserInfoControllerTest {
     assertEquals("Administrator", roleGet.getRolename());
   }
 
+  /**
+   * test get role by roleid failed.
+   */
+  @Test
+  public void testGetRoleByIdFailed() throws Exception {
+    MockHttpSession session = getDefaultSession();
+    String URI = "/getRole/{roleid}";
+    MvcResult result = mockMvc
+        .perform(MockMvcRequestBuilders.get(URI, 99999).contentType(MediaType.APPLICATION_JSON)
+            .session(session))
+        .andReturn();
+    assertEquals(200, result.getResponse().getStatus());
+  }
 }
