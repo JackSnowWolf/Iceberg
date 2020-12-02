@@ -41,7 +41,7 @@ jobs:
       - name: Generate Report
         run: |
           mvn site
-          mv target/site report
+          cp -r target/site/* report/
           git add report/*
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub"
