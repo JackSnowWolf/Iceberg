@@ -178,15 +178,14 @@ public class UserInfoServiceImplTest {
     public void add2Test(){
         logger.info("add test");
         UserInfo userInfo3 = new UserInfo();
-        userInfo3.setId(9999);
+        userInfo3.setId(7878);
         userInfo3.setUsername("additionalTest");
         userInfo3.setPassword("12345");
         userInfo3.setRealname("tttest");
         userInfo3.setRoleid(2);
-        userInfoService.delete("9999");
         int add = userInfoService.add(userInfo3);
+        userInfoService.delete("7878");
         assertEquals(1, add);
-
         logger.info("add test success");
     }
 
