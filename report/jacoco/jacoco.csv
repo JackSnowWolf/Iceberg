@@ -24,7 +24,7 @@ iceberg,com.iceberg.utils,HttpClientUtils,17,102,3,5,5,27,4,3,1,2
 iceberg,com.iceberg.utils,PageModel,24,77,3,3,10,15,7,7,4,7
 iceberg,com.iceberg.utils,ResultUtil,3,96,0,0,1,32,1,7,1,7
 iceberg,com.iceberg.utils,Utils,3,29,1,1,1,6,2,2,1,2
-iceberg,com.iceberg.utils,MailUtils,3,73,0,0,1,21,1,1,1,1
+iceberg,com.iceberg.utils,MailUtils,8,68,0,0,4,18,1,1,1,1
 iceberg,com.iceberg.utils,Config,3,5,0,0,1,1,1,1,1,1
 iceberg,com.iceberg,IcebergApplication,14,3,0,0,3,1,2,1,2,1
 iceberg,com.iceberg.externalapi,ImageStorageService,12,53,2,2,7,18,2,2,0,2
