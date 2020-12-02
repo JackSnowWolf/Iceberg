@@ -3,6 +3,8 @@ package com.iceberg.service;
 
 import com.iceberg.entity.Role;
 import com.iceberg.entity.UserInfo;
+import com.iceberg.utils.PageModel;
+import com.iceberg.utils.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -11,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.annotation.Order;
 
 import javax.annotation.Resource;
-
-
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -87,6 +87,7 @@ public class UserInfoServiceImplTest {
     @Order(2)
     public void testAdd() {
         logger.info("user add test");
+//        userInfo2.setRoleid(4);
 
         int output=userInfoService.add(userInfo2);
         boolean result=false;
@@ -94,6 +95,15 @@ public class UserInfoServiceImplTest {
             result=true;
         }
         assertEquals(true,result);
+        UserInfo invalidUserInfo = new UserInfo();
+        invalidUserInfo.setRoleid(4);
+        invalidUserInfo.setUsername("invalid");
+        invalidUserInfo.setPassword("invalid");
+        output = userInfoService.add(invalidUserInfo);
+        if(output == 0){
+            result = false;
+        }
+        assertEquals(false,result);
 
         logger.info("user add test success");
     }
@@ -147,7 +157,42 @@ public class UserInfoServiceImplTest {
     }
 
     @Test
+    public void add2Test(){
+        logger.info("add test");
+        UserInfo userInfo3 = new UserInfo();
+        userInfo3.setId(9999);
+        userInfo3.setUsername("additionalTest");
+        userInfo3.setPassword("12345");
+        userInfo3.setRealname("tttest");
+        userInfo3.setRoleid(2);
+        userInfoService.delete("9999");
+        int add = userInfoService.add(userInfo3);
+        assertEquals(1, add);
+
+        logger.info("add test success");
+    }
+
+    @Test
     public void testGetUsersByWhere() {
+        logger.info("get users by where test");
+        PageModel<UserInfo> userInfoPageModel = new PageModel<UserInfo>(1,userInfo);
+        Result usersByWhere = userInfoService.getUsersByWhere(userInfoPageModel);
+        System.out.println(usersByWhere.getMsg());
+        boolean res = false;
+        if(usersByWhere.getMsg() == "Data fetched successfully"){
+            res = true;
+        }
+        UserInfo userInfo3 = new UserInfo();
+        userInfo3.setRoleid(6666);
+        userInfo3.setUsername("dsaf");
+        PageModel<UserInfo> userInfoPageModel2 = new PageModel<UserInfo>(1,userInfo3);
+        usersByWhere = userInfoService.getUsersByWhere(userInfoPageModel2);
+        System.out.println(usersByWhere.getMsg());
+
+
+        assertEquals(true, res);
+
+        logger.info("get users by where test success");
 
     }
 
@@ -229,5 +274,14 @@ public class UserInfoServiceImplTest {
         assertEquals("Administrator",role.getRolename());
 
         logger.info("role get test success");
+    }
+
+    @Test
+    public void getUserInfoByIdTest() {
+        logger.info("getUserInfoById test");
+        UserInfo userInfoById = userInfoService.getUserInfoById("1");
+        assertEquals("hwj",userInfoById.getUsername());
+
+        logger.info("getUserInfoById test success");
     }
 }

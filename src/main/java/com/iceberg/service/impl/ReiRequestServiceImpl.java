@@ -6,10 +6,11 @@ import com.iceberg.service.ReiRequestService;
 import com.iceberg.utils.PageModel;
 import com.iceberg.utils.Result;
 import com.iceberg.utils.ResultUtil;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Resource;
-import org.springframework.stereotype.Service;
 
 @Service
 public class ReiRequestServiceImpl implements ReiRequestService {
@@ -19,12 +20,22 @@ public class ReiRequestServiceImpl implements ReiRequestService {
 
   @Override
   public int add(ReimbursementRequest reimbursementRequest) {
-    return mapper.add(reimbursementRequest);
+    Float money = reimbursementRequest.getMoney();
+    if(money > (float)0 && money <= (float)1000) {
+      return mapper.add(reimbursementRequest);
+    } else {
+      return 0;
+    }
   }
 
   @Override
   public int update(ReimbursementRequest reimbursementRequest) {
-    return mapper.update(reimbursementRequest);
+    Float money = reimbursementRequest.getMoney();
+    if(money > 0 && money <= 1000) {
+      return mapper.update(reimbursementRequest);
+    } else {
+      return 0;
+    }
   }
 
   @Override
