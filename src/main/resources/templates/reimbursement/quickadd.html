@@ -187,8 +187,8 @@
     form.on('submit(add)', function (data) {
       console.log(data.field);
       data.field["imageFile"] = null;
-      data.field["imageId"] = imageid;
-      console.log("imageId" + imageid);
+      data.field.imageid = imageid;
+      console.log("imageId" + data.field.imageid);
       $.post("/reirequest/addRequest", data.field, function (res) {
         if (res.code === 200) {
           layer.confirm("Apply Reimbursement Successfully", {
