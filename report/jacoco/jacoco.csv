@@ -31,4 +31,4 @@ iceberg,com.iceberg.externalapi,ImageStorageService,12,53,2,2,7,18,2,2,0,2
 iceberg,com.iceberg.externalapi,PayPalClient,3,17,0,0,1,3,1,1,1,1
 iceberg,com.iceberg.controller,OAuthController,153,94,7,3,33,22,7,3,2,3
 iceberg,com.iceberg.controller,ReiRequestController,274,620,56,44,83,143,49,18,2,14
-iceberg,com.iceberg.controller,UserInfoController,75,279,14,18,31,71,13,20,0,17
+iceberg,com.iceberg.controller,UserInfoController,34,306,5,25,16,81,5,27,0,17
