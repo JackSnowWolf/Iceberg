@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OAuthController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">iceberg</a> &gt; <a href="index.source.html" class="el_package">com.iceberg.controller</a> &gt; <span class="el_source">OAuthController.java</span></div><h1>OAuthController.java</h1><pre class="source lang-java linenums">package com.iceberg.controller;
+
+import com.iceberg.entity.Privilege;
+import com.iceberg.entity.UserInfo;
+import com.iceberg.service.PrivilegeService;
+import com.iceberg.service.UserInfoService;
+import com.iceberg.utils.Config;
+import com.iceberg.utils.HttpClientUtils;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+<span class="fc" id="L25">public class OAuthController {</span>
+
+  @Resource
+  private UserInfoService userInfoService;
+  @Resource
+  private PrivilegeService privilegeService;
+
+  /**
+   * github login api.
+   * @param code access code
+   * @param request http request
+   * @param httpResponse http response
+   * @return redirect url
+   * @throws IOException exception
+   */
+  @RequestMapping(&quot;/oauth/github/callback&quot;)
+  public String githubLogin(String code, HttpServletRequest request,
+      HttpServletResponse httpResponse) throws IOException {
+    // code is sent by github, need use it to exchange accessToken to get userinfo
+    // 1. get accessToken
+<span class="nc" id="L45">    String s3 = &quot;https://github.com/login/oauth/access_token&quot;;</span>
+<span class="nc" id="L46">    Map&lt;String, String&gt; paramMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L47">    paramMap.put(&quot;client_id&quot;, &quot;d644cfff862d6e5d155a&quot;);</span>
+<span class="nc" id="L48">    paramMap.put(&quot;client_secret&quot;, &quot;ac4a5c749e66dcb25bc7f9a216a7983b6326dc5a&quot;);</span>
+<span class="nc" id="L49">    paramMap.put(&quot;code&quot;, code);</span>
+<span class="nc" id="L50">    paramMap.put(&quot;redirect_uri&quot;, &quot;http://localhost:8080/oauth/github/callback&quot;);</span>
+<span class="nc" id="L51">    String accessTokenResponse = HttpClientUtils.doPost(s3, paramMap);</span>
+<span class="nc" id="L52">    String accessToken = parseAccessTokenResponse(accessTokenResponse);</span>
+    // 2. accessToken get user info
+<span class="nc" id="L54">    URL url = new URL(&quot;https://api.github.com/user&quot;);</span>
+<span class="nc" id="L55">    HttpURLConnection conn = (HttpURLConnection) url.openConnection();</span>
+<span class="nc" id="L56">    conn.setRequestProperty(&quot;Authorization&quot;, &quot;Bearer &quot; + accessToken);</span>
+<span class="nc" id="L57">    conn.setRequestProperty(&quot;Content-Type&quot;, &quot;application/json&quot;);</span>
+<span class="nc" id="L58">    conn.setRequestMethod(&quot;GET&quot;);</span>
+<span class="nc" id="L59">    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), &quot;UTF-8&quot;));</span>
+    String output;
+<span class="nc" id="L61">    StringBuffer response = new StringBuffer();</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">    while ((output = in.readLine()) != null) {</span>
+<span class="nc" id="L63">      response.append(output);</span>
+    }
+<span class="nc" id="L65">    in.close();</span>
+    // 3. down to database, set auth-provider to be github
+<span class="nc" id="L67">    Map&lt;String, String&gt; userInfoMap = parseGithubObject(response.toString());</span>
+<span class="nc" id="L68">    Integer id = Integer.parseInt(userInfoMap.get(&quot;id&quot;));</span>
+<span class="nc" id="L69">    String username = userInfoMap.get(&quot;username&quot;);</span>
+<span class="nc" id="L70">    String email = userInfoMap.get(&quot;email&quot;);</span>
+<span class="nc" id="L71">    UserInfo user = new UserInfo(id, username, email);</span>
+    // if user is existed
+<span class="nc bnc" id="L73" title="All 2 branches missed.">    if (userInfoService.userIsExisted(user)) {</span>
+    } else {
+<span class="nc" id="L75">      userInfoService.add(user);</span>
+    }
+<span class="nc" id="L77">    setSessionUserInfo(user, request.getSession());</span>
+    // 4. configure user session in order to login in
+
+<span class="nc" id="L80">    return &quot;redirect:http://localhost:8080/&quot;;</span>
+  }
+
+  /**
+   * parse access token response.
+   * @param accessTokenResponse access token response
+   * @return access token
+   */
+  public static String parseAccessTokenResponse(String accessTokenResponse) {
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">    if (accessTokenResponse == null) {</span>
+<span class="nc" id="L90">      return null;</span>
+    }
+<span class="fc" id="L92">    String accessToken = null;</span>
+<span class="fc" id="L93">    String[] res = accessTokenResponse.split(&quot;&amp;&quot;);</span>
+<span class="fc" id="L94">    String accessTokenKV = res[0];</span>
+<span class="fc" id="L95">    accessToken = accessTokenKV.substring(13);</span>
+<span class="fc" id="L96">    return accessToken;</span>
+  }
+
+  /**
+   * parse github object.
+   * @param response response
+   * @return key-value pairs.
+   */
+  public static Map&lt;String, String&gt; parseGithubObject(String response) {
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">    if (response == null) {</span>
+<span class="nc" id="L106">      return null;</span>
+    }
+<span class="fc" id="L108">    String email = null;</span>
+<span class="fc" id="L109">    String[] res = response.toString().split(&quot;,&quot;);</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">    if (res.length &gt;= 10) {</span>
+<span class="fc" id="L111">      String emailKV = res[res.length - 10];</span>
+<span class="fc" id="L112">      email = emailKV.substring(9, emailKV.length() - 1);</span>
+    }
+<span class="fc" id="L114">    String username = res[0].substring(1);</span>
+<span class="fc" id="L115">    String id = res[1];</span>
+<span class="fc" id="L116">    Map&lt;String, String&gt; userMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L117">    String value = username.substring(9);</span>
+<span class="fc" id="L118">    String usernameValue = value.substring(0, value.length() - 1);</span>
+<span class="fc" id="L119">    userMap.put(&quot;username&quot;, usernameValue);</span>
+<span class="fc" id="L120">    userMap.put(&quot;id&quot;, id.substring(5));</span>
+<span class="fc" id="L121">    userMap.put(&quot;email&quot;, email);</span>
+<span class="fc" id="L122">    return userMap;</span>
+
+  }
+
+  /**
+   * get user privilege info through user info and save it in session.
+   */
+  public UserInfo setSessionUserInfo(UserInfo userInfo, HttpSession session) {
+<span class="nc" id="L130">    List&lt;Privilege&gt; privileges = privilegeService.getPrivilegeByRoleid(userInfo.getRoleid());</span>
+<span class="nc" id="L131">    userInfo.setPrivileges(privileges);</span>
+<span class="nc" id="L132">    session.setAttribute(Config.CURRENT_USERNAME, userInfo);</span>
+<span class="nc" id="L133">    return userInfo;</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
