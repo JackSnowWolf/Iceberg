@@ -6,75 +6,86 @@ import com.iceberg.service.ReiRequestService;
 import com.iceberg.utils.PageModel;
 import com.iceberg.utils.Result;
 import com.iceberg.utils.ResultUtil;
-import java.util.List;
-import java.util.Map;
-import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
 @Service
-<span class="fc" id="L15">public class ReiRequestServiceImpl implements ReiRequestService {</span>
+<span class="fc" id="L16">public class ReiRequestServiceImpl implements ReiRequestService {</span>
 
   @Resource
   private ReiRequestMapper mapper;
 
   @Override
   public int add(ReimbursementRequest reimbursementRequest) {
-<span class="fc" id="L22">    return mapper.add(reimbursementRequest);</span>
+<span class="fc" id="L23">    Float money = reimbursementRequest.getMoney();</span>
+<span class="pc bpc" id="L24" title="1 of 4 branches missed.">    if(money &gt; (float)0 &amp;&amp; money &lt;= (float)1000) {</span>
+<span class="fc" id="L25">      return mapper.add(reimbursementRequest);</span>
+    } else {
+<span class="fc" id="L27">      return 0;</span>
+    }
   }
 
   @Override
   public int update(ReimbursementRequest reimbursementRequest) {
-<span class="fc" id="L27">    return mapper.update(reimbursementRequest);</span>
+<span class="fc" id="L33">    Float money = reimbursementRequest.getMoney();</span>
+<span class="pc bpc" id="L34" title="1 of 4 branches missed.">    if(money &gt; 0 &amp;&amp; money &lt;= 1000) {</span>
+<span class="fc" id="L35">      return mapper.update(reimbursementRequest);</span>
+    } else {
+<span class="fc" id="L37">      return 0;</span>
+    }
   }
 
   @Override
   public int del(int id) {
-<span class="fc" id="L32">    return mapper.del(id);</span>
+<span class="fc" id="L43">    return mapper.del(id);</span>
   }
 
   @Override
   public Result&lt;ReimbursementRequest&gt; findByWhere(PageModel model) {
     try {
-<span class="fc" id="L38">      List&lt;ReimbursementRequest&gt; reimbursementRequests = mapper.findByWhere(model);</span>
-<span class="fc" id="L39">      Result&lt;ReimbursementRequest&gt; result = ResultUtil.success(reimbursementRequests);</span>
-<span class="fc" id="L40">      result.setTotal(mapper.getTotalByWhere(model));</span>
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">      if (result.getTotal() == 0) {</span>
-<span class="fc" id="L42">        result.setMsg(&quot;No related data&quot;);</span>
+<span class="fc" id="L49">      List&lt;ReimbursementRequest&gt; reimbursementRequests = mapper.findByWhere(model);</span>
+<span class="fc" id="L50">      Result&lt;ReimbursementRequest&gt; result = ResultUtil.success(reimbursementRequests);</span>
+<span class="fc" id="L51">      result.setTotal(mapper.getTotalByWhere(model));</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">      if (result.getTotal() == 0) {</span>
+<span class="fc" id="L53">        result.setMsg(&quot;No related data&quot;);</span>
       } else {
-<span class="nc" id="L44">        result.setMsg(&quot;Fetch data successfully&quot;);</span>
+<span class="fc" id="L55">        result.setMsg(&quot;Fetch data successfully&quot;);</span>
       }
-<span class="fc" id="L46">      return result;</span>
+<span class="fc" id="L57">      return result;</span>
 
-<span class="nc" id="L48">    } catch (Exception e) {</span>
-<span class="nc" id="L49">      return ResultUtil.error(e);</span>
+<span class="nc" id="L59">    } catch (Exception e) {</span>
+<span class="nc" id="L60">      return ResultUtil.error(e);</span>
     }
   }
 
   @Override
   public Result&lt;ReimbursementRequest&gt; findByWhereNoPage(ReimbursementRequest reimbursementRequest) {
     try {
-<span class="fc" id="L56">      List&lt;ReimbursementRequest&gt; reimbursementRequests = mapper</span>
-<span class="fc" id="L57">          .findByWhereNoPage(reimbursementRequest);</span>
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">      if (reimbursementRequests.size() &gt;= 0) {</span>
-<span class="fc" id="L59">        Result&lt;ReimbursementRequest&gt; result = ResultUtil.success(reimbursementRequests);</span>
-<span class="fc" id="L60">        result.setMsg(&quot;Fetch data successfully&quot;);</span>
-<span class="fc" id="L61">        return result;</span>
+<span class="fc" id="L67">      List&lt;ReimbursementRequest&gt; reimbursementRequests = mapper</span>
+<span class="fc" id="L68">          .findByWhereNoPage(reimbursementRequest);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">      if (reimbursementRequests.size() &gt;= 0) {</span>
+<span class="fc" id="L70">        Result&lt;ReimbursementRequest&gt; result = ResultUtil.success(reimbursementRequests);</span>
+<span class="fc" id="L71">        result.setMsg(&quot;Fetch data successfully&quot;);</span>
+<span class="fc" id="L72">        return result;</span>
       } else {
-<span class="nc" id="L63">        return ResultUtil.unSuccess(&quot;No satisfied conditions found!&quot;);</span>
+<span class="nc" id="L74">        return ResultUtil.unSuccess(&quot;No satisfied conditions found!&quot;);</span>
       }
-<span class="nc" id="L65">    } catch (Exception e) {</span>
-<span class="nc" id="L66">      return ResultUtil.error(e);</span>
+<span class="fc" id="L76">    } catch (Exception e) {</span>
+<span class="fc" id="L77">      return ResultUtil.error(e);</span>
     }
   }
 
   @Override
   public List&lt;Map&lt;String, Float&gt;&gt; getMonthlyInfo(PageModel&lt;ReimbursementRequest&gt; model) {
-<span class="fc" id="L72">    return mapper.getMonthlyInfo(model);</span>
+<span class="fc" id="L83">    return mapper.getMonthlyInfo(model);</span>
   }
 
   @Override
   public ReimbursementRequest getReimRequestById(Integer id) {
-<span class="fc" id="L77">    return mapper.getReimRequestById(id);</span>
+<span class="fc" id="L88">    return mapper.getReimRequestById(id);</span>
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

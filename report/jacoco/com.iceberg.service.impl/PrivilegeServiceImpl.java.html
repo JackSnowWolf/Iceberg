@@ -3,29 +3,39 @@
 import com.iceberg.dao.PrivilegeMapper;
 import com.iceberg.entity.Privilege;
 import com.iceberg.service.PrivilegeService;
-import java.util.List;
-import javax.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.List;
+
 @Service
-<span class="fc" id="L11">public class PrivilegeServiceImpl implements PrivilegeService {</span>
+<span class="fc" id="L13">public class PrivilegeServiceImpl implements PrivilegeService {</span>
 
   @Resource
   private PrivilegeMapper mapper;
 
   @Override
   public List&lt;Privilege&gt; getPrivilegeByRoleid(int roleid) {
-<span class="fc" id="L18">    return this.mapper.getPrivilegeByRoleid(roleid);</span>
+<span class="fc" id="L20">    return this.mapper.getPrivilegeByRoleid(roleid);</span>
   }
 
   @Override
   public int addDefaultPrivilegesWhenAddRole(String roleid) {
-<span class="fc" id="L23">    return mapper.addDefaultPrivilegesWhenAddRole(roleid);</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">    if(StringUtils.isNumeric(roleid)) {</span>
+<span class="fc" id="L26">      return mapper.addDefaultPrivilegesWhenAddRole(roleid);</span>
+    } else {
+<span class="fc" id="L28">      return 0;</span>
+    }
   }
 
   @Override
   public int delPrivilegesWenDelRole(String roleid) {
-<span class="fc" id="L28">    return mapper.delPrivilegesWenDelRole(roleid);</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">    if(StringUtils.isNumeric(roleid)) {</span>
+<span class="fc" id="L35">      return mapper.delPrivilegesWenDelRole(roleid);</span>
+    } else {
+<span class="fc" id="L37">      return 0;</span>
+    }
   }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
