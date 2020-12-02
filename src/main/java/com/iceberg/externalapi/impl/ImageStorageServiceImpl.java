@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
-import software.amazon.awssdk.auth.credentials.SystemPropertyCredentialsProvider;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
@@ -57,7 +56,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
   }
 
   @Override
-  public String putImage(String objectKey, byte[] objectContent) {
+  public String putImage(String objectKey, byte[] objectContent) throws Exception {
     String result=null;
     try {
       PutObjectResponse response = s3Client.putObject(PutObjectRequest.builder()

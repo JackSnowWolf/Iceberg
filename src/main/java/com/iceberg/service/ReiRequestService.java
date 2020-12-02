@@ -10,9 +10,9 @@ public interface ReiRequestService {
 
   int add(ReimbursementRequest reimbursementRequest);
 
-  int update(ReimbursementRequest reimbursementRequest);
+  int update(ReimbursementRequest reimbursementRequest) throws Exception;
 
-  int del(int id);
+  int del(int id) throws Exception;
 
   Result<ReimbursementRequest> findByWhere(PageModel model);
 

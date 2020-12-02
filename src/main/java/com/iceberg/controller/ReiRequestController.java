@@ -23,7 +23,6 @@ import com.iceberg.utils.Utils;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -111,24 +110,17 @@ public class ReiRequestController {
    */
   @RequestMapping(value = "/updateRequest", method = RequestMethod.POST)
   public Result update(ReimbursementRequest reimbursementRequest, HttpSession session) {
-    if (Config.getSessionUser(session) == null) {
-      return ResultUtil.unSuccess("No user for current session");
-    }
     Utils.log(reimbursementRequest.toString());
     int userId = Config.getSessionUser(session).getId();
     int roleId = Config.getSessionUser(session).getRoleid();
-    ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
-    reimbursementRequestSearch.setId(reimbursementRequest.getId());
-    Result<ReimbursementRequest> result = reiRequestService
-        .findByWhereNoPage(reimbursementRequestSearch);
-    if (result.getDatas().size() == 0) {
+    ReimbursementRequest result = reiRequestService
+        .getReimRequestById(reimbursementRequest.getId());
+    if (result == null) {
       return ResultUtil.unSuccess("Such reimbursement request doesn't exist!");
-    } else if (result.getDatas().size() > 2) {
-      return ResultUtil.unSuccess("reimbursement request duplicate!");
     } else {
-      if (roleId == 3 && result.getDatas().get(0).getUserid() != userId) {
+      if (roleId == 3 && result.getUserid() != userId) {
         return ResultUtil.unSuccess("Permission denied!");
-      } else if (result.getDatas().get(0).getTypeid() == APPROVED) {
+      } else if (result.getTypeid() == APPROVED) {
         return ResultUtil.unSuccess("Request has already been approved!");
       }
       try {
@@ -161,9 +153,6 @@ public class ReiRequestController {
       @PathVariable String typeid, @PathVariable String userid, @PathVariable String reimId,
       @PathVariable String comments)
       throws IOException {
-    if (Config.getSessionUser(session) == null) {
-      return ResultUtil.unSuccess("No user for current session");
-    }
     if (Config.getSessionUser(session).getRoleid() > 2) {
       return ResultUtil.unSuccess("Permission denied. Don't have review access.");
     }
@@ -176,24 +165,18 @@ public class ReiRequestController {
     request.setComments(comments);
     if (reimbursementRequest.getTypeid() == APPROVED) {
       // email send service
-      try {
-        System.out.println("requestUserInfo is null ? " + requestUserInfo);
-        String email = requestUserInfo.getEmail();
-        MailUtils.sendMail(email, MailUtils.approved);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      sendEmailHelper(requestUserInfo, MailUtils.approved);
       // paypal send service
       try {
         String receiver = request.getReceiveraccount();
-        String money = request.getMoney().toString();
+        Float money = request.getMoney();
         if (receiver == null || receiver.equals("")) {
           return ResultUtil.unSuccess("No receiver account");
         }
-        if (money == null || money.equals("")) {
+        if (money == null) {
           return ResultUtil.unSuccess("Please input money");
         }
-        payPalService.createPayout(receiver, "USD", money);
+        payPalService.createPayout(receiver, "USD", money.toString());
         //  return ResultUtil.success("Approved");
       } catch (Exception e) {
         e.printStackTrace();
@@ -203,12 +186,7 @@ public class ReiRequestController {
       return ResultUtil.unSuccess("Not a valid review");
     } else if (reimbursementRequest.getTypeid() == DENIED) {
       // send denied email
-      try {
-        String email = requestUserInfo.getEmail();
-        MailUtils.sendMail(email, MailUtils.denied);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      sendEmailHelper(requestUserInfo, MailUtils.denied);
     }
     try {
       int num = reiRequestService.update(request);
@@ -225,6 +203,22 @@ public class ReiRequestController {
   }
 
   /**
+   * send email helper in rei request controller.
+   *
+   * @param requestUserInfo request user info
+   * @param content email content type.
+   */
+  private void sendEmailHelper(UserInfo requestUserInfo, String content) {
+    try {
+      System.out.println("requestUserInfo is null ? " + requestUserInfo);
+      String email = requestUserInfo.getEmail();
+      MailUtils.sendMail(email, content);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
    * get reimbursement request by request id.
    *
    * @param id request id.
@@ -234,12 +228,8 @@ public class ReiRequestController {
   public Result getReiRequestById(@PathVariable Integer id) {
     ReimbursementRequest reimbursementRequestCondition = new ReimbursementRequest();
     reimbursementRequestCondition.setId(id);
+    return reiRequestService.findByWhereNoPage(reimbursementRequestCondition);
 
-    try {
-      return reiRequestService.findByWhereNoPage(reimbursementRequestCondition);
-    } catch (Exception e) {
-      return ResultUtil.error(e);
-    }
   }
 
   /**
@@ -254,7 +244,7 @@ public class ReiRequestController {
   public Result getReiRequestByUserId(@PathVariable int userid, @PathVariable int pageNo,
       @PathVariable int pageSize) {
     ReimbursementRequest reimbursementRequest = new ReimbursementRequest();
-    reimbursementRequest.setId(userid);
+    reimbursementRequest.setUserid(userid);
 
     PageModel model = new PageModel<>(pageNo, reimbursementRequest);
     model.setPageSize(pageSize);
@@ -275,16 +265,12 @@ public class ReiRequestController {
   public Result getReiRequest(ReimbursementRequest reimbursementRequest, @PathVariable int pageNo,
       @PathVariable int pageSize, HttpSession session) {
     System.out.println("reimbursementRequest:" + reimbursementRequest);
-    UserInfo currentUser = Config.getSessionUser(session);
-    if (currentUser == null) {
-      return ResultUtil.unSuccess("No user for current session");
-    }
     Utils.log(reimbursementRequest.toString());
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
     if (reimbursementRequest.getTitle() != null && !reimbursementRequest.getTitle().equals("")) {
       reimbursementRequestSearch.setTitle(reimbursementRequest.getTitle());
     }
-    if (reimbursementRequest.getRemark() != null && !reimbursementRequest.getRemark().equals("")) {
+    if (reimbursementRequest.getRemark() != null) {
       reimbursementRequestSearch.setRemark(reimbursementRequest.getRemark());
     }
     if (reimbursementRequest.getTypeid() != null) {
@@ -296,7 +282,7 @@ public class ReiRequestController {
     if (reimbursementRequest.getRealname() != null) {
       reimbursementRequestSearch.setRealname(reimbursementRequest.getRealname());
     }
-
+    UserInfo currentUser = Config.getSessionUser(session);
     // search for group reimbursement information if group manager
     if (currentUser.getRoleid() == 2) {
       reimbursementRequestSearch.setGroupid(currentUser.getGroupid());
@@ -321,9 +307,6 @@ public class ReiRequestController {
       HttpSession session) {
     ReimbursementRequest reimbursementRequestSearch = new ReimbursementRequest();
 
-    if (Config.getSessionUser(session) == null) {
-      return ResultUtil.unSuccess("No user for current session");
-    }
     UserInfo currentUser = Config.getSessionUser(session);
     // search for group reimbursement information if group manager
     if (currentUser.getRoleid() == 2) {
@@ -435,9 +418,6 @@ public class ReiRequestController {
   @RequestMapping(value = "/image/analysis", method = RequestMethod.POST)
   public Result analysisImage(@RequestParam("imageFile") MultipartFile imageFile,
       HttpSession session) {
-    if (Config.getSessionUser(session) == null) {
-      return ResultUtil.unSuccess("No user for current session");
-    }
     ReimbursementRequest requestResult = new ReimbursementRequest();
     Result uploadImageResult = uploadImageToStorage(imageFile);
     if (uploadImageResult.getCode() != 200) {
@@ -452,10 +432,10 @@ public class ReiRequestController {
       requestResult.setVendorname(invoiceDetail.getVendorname());
       requestResult.setVendoraddr(invoiceDetail.getVendoraddr());
       requestResult.setDuedate(invoiceDetail.getDuedate());
-//      requestResult.setMoney((float)1.23);
-//      requestResult.setVendorname("Apple");
-//      requestResult.setVendoraddr("NYC");
-//      requestResult.setDuedate("2020-12-01");
+      //      requestResult.setMoney((float)1.23);
+      //      requestResult.setVendorname("Apple");
+      //      requestResult.setVendoraddr("NYC");
+      //      requestResult.setDuedate("2020-12-01");
 
       return ResultUtil.success(requestResult);
     } catch (Exception e) {
@@ -466,12 +446,9 @@ public class ReiRequestController {
 
   private Result uploadImageToStorage(MultipartFile imageFile) {
     String imageName;
-    try {
-      imageName = StringUtils.cleanPath(Objects.requireNonNull(imageFile.getOriginalFilename()));
-      logger.debug("image name: " + imageName);
-    } catch (Exception e) {
-      return ResultUtil.unSuccess("No file name");
-    }
+
+    imageName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+    logger.debug("image name: " + imageName);
 
     String ext = getExtension(imageName);
     if (!supportedImageExt.contains(ext.toLowerCase())) {
@@ -502,9 +479,6 @@ public class ReiRequestController {
   @RequestMapping(value = "/{requestId}/image", method = RequestMethod.POST)
   public Result uploadImage(@PathVariable Integer requestId,
       @RequestParam("imageFile") MultipartFile imageFile, HttpSession session) {
-    if (Config.getSessionUser(session) == null) {
-      return ResultUtil.unSuccess("No user for current session");
-    }
     // check whether current user is legal to revise.
 
     ReimbursementRequest reimbursementRequest = reiRequestService.getReimRequestById(requestId);

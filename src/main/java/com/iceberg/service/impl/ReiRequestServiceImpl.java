@@ -29,7 +29,7 @@ public class ReiRequestServiceImpl implements ReiRequestService {
   }
 
   @Override
-  public int update(ReimbursementRequest reimbursementRequest) {
+  public int update(ReimbursementRequest reimbursementRequest) throws Exception {
     Float money = reimbursementRequest.getMoney();
     if(money > 0 && money <= 1000) {
       return mapper.update(reimbursementRequest);
@@ -39,7 +39,7 @@ public class ReiRequestServiceImpl implements ReiRequestService {
   }
 
   @Override
-  public int del(int id) {
+  public int del(int id) throws Exception {
     return mapper.del(id);
   }
 

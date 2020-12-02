@@ -61,7 +61,7 @@ public interface ImageStorageService {
 
   String putImage(String objectKey, String objectPath);
 
-  String putImage(String objectKey, byte[] objectContent);
+  String putImage(String objectKey, byte[] objectContent) throws Exception;
 
   byte[] getImageBytes(String keyName);
 }

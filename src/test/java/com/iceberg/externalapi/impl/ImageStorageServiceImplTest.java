@@ -47,7 +47,12 @@ public class ImageStorageServiceImplTest {
   void shouldPutImageFromBytes() {
     logger.info("test put image from bytes");
     byte[] data = getFileBytes(testImageFile.getAbsolutePath());
-    String response = imageStorageService.putImage("invoice-test-01.png", data);
+    String response = null;
+    try {
+      response = imageStorageService.putImage("invoice-test-01.png", data);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     assertNotEquals("", response);
   }
 
@@ -55,7 +60,12 @@ public class ImageStorageServiceImplTest {
   void shouldGetImageBytes() {
     logger.info("test get image bytes");
     byte[] expectedData = getFileBytes(testImageFile.getAbsolutePath());
-    String response = imageStorageService.putImage("invoice-test-01.png", expectedData);
+    String response = null;
+    try {
+      response = imageStorageService.putImage("invoice-test-01.png", expectedData);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     assertNotEquals("", response);
 
     byte[] data = imageStorageService.getImageBytes("invoice-test-01.png");

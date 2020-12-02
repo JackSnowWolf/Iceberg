@@ -61,7 +61,7 @@ public class ReiRequestServiceTest {
 
   @Test
   @Order(2)
-  public void updateTest() {
+  public void updateTest() throws Exception {
     logger.info("test");
     request.setId(600);
     reiRequestService.add(request);
@@ -78,7 +78,12 @@ public class ReiRequestServiceTest {
   public void delTest() {
     logger.info("del test");
     request.setId(8888);
-    int del = reiRequestService.del(8888);
+    int del = 0;
+    try {
+      del = reiRequestService.del(8888);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     boolean res = false;
     if(del >= 0){
       res = true;

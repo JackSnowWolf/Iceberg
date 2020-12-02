@@ -29,7 +29,7 @@ import java.util.Map;
   }
 
   @Override
-  public int update(ReimbursementRequest reimbursementRequest) {
+  public int update(ReimbursementRequest reimbursementRequest) throws Exception {
 <span class="fc" id="L33">    Float money = reimbursementRequest.getMoney();</span>
 <span class="pc bpc" id="L34" title="1 of 4 branches missed.">    if(money &gt; 0 &amp;&amp; money &lt;= 1000) {</span>
 <span class="fc" id="L35">      return mapper.update(reimbursementRequest);</span>
@@ -39,7 +39,7 @@ import java.util.Map;
   }
 
   @Override
-  public int del(int id) {
+  public int del(int id) throws Exception {
 <span class="fc" id="L43">    return mapper.del(id);</span>
   }
 
