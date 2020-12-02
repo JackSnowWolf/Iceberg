@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoggerInterceptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">iceberg</a> &gt; <a href="index.source.html" class="el_package">com.iceberg.configs</a> &gt; <span class="el_source">LoggerInterceptor.java</span></div><h1>LoggerInterceptor.java</h1><pre class="source lang-java linenums">package com.iceberg.configs;
+
+import com.iceberg.entity.UserInfo;
+import com.iceberg.utils.Config;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+/**
+ * description: Log, Helpful for debug.
+ *
+ * @author Weijie Huang
+ * @date 2020/11/13
+ */
+<span class="fc" id="L21">public class LoggerInterceptor implements HandlerInterceptor {</span>
+
+<span class="fc" id="L23">  private static Logger logger = LoggerFactory.getLogger(LoggerInterceptor.class);</span>
+<span class="fc" id="L24">  private static StringBuilder sb = new StringBuilder();</span>
+  private HttpSession session;
+  private String userid;
+
+  @Override
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+      throws Exception {
+
+<span class="fc" id="L32">    System.out.println(&quot;logger preHandler runs @@@@@@@@@@@@@@@@@@@@@@@&quot;);</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">    if ((session = request.getSession()) != null) {</span>
+<span class="fc" id="L34">      System.out.println(&quot;Log preHandler comes in&quot;);</span>
+<span class="fc" id="L35">      UserInfo userInfo = (UserInfo) session.getAttribute(Config.CURRENT_USERNAME);</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">      userid = userInfo == null ? request.getHeader(&quot;userid&quot;) : userInfo.getId().toString();</span>
+<span class="fc" id="L37">      System.out.println(&quot;now user id is ： &quot; + userid);</span>
+    }
+<span class="fc" id="L39">    sb.setLength(0);</span>
+
+<span class="fc" id="L41">    sb.append(&quot;User ID【&quot;).append(userid).append(&quot;】is visiting：&quot;)</span>
+<span class="fc" id="L42">      .append(request.getRequestURL().toString());</span>
+<span class="fc" id="L43">    logger.info(sb.toString());</span>
+<span class="fc" id="L44">    return true;</span>
+  }
+
+  @Override
+  public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+      ModelAndView modelAndView) throws Exception {
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">    if (!request.getRequestURI().contains(&quot;/static/&quot;)) {</span>
+<span class="fc" id="L51">      sb.setLength(0);</span>
+<span class="fc" id="L52">      sb.append(&quot;Method:&quot;).append(((HandlerMethod) handler).getShortLogMessage());</span>
+<span class="fc" id="L53">      logger.info(sb.toString());</span>
+<span class="fc" id="L54">      Map&lt;String, String[]&gt; parameters = request.getParameterMap();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">      if (parameters.size() &gt; 0) {</span>
+<span class="fc" id="L56">        sb.setLength(0);</span>
+<span class="fc" id="L57">        sb.append(&quot;Parameters: {&quot;);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        for (Map.Entry&lt;String, String[]&gt; entrySet : parameters.entrySet()) {</span>
+<span class="fc" id="L59">          String value = entrySet.getValue()[0];</span>
+<span class="pc bpc" id="L60" title="2 of 4 branches missed.">          if (value != null &amp;&amp; !value.isEmpty()) {</span>
+<span class="fc" id="L61">            sb.append(entrySet.getKey() + &quot;:&quot; + value + &quot;,&quot;);</span>
+          }
+<span class="fc" id="L63">        }</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (sb.lastIndexOf(&quot;,&quot;) != -1) {</span>
+<span class="fc" id="L65">          sb.deleteCharAt(sb.lastIndexOf(&quot;,&quot;));</span>
+        }
+<span class="fc" id="L67">        sb.append(&quot;}&quot;);</span>
+<span class="fc" id="L68">        logger.info(sb.toString());</span>
+      }
+    }
+
+<span class="fc" id="L72">  }</span>
+
+  @Override
+  public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+      Object handler, Exception ex) throws Exception {
+
+<span class="fc" id="L78">    sb.setLength(0);</span>
+<span class="fc" id="L79">    sb.append(&quot;User ID [&quot;).append(userid).append(&quot;]&quot;).append(request.getRequestURL().toString())</span>
+<span class="fc" id="L80">      .append(&quot;visiting ends... &quot;);</span>
+
+    // logger.info(sb.toString());
+
+<span class="fc" id="L84">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

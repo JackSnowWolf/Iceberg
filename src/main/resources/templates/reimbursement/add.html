@@ -19,6 +19,9 @@
     .layui-form {
       padding: 20px 50px;
     }
+    /*.layui-form-label {*/
+    /*  width: 200px;*/
+    /*}*/
   </style>
 </head>
 
@@ -99,6 +102,31 @@
   <!--        </div>-->
   <!--    </div>-->
   <input type="hidden" name="typeid" value="2">
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">Vendor Name</label>
+    <div class="layui-input-block">
+      <input type="text" name="vendorname" placeholder="Please fill vendor name"
+             autocomplete="off" class="layui-input" id = "vendorname">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">Vendor Address</label>
+    <div class="layui-input-block">
+      <input type="text" name="vendoraddress" placeholder="Please fill vendor address"
+             autocomplete="off" class="layui-input" id = "vendoraddress">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">Invoice Due Date</label>
+    <div class="layui-input-block">
+      <input type="text" name="duedate" placeholder="Please fill due date"
+             autocomplete="off" class="layui-input" id = "duedate">
+    </div>
+  </div>
+
   <div class="layui-form-item">
     <label class="layui-form-label">Comments from managers</label>
     <div class="layui-input-block" style="margin-left: 0;">
@@ -118,7 +146,6 @@
   </div>
 </form>
 <script>
-
   // getAllPayways();
   var url = location.href;
   if (url.indexOf("#2") != -1) {
@@ -242,6 +269,10 @@
     $("input[name=id]").val($(tr).find(":nth-child(4)").html());
     $("input[name=receiveraccount]").val($(tr).find(":nth-child(10)").html());
     document.getElementById("comments").innerHTML = $(tr).find(":nth-child(13)").html();
+    document.getElementById("vendorname").value = $(tr).find(":nth-child(14)").html();
+    console.log($(tr).find(":nth-child(15)").html())
+    document.getElementById("vendoraddress").value = $(tr).find(":nth-child(15)").html();
+    document.getElementById("duedate").value = $(tr).find(":nth-child(16)").html();
     // }
   }
 </script>

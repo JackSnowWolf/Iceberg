@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PageModel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">iceberg</a> &gt; <a href="index.source.html" class="el_package">com.iceberg.utils</a> &gt; <span class="el_source">PageModel.java</span></div><h1>PageModel.java</h1><pre class="source lang-java linenums">package com.iceberg.utils;
+
+public class PageModel&lt;T&gt; {
+
+  private int beginIndex;
+  private int currentPageNo;
+<span class="fc" id="L7">  private int pageSize = 20;</span>
+  private T data;
+
+  /**
+   * create page model.
+   * @param currentPageNo current page number.
+   * @param data data.
+   */
+<span class="fc" id="L15">  public PageModel(int currentPageNo, T data) {</span>
+<span class="pc bpc" id="L16" title="1 of 2 branches missed.">    if (currentPageNo &lt; 1) {</span>
+<span class="nc" id="L17">      throw new IllegalArgumentException(&quot;currentPageNo can not less than one&quot;);</span>
+    } else {
+<span class="fc" id="L19">      this.currentPageNo = currentPageNo;</span>
+<span class="fc" id="L20">      this.data = data;</span>
+    }
+<span class="fc" id="L22">  }</span>
+
+  public void setPageSize(int pageSize) {
+<span class="fc" id="L25">    this.pageSize = pageSize;</span>
+<span class="fc" id="L26">  }</span>
+
+  public void setBeginIndex(int beginIndex) {
+<span class="nc" id="L29">    this.beginIndex = beginIndex;</span>
+<span class="nc" id="L30">  }</span>
+
+  public int getCurrentPageNo() {
+<span class="nc" id="L33">    return currentPageNo;</span>
+  }
+
+  public void setCurrentPageNo(int currentPageNo) {
+<span class="nc" id="L37">    this.currentPageNo = currentPageNo;</span>
+<span class="nc" id="L38">  }</span>
+
+  public int getPageSize() {
+<span class="fc" id="L41">    return pageSize;</span>
+  }
+
+  public T getData() {
+<span class="fc" id="L45">    return data;</span>
+  }
+
+  public void setData(T data) {
+<span class="nc" id="L49">    this.data = data;</span>
+<span class="nc" id="L50">  }</span>
+
+  public int getBeginIndex() {
+<span class="fc" id="L53">    return beginIndex = (currentPageNo - 1) * pageSize;</span>
+  }
+
+  @Override
+  public String toString() {
+<span class="fc" id="L58">    return &quot;PageModel{&quot; + &quot;beginIndex=&quot; + beginIndex + &quot;, currentPageNo=&quot; + currentPageNo</span>
+        + &quot;, pageSize=&quot; + pageSize + &quot;, data=&quot; + data + '}';
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">    if (this.getClass() != obj.getClass()) {</span>
+<span class="nc" id="L65">      return false;</span>
+    }
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">    if (this == obj) {</span>
+<span class="nc" id="L68">      return true;</span>
+    }
+<span class="fc" id="L70">    return this.toString().equals(obj.toString());</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ImageStorageService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">iceberg</a> &gt; <a href="index.source.html" class="el_package">com.iceberg.externalapi</a> &gt; <span class="el_source">ImageStorageService.java</span></div><h1>ImageStorageService.java</h1><pre class="source lang-java linenums">package com.iceberg.externalapi;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
+public interface ImageStorageService {
+
+  /**
+   * get image file data in bytes.
+   *
+   * @param filePath file path.
+   * @return file data
+   */
+  static byte[] getFileBytes(String filePath) {
+<span class="fc" id="L18">    FileInputStream fileInputStream = null;</span>
+<span class="fc" id="L19">    byte[] bytesArray = null;</span>
+
+    try {
+<span class="fc" id="L22">      File file = new File(filePath);</span>
+<span class="fc" id="L23">      bytesArray = new byte[(int) file.length()];</span>
+<span class="fc" id="L24">      fileInputStream = new FileInputStream(file);</span>
+<span class="fc" id="L25">      fileInputStream.read(bytesArray);</span>
+<span class="nc" id="L26">    } catch (IOException e) {</span>
+<span class="nc" id="L27">      e.printStackTrace();</span>
+    } finally {
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">      if (fileInputStream != null) {</span>
+        try {
+<span class="fc" id="L31">          fileInputStream.close();</span>
+<span class="nc" id="L32">        } catch (IOException e) {</span>
+<span class="nc" id="L33">          e.printStackTrace();</span>
+<span class="fc" id="L34">        }</span>
+      }
+    }
+<span class="fc" id="L37">    return bytesArray;</span>
+  }
+
+  /**
+   * write image bytes to files.
+   *
+   * @param data image data in bytes.
+   * @param filePath file path.
+   */
+  static void writeToFile(byte[] data, String filePath) {
+    try {
+      // Write the data to a local file
+<span class="fc" id="L49">      File myFile = new File(filePath);</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">      if (!myFile.createNewFile()) {</span>
+<span class="nc" id="L51">        System.out.println(&quot;file exists.&quot;);</span>
+      }
+<span class="fc" id="L53">      OutputStream os = new FileOutputStream(myFile);</span>
+<span class="fc" id="L54">      os.write(data);</span>
+<span class="fc" id="L55">      System.out.println(&quot;Successfully write to file&quot;);</span>
+<span class="fc" id="L56">      os.close();</span>
+<span class="nc" id="L57">    } catch (IOException ex) {</span>
+<span class="nc" id="L58">      ex.printStackTrace();</span>
+<span class="fc" id="L59">    }</span>
+<span class="fc" id="L60">  }</span>
+
+  String putImage(String objectKey, String objectPath);
+
+  String putImage(String objectKey, byte[] objectContent);
+
+  byte[] getImageBytes(String keyName);
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

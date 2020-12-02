@@ -37,9 +37,9 @@
 </head>
 
 <body>
-<div class="layui-row">
+<!--<div class="layui-row">-->
 
-  <div class="layui-col-xs6 layui-col-md4">
+<!--  <div class="layui-col-xs6 layui-col-md4">-->
 
     <form class="layui-form layui-form-pane">
       <div class="layui-form-item">
@@ -64,14 +64,6 @@
                  disabled="">
         </div>
       </div>
-      <!--    <div class="layui-form-item">-->
-      <!--        <label class="layui-form-label"></label>-->
-      <!--        <div class="layui-input-block">-->
-      <!--            <select id="payway" name="paywayid" lay-verify="payway">-->
-      <!--                <option value="-1"></option>-->
-      <!--            </select>-->
-      <!--        </div>-->
-      <!--    </div>-->
       <div class="layui-form-item">
         <label class="layui-form-label">Type</label>
         <div class="layui-input-block">
@@ -100,12 +92,6 @@
                  autocomplete="off" class="layui-input" disabled="">
         </div>
       </div>
-      <!--      <div class="layui-form-item">-->
-      <!--        <label class="layui-form-label">Invoice</label>-->
-      <!--        <button type="button" class="layui-btn" name="image">-->
-      <!--          <i class="layui-icon">&#xe67c;</i>Invoice-->
-      <!--        </button>-->
-      <!--      </div>-->
       <div class="layui-form-item" lay-filter="bill-form">
         <label class="layui-form-label">Status</label>
         <div class="layui-input-inline">
@@ -117,10 +103,30 @@
           </select>
         </div>
       </div>
-      <!--        <div class="layui-form-item">-->
-      <!--            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;">Review</button>-->
-      <!--&lt;!&ndash;            <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="update"  style="display:none; margin-left: 0;" >submit immediately</button>&ndash;&gt;-->
-      <!--        </div>-->
+      <div class="layui-form-item">
+        <label class="layui-form-label">Vendor Name</label>
+        <div class="layui-input-block">
+          <input type="text" name="vendorname" placeholder="Please fill vendor name"
+                 autocomplete="off" class="layui-input" id = "vendorname">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">Vendor Address</label>
+        <div class="layui-input-block">
+          <input type="text" name="vendoraddress" placeholder="Please fill vendor address"
+                 autocomplete="off" class="layui-input" id = "vendoraddress">
+        </div>
+      </div>
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">Invoice Due Date</label>
+        <div class="layui-input-block">
+          <input type="text" name="duedate" placeholder="Please fill due date"
+                 autocomplete="off" class="layui-input" id = "duedate">
+        </div>
+      </div>
+
       <div class="layui-form-item">
         <div class="layui-input-block" style="margin-left: 0;">
             <textarea name="comments" placeholder="Comments？" class="layui-textarea"
@@ -129,44 +135,14 @@
         </div>
       </div>
       <div class="layui-form-item">
-        <!--        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;" >Add</button>-->
         <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="review"
                 style="display:none;">Review
         </button>
-        <!--        <button type="reset" id="resetForm" style="display: none;">Reset</button>-->
       </div>
-      <!--    <div class="layui-form-item">-->
-      <!--        <label class="layui-form-label">Status</label>-->
-      <!--        <div class="layui-input-inline">-->
-      <!--            <select id="typeid" autocomplete="off">-->
-      <!--                <option>Status</option>-->
-      <!--                <option value="1">MISSING INFO</option>-->
-      <!--                <option value="2">DENIED</option>-->
-      <!--                <option value="3">APPROVED</option>-->
-      <!--            </select>-->
-      <!--        </div>-->
-      <!--    </div>-->
-      <!--    <div class="layui-form-item">-->
-      <!--        <div class="layui-input-block" style="margin-left: 0;">-->
-      <!--            <textarea name="remark" placeholder="Remark" class="layui-textarea" autocomplete="off"></textarea>-->
-      <!--        </div>-->
-      <!--    </div>-->
-      <!--    <input type="hidden" name="typeid" value="2">-->
-      <!--    <input type="hidden" name="id">-->
-
+      <div class="layui-form-item">
+        <img id="reviewImage" src=""/>
+      </div>
     </form>
-
-  </div>
-
-  <div class="layui-col-xs12 layui-col-md8">
-    <div id="draggableHelper" style="display:inline-block">
-      <img id="reviewImage" src=""/>
-    </div>
-
-  </div>
-
-
-</div>
 
 
 <script>
@@ -279,7 +255,9 @@
     // $("input[name=id]").val($(tr).find(":nth-child(9)").html());
     // var tr = parent.document.getElementsByTagName("tr")[index];
     var requestId = tr.cells[3].innerHTML;
-
+    document.getElementById("vendorname").value = $(tr).find(":nth-child(14)").html();
+    document.getElementById("vendoraddress").value = $(tr).find(":nth-child(15)").html();
+    document.getElementById("duedate").value = $(tr).find(":nth-child(16)").html();
     document.getElementById("reviewImage").src = "/reirequest/" + requestId + "/image";
     // document.getElementById("draggableHelper").style.width = document.getElementById("reviewImage").style.width;
     // document.getElementById("draggableHelper").style.height = document.getElementById("reviewImage").style.height;

@@ -1,4 +1,4 @@
-package com.iceberg.externalapi;
+package com.iceberg.utils;
 
 import com.iceberg.utils.MailUtils;
 import org.junit.jupiter.api.Test;

@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserInfoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">iceberg</a> &gt; <a href="index.source.html" class="el_package">com.iceberg.controller</a> &gt; <span class="el_source">UserInfoController.java</span></div><h1>UserInfoController.java</h1><pre class="source lang-java linenums">package com.iceberg.controller;
+
+import com.iceberg.entity.Privilege;
+import com.iceberg.entity.Role;
+import com.iceberg.entity.UserInfo;
+import com.iceberg.service.PrivilegeService;
+import com.iceberg.service.UserInfoService;
+import com.iceberg.utils.Config;
+import com.iceberg.utils.PageModel;
+import com.iceberg.utils.Result;
+import com.iceberg.utils.ResultUtil;
+import com.iceberg.utils.Utils;
+import java.io.IOException;
+import java.util.List;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+/**
+ * description: this class is mainly focus on user's account information.
+ */
+
+@Controller
+<span class="fc" id="L29">public class UserInfoController {</span>
+
+  @Resource
+  private UserInfoService userInfoService;
+  @Resource
+  private PrivilegeService privilegeService;
+
+  /**
+   * login handler.
+   * @param request http request
+   * @param response http response
+   * @return redirect path.
+   */
+  @RequestMapping(value = {&quot;/&quot;, &quot;login.html&quot;})
+  public String toLogin(HttpServletRequest request, HttpServletResponse response) {
+<span class="fc" id="L44">    HttpSession session = request.getSession();</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">    if (session.getAttribute(Config.CURRENT_USERNAME) == null) {</span>
+<span class="fc" id="L46">      System.out.println(&quot;session attribute is null&quot;);</span>
+<span class="fc" id="L47">      return &quot;login&quot;;</span>
+    } else {
+      try {
+<span class="fc" id="L50">        response.sendRedirect(&quot;/pages/index&quot;);</span>
+<span class="fc" id="L51">        return null;</span>
+<span class="nc" id="L52">      } catch (IOException e) {</span>
+<span class="nc" id="L53">        return &quot;login&quot;;</span>
+      }
+    }
+  }
+
+  /**
+   * get user info for login.
+   * @param userInfo user info
+   * @param request http request
+   * @param response http response
+   * @return result message.
+   */
+  @RequestMapping(value = &quot;/login.do&quot;)
+  @ResponseBody
+  public Result getUserInfo(UserInfo userInfo, HttpServletRequest request,
+      HttpServletResponse response) {
+<span class="fc" id="L69">    boolean userIsExisted = userInfoService.userIsExisted(userInfo);</span>
+<span class="fc" id="L70">    System.out.println(userIsExisted + &quot; - &quot; + request.getHeader(&quot;token&quot;));</span>
+<span class="fc" id="L71">    userInfo = getUserInfo(userInfo);</span>
+<span class="pc bpc" id="L72" title="1 of 4 branches missed.">    if (userIsExisted &amp;&amp; userInfo == null) {</span>
+<span class="fc" id="L73">      return ResultUtil.unSuccess(&quot;wrong username or password!&quot;);</span>
+    } else {
+      // save user info in session
+<span class="fc" id="L76">      userInfo = setSessionUserInfo(userInfo, request.getSession());</span>
+      // save user info in cookie
+      // setCookieUser(request,response);
+<span class="fc" id="L79">      return ResultUtil.success(&quot;login successful&quot;, userInfo);</span>
+    }
+  }
+
+  /**
+   * get user info from service.
+   * @param userInfo user info.
+   * @return user info in the database.
+   */
+  public UserInfo getUserInfo(UserInfo userInfo) {
+<span class="fc" id="L89">    return userInfoService.getUserInfo(userInfo);</span>
+  }
+
+
+  /**
+   * get user privilege info through user info and save it in session.
+   *
+   * @param userInfo user info.
+   * @param session http session.
+   * @return user info.
+   */
+  public UserInfo setSessionUserInfo(UserInfo userInfo, HttpSession session) {
+<span class="fc" id="L101">    List&lt;Privilege&gt; privileges = privilegeService.getPrivilegeByRoleid(userInfo.getRoleid());</span>
+<span class="fc" id="L102">    userInfo.setPrivileges(privileges);</span>
+<span class="fc" id="L103">    session.setAttribute(Config.CURRENT_USERNAME, userInfo);</span>
+<span class="fc" id="L104">    return userInfo;</span>
+
+  }
+
+  /**
+   * get user info by where.
+   * @param userInfo query user info.
+   * @param pageNo page no
+   * @param pageSize page size.
+   * @param session http session.
+   * @return result message
+   */
+  @RequestMapping(&quot;/users/getUsersByWhere/{pageNo}/{pageSize}&quot;)
+  public @ResponseBody
+  Result getUsersByWhere(UserInfo userInfo, @PathVariable int pageNo, @PathVariable int pageSize,
+      HttpSession session) {
+<span class="pc bpc" id="L120" title="1 of 4 branches missed.">    if (&quot;&quot;.equals(userInfo.getGroupid()) || userInfo.getGroupid() == null) {</span>
+<span class="fc" id="L121">      userInfo.setGroupid(null);</span>
+    }
+    //    if (userInfo.getRoleid() == -1) {
+    //      //System.out.println(&quot;*****&quot; + Config.getSessionUser(session));
+    //      userInfo.setRoleid(Config.getSessionUser(session).getRoleid());
+    //    }
+    //group manager cannot search administrator's userinfo.
+<span class="pc bpc" id="L128" title="1 of 4 branches missed.">    if (userInfo.getGroupid() != null &amp;&amp; userInfo.getRoleid() == 1) {</span>
+      //cannot search user with role 1
+<span class="fc" id="L130">      userInfo.setRoleid(2);</span>
+    }
+<span class="fc" id="L132">    Utils.log(userInfo.toString());</span>
+<span class="fc" id="L133">    PageModel model = new PageModel&lt;&gt;(pageNo, userInfo);</span>
+<span class="fc" id="L134">    model.setPageSize(pageSize);</span>
+<span class="fc" id="L135">    return userInfoService.getUsersByWhere(model);</span>
+  }
+
+  /**
+   * add user.
+   * @param userInfo user info
+   * @return result message in response body.
+   */
+  @RequestMapping(&quot;/user/add&quot;)
+  public @ResponseBody
+  Result addUser(UserInfo userInfo) {
+<span class="fc" id="L146">    System.out.println(userInfo);</span>
+    try {
+<span class="fc" id="L148">      int num = userInfoService.add(userInfo);</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
+<span class="fc" id="L150">        return ResultUtil.success();</span>
+      } else {
+<span class="nc" id="L152">        return ResultUtil.unSuccess();</span>
+      }
+<span class="fc" id="L154">    } catch (Exception e) {</span>
+<span class="fc" id="L155">      return ResultUtil.error(e);</span>
+    }
+  }
+
+  /**
+   * update user info.
+   * @param userInfo user info.
+   * @return result message in response body.
+   */
+  @RequestMapping(&quot;/user/update&quot;)
+  public @ResponseBody
+  Result updateUser(UserInfo userInfo, HttpSession session) {
+    try {
+<span class="fc" id="L168">      int num = userInfoService.update(userInfo);</span>
+      //if he updates his own info, then update the session user.
+<span class="fc bfc" id="L170" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L171">        System.out.println();</span>
+<span class="fc" id="L172">        UserInfo sessionUser = Config.getSessionUser(session);</span>
+<span class="fc" id="L173">        System.out.println(&quot;sessionUser is null?&quot; + sessionUser);</span>
+<span class="fc" id="L174">        System.out.println(sessionUser.getId());</span>
+<span class="fc" id="L175">        System.out.println(userInfo.getId());</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (sessionUser.getId().equals(userInfo.getId())) {</span>
+<span class="fc" id="L177">          System.out.println(&quot;same user update&quot;);</span>
+<span class="fc" id="L178">          sessionUser.setUsername(userInfo.getUsername());</span>
+<span class="fc" id="L179">          sessionUser.setRealname(userInfo.getRealname());</span>
+<span class="fc" id="L180">          sessionUser.setEmail(userInfo.getEmail());</span>
+<span class="fc" id="L181">          sessionUser.setPassword(userInfo.getPassword());</span>
+        }
+<span class="fc" id="L183">        System.out.println(&quot;SessionUser now is :&quot; + sessionUser);</span>
+<span class="fc" id="L184">        return ResultUtil.success();</span>
+      } else {
+<span class="fc" id="L186">        return ResultUtil.unSuccess();</span>
+      }
+<span class="nc" id="L188">    } catch (Exception e) {</span>
+<span class="nc" id="L189">      return ResultUtil.error(e);</span>
+    }
+  }
+
+  /**
+   * delete user.
+   * @param id user id.
+   * @return result message in response body.
+   */
+  @RequestMapping(&quot;/user/del/{id}&quot;)
+  public @ResponseBody
+  Result deleteUser(@PathVariable String id) {
+    try {
+<span class="fc" id="L202">      int num = userInfoService.delete(id);</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L204">        return ResultUtil.success();</span>
+      } else {
+<span class="fc" id="L206">        return ResultUtil.unSuccess();</span>
+      }
+<span class="nc" id="L208">    } catch (Exception e) {</span>
+<span class="nc" id="L209">      return ResultUtil.error(e);</span>
+    }
+  }
+
+  /**
+   * get session user.
+   * @param session http session.
+   * @return result message.
+   */
+  @RequestMapping(&quot;/getSessionUser&quot;)
+  @ResponseBody
+  public UserInfo getSessionUser(HttpSession session) {
+<span class="fc" id="L221">    UserInfo sessionUser = (UserInfo) session.getAttribute(Config.CURRENT_USERNAME);</span>
+<span class="fc" id="L222">    sessionUser.setPassword(null);</span>
+<span class="fc" id="L223">    return sessionUser;</span>
+  }
+
+  /**
+   * logout.
+   * @param request http request.
+   * @param response http response
+   * @return redirect url.
+   */
+  @RequestMapping(&quot;/logout&quot;)
+  public String logout(HttpServletRequest request, HttpServletResponse response) {
+    //  delCookieUser(request, response);
+<span class="fc" id="L235">    request.getSession().removeAttribute(Config.CURRENT_USERNAME);</span>
+<span class="fc" id="L236">    return &quot;login&quot;;</span>
+  }
+
+  /**
+   * redirect pages.
+   * @param page request page.
+   * @return redirect url.
+   */
+  @RequestMapping(&quot;/pages/{page}&quot;)
+  public String toPage(@PathVariable String page) {
+<span class="fc" id="L246">    return page.replace(&quot;_&quot;, &quot;/&quot;);</span>
+  }
+
+  /**
+   * get all roles.
+   * @return all roles.
+   */
+  @RequestMapping(&quot;/getAllRoles&quot;)
+  public @ResponseBody
+  Result&lt;Role&gt; getAllRoles() {
+    try {
+<span class="fc" id="L257">      List&lt;Role&gt; roles = userInfoService.getAllRoles();</span>
+<span class="fc" id="L258">      return ResultUtil.success(roles);</span>
+<span class="nc" id="L259">    } catch (Exception e) {</span>
+<span class="nc" id="L260">      return ResultUtil.error(e);</span>
+    }
+  }
+
+  /**
+   * add role.
+   * @param role role
+   * @return result message
+   */
+  @RequestMapping(&quot;/role/add&quot;)
+  public @ResponseBody
+  Result addRole(Role role) {
+    try {
+<span class="fc" id="L273">      int num = userInfoService.addRole(role);</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
+<span class="fc" id="L275">        privilegeService.addDefaultPrivilegesWhenAddRole(role.getRoleid().toString());</span>
+<span class="fc" id="L276">        return ResultUtil.success();</span>
+      } else {
+<span class="nc" id="L278">        return ResultUtil.unSuccess();</span>
+      }
+<span class="fc" id="L280">    } catch (Exception e) {</span>
+<span class="fc" id="L281">      return ResultUtil.error(e);</span>
+    }
+  }
+
+  /**
+   * update role.
+   * @param role role
+   * @return result message.
+   */
+  @RequestMapping(&quot;/role/update&quot;)
+  public @ResponseBody
+  Result updateRole(Role role) {
+    try {
+<span class="fc" id="L294">      int num = userInfoService.updateRole(role);</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L296">        return ResultUtil.success();</span>
+      } else {
+<span class="fc" id="L298">        return ResultUtil.unSuccess();</span>
+      }
+<span class="nc" id="L300">    } catch (Exception e) {</span>
+<span class="nc" id="L301">      return ResultUtil.error(e);</span>
+    }
+  }
+
+  /**
+   * delete role.
+   * @param roleid role id.
+   * @return result message
+   */
+  @RequestMapping(&quot;/role/del/{roleid}&quot;)
+  public @ResponseBody
+  Result deleteRole(@PathVariable String roleid) {
+    try {
+<span class="fc" id="L314">      privilegeService.delPrivilegesWenDelRole(roleid);</span>
+<span class="fc" id="L315">      int num = userInfoService.deleteRole(roleid);</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L317">        return ResultUtil.success();</span>
+      } else {
+<span class="nc" id="L319">        privilegeService.addDefaultPrivilegesWhenAddRole(roleid);</span>
+<span class="nc" id="L320">        return ResultUtil.unSuccess();</span>
+      }
+<span class="fc" id="L322">    } catch (Exception e) {</span>
+<span class="fc" id="L323">      return ResultUtil.error(e);</span>
+    }
+  }
+
+  /**
+   * get role by id.
+   * @param id role id
+   * @return result message
+   */
+  @RequestMapping(&quot;/getRole/{id}&quot;)
+  public @ResponseBody
+  Result getRoleById(@PathVariable String id) {
+    try {
+<span class="fc" id="L336">      Role role = userInfoService.getRoleById(id);</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">      if (role != null) {</span>
+<span class="fc" id="L338">        return ResultUtil.success(role);</span>
+      } else {
+<span class="fc" id="L340">        return ResultUtil.unSuccess();</span>
+      }
+<span class="nc" id="L342">    } catch (Exception e) {</span>
+<span class="nc" id="L343">      return ResultUtil.error(e);</span>
+    }
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

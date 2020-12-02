@@ -452,6 +452,10 @@ public class ReiRequestController {
       requestResult.setVendorname(invoiceDetail.getVendorname());
       requestResult.setVendoraddr(invoiceDetail.getVendoraddr());
       requestResult.setDuedate(invoiceDetail.getDuedate());
+//      requestResult.setMoney((float)1.23);
+//      requestResult.setVendorname("Apple");
+//      requestResult.setVendoraddr("NYC");
+//      requestResult.setDuedate("2020-12-01");
 
       return ResultUtil.success(requestResult);
     } catch (Exception e) {

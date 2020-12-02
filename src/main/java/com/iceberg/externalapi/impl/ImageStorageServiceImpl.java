@@ -40,6 +40,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
   @Override
   public String putImage(String objectKey, String objectPath) {
+    String result=null;
     try {
       PutObjectResponse response = s3Client.putObject(PutObjectRequest.builder()
               .bucket(bucketName)
@@ -47,16 +48,17 @@ public class ImageStorageServiceImpl implements ImageStorageService {
               .build(),
           RequestBody.fromBytes(getFileBytes(objectPath)));
 
-      return response.eTag();
+      result= response.eTag();
 
     } catch (S3Exception e) {
       logger.error(e.awsErrorDetails().errorMessage());
     }
-    return null;
+    return result;
   }
 
   @Override
   public String putImage(String objectKey, byte[] objectContent) {
+    String result=null;
     try {
       PutObjectResponse response = s3Client.putObject(PutObjectRequest.builder()
               .bucket(bucketName)
@@ -64,12 +66,12 @@ public class ImageStorageServiceImpl implements ImageStorageService {
               .build(),
           RequestBody.fromBytes(objectContent));
 
-      return response.eTag();
+      result= response.eTag();
 
     } catch (S3Exception e) {
       logger.error(e.awsErrorDetails().errorMessage());
     }
-    return null;
+    return result;
   }
 
   @Override
@@ -83,7 +85,6 @@ public class ImageStorageServiceImpl implements ImageStorageService {
           .build();
       ResponseBytes<GetObjectResponse> objectBytes = s3Client.getObjectAsBytes(objectRequest);
       data = objectBytes.asByteArray();
-
     } catch (S3Exception e) {
       logger.error(e.awsErrorDetails().errorMessage());
       return null;

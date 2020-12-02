@@ -38,6 +38,8 @@ public class MailUtils {
 
     String host = "smtp.qq.com";
 
+    String result= "failed";
+
     Properties props = System.getProperties();
 
     props.setProperty("mail.smtp.host", host);
@@ -80,12 +82,11 @@ public class MailUtils {
 
       Transport.send(message);
 
-      return "success";
+      result= "success";
 
     } catch (MessagingException mex) {
-
       mex.printStackTrace();
-      return "failed";
     }
+    return result;
   }
 }

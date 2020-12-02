@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Add Reimbursement</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+        content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
+  <link rel="stylesheet" href="/static/css/font.css">
+  <link rel="stylesheet" href="/static/css/xadmin.css">
+  <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="/static/lib/layui/layui.js" charset="utf-8"></script>
+  <script type="text/javascript" src="/static/js/xadmin.js"></script>
+  <script type="text/javascript" src="/static/js/index.js"></script>
+  <style>
+    .layui-form {
+      padding: 40px 80px;
+    }
+  </style>
+</head>
+
+<body>
+
+<form class="layui-form layui-form-pane">
+  <div class="layui-form-item">
+    <label class="layui-form-label">Upload your invoice to OCR service</label>
+    <button type="button" class="layui-btn" name="image" id="image">
+      <i class="layui-icon">&#xe67c;</i>Upload your invoice to OCR service
+    </button>
+  </div>
+  <div class="layui-form-item" lay-filter="bill-form">
+    <label class="layui-form-label">Title</label>
+    <div class="layui-input-block">
+      <input type="text" name="title" lay-verify="required" placeholder="Please input title"
+             autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">Money</label>
+    <div class="layui-input-block">
+      <input type="text" name="money" lay-verify="required|number" placeholder="Please input money"
+             autocomplete="off" class="layui-input">
+    </div>
+  </div>
+  <!--    <div class="layui-form-item">-->
+  <!--        <label class="layui-form-label"></label>-->
+  <!--        <div class="layui-input-block">-->
+  <!--            <select id="payway" name="paywayid" lay-verify="payway">-->
+  <!--                <option value="-1"></option>-->
+  <!--            </select>-->
+  <!--        </div>-->
+  <!--    </div>-->
+  <div class="layui-form-item">
+    <label class="layui-form-label">Type</label>
+    <div class="layui-input-block">
+      <select id="remark" name="remark" autocomplete="off">
+        <option value="HOTELORTRAVEL">HotelOrTravel</option>
+        <option value="TRANSPORT">Transport</option>
+        <option value="CATERING">Catering</option>
+        <option value="LIFE">Life</option>
+        <option value="COMMS">Comms</option>
+        <option value="OTHERS">Others</option>
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">Pay way</label>
+    <!--        <div class="layui-input-block">-->
+    <!--            <select name="paywayid" lay-verify="payway" id="payway">-->
+    <!--                <option value="-1"></option>-->
+    <!--            </select>-->
+    <!--        </div>-->
+    <div class="layui-input-block">
+      <select id="paywayid" name="paywayid" autocomplete="off">
+        <option value="-1">Pay way</option>
+        <option value="1">Paypal</option>
+        <option value="2">Cash</option>
+        <option value="3">Debit</option>
+        <option value="4">Venmo</option>
+        <option value="5">Others</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">Receiver</label>
+    <div class="layui-input-block">
+      <input type="text" name="receiveraccount" placeholder="Please fill receiver account"
+             autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">Vendor Name</label>
+    <div class="layui-input-block">
+      <input type="text" name="vendorname" placeholder="Please fill vendor name"
+             autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">Vendor Address</label>
+    <div class="layui-input-block">
+      <input type="text" name="vendoraddress" placeholder="Please fill vendor address"
+             autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">Due Date</label>
+    <div class="layui-input-block">
+      <input type="text" name="duedate" placeholder="Please fill duedate"
+             autocomplete="off" class="layui-input">
+    </div>
+  </div>
+
+  <input type="hidden" name="typeid" value="2">
+  <input type="hidden" name="id">
+  <div class="layui-form-item">
+    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="add" style="display:none;">
+      Add
+    </button>
+    <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="update"
+            style="display:none; margin-left: 0;">Update
+    </button>
+    <button type="reset" id="resetForm" style="display: none;">Reset</button>
+  </div>
+</form>
+<script>
+
+  // getAllPayways();
+  var imageid;
+  var url = location.href;
+  if (url.indexOf("#2") != -1) {
+    $("button[lay-filter=update]").css("display", "block");
+    var index = getQueryString("index");
+    initForm(parent.document.getElementsByTagName("tr")[index]);
+  } else {
+    if (url.indexOf("#3") != -1) {
+      initForm();
+    }
+    $("button[lay-filter=add]").css("display", "block");
+  }
+
+  layui.use(['form', 'layer'], function () {
+    $ = layui.jquery;
+    var form = layui.form
+        , layer = layui.layer;
+
+    // //
+    // form.verify({
+    //     payway: function(value){
+    //         if(value == -1){
+    //             return '';
+    //         }
+    //     }
+    // });
+
+    //
+
+    var uploadInst;
+    layui.use('upload', function(){
+    var upload = layui.upload;
+    //
+    uploadInst = upload.render({
+      elem: '#image' //
+      ,url: '/reirequest/image/analysis'
+      ,done: function(res, index, upload){
+        if(res.code == 200) {
+          // ocrFillTable(res.data)
+          console.log(res.data);
+          imageid=res.data.imageid;
+          initForm(res.data)
+        }
+      }
+      ,accept: 'images'
+      ,field:'imageFile'
+      ,error: function(){
+
+      }
+    });
+    });
+
+    form.on('submit(add)', function (data) {
+      console.log(data.field);
+      data.field["imageFile"] = null;
+      data.field.imageid = imageid;
+      console.log("imageId" + data.field.imageid);
+      $.post("/reirequest/addRequest", data.field, function (res) {
+        if (res.code === 200) {
+          layer.confirm("Apply Reimbursement Successfully", {
+            btn: ['Yes', 'No'],
+            title: false,
+            closeBtn: false,
+            skin: 'layui-layer-molv',
+            btn: ["Add more", "cancel"]
+          }, function (layno) {
+            layer.close(layno);
+            $("#resetForm").click();
+          }, function () {
+            console.log("response msg: ");
+
+            layer.msg(res.msg, {time: 1000}, function () {
+              x_admin_close();
+              if (parent.location.href.indexOf("details.html") != -1) {
+                parent.getReiRequests();
+              } else {
+                parent.document.getElementById("home").src = "welcome";
+              }
+            });
+          });
+        } else {
+          layer.msg(res.msg)
+        }
+      })
+      return false;
+    });
+  });
+
+  function initForm(tr) {
+    console.log("goes in ??")
+    $("input[name=money]").val(tr.money);
+    $("input[name=vendorname]").val(tr.vendorname);
+    $("input[name=vendoraddress]").val(tr.vendoraddr);
+    $("input[name=duedate]").val(tr.duedate);
+  }
+</script>
+</body>
+
+</html>

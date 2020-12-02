@@ -84,18 +84,6 @@
           <option value=5>Others</option>
         </select>
       </div>
-<!--      TODO: make remark as enum-->
-<!--      <div class="layui-input-inline">-->
-<!--        <select id="remark" autocomplete="off">-->
-<!--          <option value=-1>Usage Type</option>-->
-<!--          &lt;!&ndash;          <option value=0>Paypal</option>&ndash;&gt;-->
-<!--          <option value=1>Paypal</option>-->
-<!--          <option value=2>Cash</option>-->
-<!--          <option value=3>Debit</option>-->
-<!--          <option value=4>Venmo</option>-->
-<!--          <option value=5>Others</option>-->
-<!--        </select>-->
-<!--      </div>-->
 
       <div class="layui-form-item">
         <button class="layui-btn" type="button" lay-submit="" lay-filter="sreach"
@@ -110,7 +98,9 @@
   </div>
 
   <xblock>
-    <button class="layui-btn" onclick="x_admin_show('New Reimbursement Request','reimbursement_add.html','460px','80%')"><i class="layui-icon"></i>ADD
+    <button class="layui-btn" onclick="x_admin_show('New Reimbursement Request','reimbursement_add.html','800px','80%')"><i class="layui-icon"></i>ADD
+    </button>
+    <button class="layui-btn" onclick="x_admin_show('New Reimbursement Request','reimbursement_quickadd.html','800px','80%')"><i class="layui-icon"></i>Quick Add By OCR
     </button>
     <span class="x-right" style="line-height:40px">Total count：<span id="num"></span> </span>
   </xblock>
@@ -119,14 +109,14 @@
     <tr>
       <th style="width: 6%;">Index</th>
       <th style="width: 8%;">Title</th>
-      <th style="width: 8%;">UserId</th>
-      <th style="width: 6%;">RequestId</th>
-      <th style="width: 8%;" >Real Name</th>
+<!--      <th style="width: 8%;">UserId</th>-->
+<!--      <th style="width: 6%;">RequestId</th>-->
+      <th style="width: 8%;" >Name</th>
       <th style="width: 8%;">Money</th>
       <!--            <th style="width: 10%;">Payway</th>-->
       <th style="width: 14%;">Usage Type</th>
-      <th style="width: 6%;">Payway</th>
-      <th style="width: 8%;">Payway Name</th>
+<!--      <th style="width: 6%;">Payway</th>-->
+      <th style="width: 8%;">Payway</th>
       <th style="width: 12%;">Receiver</th>
       <th style="width: 10%;">Time</th>
       <th style="width: 8%;">Status</th>
@@ -248,21 +238,23 @@
         html += '<tr>' +
             '            <td>' + (index + 1 + beginIndex) + '</td>' +
             '            <td>' + item.title + '</td>' +
-            '            <td>' + item.userid + '</td>' +
-            '            <td>' + item.id + '</td>' +
+            '            <td style="display:none">' + item.userid + '</td>' +
+            '            <td style="display:none">' + item.id + '</td>' +
             '            <td>' + item.realname + '</td>' +
             '            <td>' + parseFloat(item.money).toFixed(2) + '</td>' +
             // '            <td>' + item.payway + '</td>' +
             '            <td class="remark" title=' + item.remark + '>' + item.remark + '</td>' +
-            '            <td class="paywayid" title=' + item.paywayid + '>' + item.paywayid + '</td>' +
+            '            <td class="paywayid" style="display:none" title=' + item.paywayid + '>' + item.paywayid + '</td>' +
             '            <td class="paywayname">' + paywayname + '</td>' +
             '            <td class="receiveraccount" title=' + item.receiveraccount + '>' + item.receiveraccount + '</td>' +
             '            <td>' + item.time + '</td>' +
             '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
             '            <td  class="comments" title=' + item.comments + '>' + item.comments + '</td>' +
-            '            <td style="display: none">' + item.id + '</td>' +
+            '            <td style="display: none" class="vendorname">' + item.vendorname + '</td>' +
+            '            <td style="display: none" class="vendoraddress">' + item.vendoraddr + '</td>' +
+            '            <td style="display: none" class="duedate">' + item.duedate + '</td>' +
             '            <td class="td-manage">' +
-            '                <a title="edit" onclick="x_admin_show(\'edit\',\'reimbursement_add.html?index=' + (index + 1) + '#2\',\'460px\',\'80%\')" href="javascript:;">' +
+            '                <a title="edit" onclick="x_admin_show(\'edit\',\'reimbursement_add.html?index=' + (index + 1) + '#2\',\'800px\',\'100%\')" href="javascript:;">' +
             '                    <i class="layui-icon">&#xe615;</i>' +
             '                </a>' +
             '                <a title="delete" onclick="del(this,' + item.id + ')" href="javascript:;">' +
@@ -287,18 +279,21 @@
         html += '<tr>' +
             '            <td>' + (index + 1 + beginIndex) + '</td>' +
             '            <td>' + item.title + '</td>' +
-            '            <td>' + item.userid + '</td>' +
-            '            <td>' + item.id + '</td>' +
+            '            <td style="display:none">' + item.userid + '</td>' +
+            '            <td style="display:none">' + item.id + '</td>' +
             '            <td>' + item.realname + '</td>' +
             '            <td>' + parseFloat(item.money).toFixed(2) + '</td>' +
             // '            <td>' + item.payway + '</td>' +
             '            <td class="remark" title=' + item.remark + '>' + item.remark + '</td>' +
-            '            <td class="paywayid" title=' + item.paywayid + '>' + item.paywayid + '</td>' +
+            '            <td style="display:none" class="paywayid" title=' + item.paywayid + '>' + item.paywayid + '</td>' +
             '            <td class="paywayname">' + paywayname + '</td>' +
             '            <td class="receiveraccount" title=' + item.receiveraccount + '>' + item.receiveraccount + '</td>' +
             '            <td>' + item.time + '</td>' +
             '            <td  class="typeid" title=' + item.typeid + '>' + item.typeid + '</td>' +
             '            <td  class="comments" title=' + item.comments + '>' + item.comments + '</td>' +
+            '            <td style="display: none" class="vendorname">' + item.vendorname + '</td>' +
+            '            <td style="display: none" class="vendoraddress">' + item.vendoraddr + '</td>' +
+            '            <td style="display: none" class="duedate">' + item.duedate + '</td>' +
             '            <td style="display: none">' + item.id + '</td>' +
             '            <td class="td-manage">' +
             '            <button class="layui-btn" onclick="x_admin_show(\'review\',\'review_add.html?index='

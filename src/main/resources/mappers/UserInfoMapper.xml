@@ -93,6 +93,10 @@
         insert into iceberg.group(id,managerid,groupname) values(null,#{managerid},#{groupname})
     </insert>
 
+    <delete id="deleteGroup">
+        delete from group where id=#{groupId}
+    </delete>
+
 
 
 </mapper>

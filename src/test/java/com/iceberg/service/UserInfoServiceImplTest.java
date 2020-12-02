@@ -95,6 +95,7 @@ public class UserInfoServiceImplTest {
             result=true;
         }
         assertEquals(true,result);
+
         UserInfo invalidUserInfo = new UserInfo();
         invalidUserInfo.setRoleid(4);
         invalidUserInfo.setUsername("invalid");
@@ -106,6 +107,7 @@ public class UserInfoServiceImplTest {
         assertEquals(false,result);
 
         logger.info("user add test success");
+
         //add group user
         //UserInfo group = new UserInfo();
         //group.setUsername("hwjtest");
@@ -288,11 +290,11 @@ public class UserInfoServiceImplTest {
         logger.info("role get test");
         Role role=userInfoService.getRoleById("1");
         assertEquals("Administrator",role.getRolename());
-
         logger.info("role get test success");
     }
 
     @Test
+
     public void getUserInfoByIdTest() {
         logger.info("getUserInfoById test");
         UserInfo userInfoById = userInfoService.getUserInfoById("1");

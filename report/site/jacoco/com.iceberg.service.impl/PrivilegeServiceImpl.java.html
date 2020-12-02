@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PrivilegeServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">iceberg</a> &gt; <a href="index.source.html" class="el_package">com.iceberg.service.impl</a> &gt; <span class="el_source">PrivilegeServiceImpl.java</span></div><h1>PrivilegeServiceImpl.java</h1><pre class="source lang-java linenums">package com.iceberg.service.impl;
+
+import com.iceberg.dao.PrivilegeMapper;
+import com.iceberg.entity.Privilege;
+import com.iceberg.service.PrivilegeService;
+import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+
+@Service
+<span class="fc" id="L11">public class PrivilegeServiceImpl implements PrivilegeService {</span>
+
+  @Resource
+  private PrivilegeMapper mapper;
+
+  @Override
+  public List&lt;Privilege&gt; getPrivilegeByRoleid(int roleid) {
+<span class="fc" id="L18">    return this.mapper.getPrivilegeByRoleid(roleid);</span>
+  }
+
+  @Override
+  public int addDefaultPrivilegesWhenAddRole(String roleid) {
+<span class="fc" id="L23">    return mapper.addDefaultPrivilegesWhenAddRole(roleid);</span>
+  }
+
+  @Override
+  public int delPrivilegesWenDelRole(String roleid) {
+<span class="fc" id="L28">    return mapper.delPrivilegesWenDelRole(roleid);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

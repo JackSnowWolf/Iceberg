@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Utils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">iceberg</a> &gt; <a href="index.source.html" class="el_package">com.iceberg.utils</a> &gt; <span class="el_source">Utils.java</span></div><h1>Utils.java</h1><pre class="source lang-java linenums">package com.iceberg.utils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+<span class="nc" id="L6">public class Utils {</span>
+
+  /**
+   * log function.
+   *
+   * @param msg message
+   */
+  public static void log(String msg) {
+    if (Config.ENABLE_CUSTOMEIZE_LOG) {
+<span class="fc" id="L15">      System.out.println(dateToStr(null) + &quot; : &quot; + msg);</span>
+    }
+<span class="fc" id="L17">  }</span>
+
+  /**
+   * convert date to string.
+   *
+   * @param date data.
+   * @return data in string.
+   */
+  public static String dateToStr(Date date) {
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">    if (date == null) {</span>
+<span class="fc" id="L27">      date = new Date();</span>
+    }
+<span class="fc" id="L29">    SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);</span>
+<span class="fc" id="L30">    return sdf.format(date);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

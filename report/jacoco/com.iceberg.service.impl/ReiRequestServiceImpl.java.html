@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReiRequestServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">iceberg</a> &gt; <a href="index.source.html" class="el_package">com.iceberg.service.impl</a> &gt; <span class="el_source">ReiRequestServiceImpl.java</span></div><h1>ReiRequestServiceImpl.java</h1><pre class="source lang-java linenums">package com.iceberg.service.impl;
+
+import com.iceberg.dao.ReiRequestMapper;
+import com.iceberg.entity.ReimbursementRequest;
+import com.iceberg.service.ReiRequestService;
+import com.iceberg.utils.PageModel;
+import com.iceberg.utils.Result;
+import com.iceberg.utils.ResultUtil;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+
+@Service
+<span class="fc" id="L15">public class ReiRequestServiceImpl implements ReiRequestService {</span>
+
+  @Resource
+  private ReiRequestMapper mapper;
+
+  @Override
+  public int add(ReimbursementRequest reimbursementRequest) {
+<span class="fc" id="L22">    return mapper.add(reimbursementRequest);</span>
+  }
+
+  @Override
+  public int update(ReimbursementRequest reimbursementRequest) {
+<span class="fc" id="L27">    return mapper.update(reimbursementRequest);</span>
+  }
+
+  @Override
+  public int del(int id) {
+<span class="fc" id="L32">    return mapper.del(id);</span>
+  }
+
+  @Override
+  public Result&lt;ReimbursementRequest&gt; findByWhere(PageModel model) {
+    try {
+<span class="fc" id="L38">      List&lt;ReimbursementRequest&gt; reimbursementRequests = mapper.findByWhere(model);</span>
+<span class="fc" id="L39">      Result&lt;ReimbursementRequest&gt; result = ResultUtil.success(reimbursementRequests);</span>
+<span class="fc" id="L40">      result.setTotal(mapper.getTotalByWhere(model));</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">      if (result.getTotal() == 0) {</span>
+<span class="fc" id="L42">        result.setMsg(&quot;No related data&quot;);</span>
+      } else {
+<span class="nc" id="L44">        result.setMsg(&quot;Fetch data successfully&quot;);</span>
+      }
+<span class="fc" id="L46">      return result;</span>
+
+<span class="nc" id="L48">    } catch (Exception e) {</span>
+<span class="nc" id="L49">      return ResultUtil.error(e);</span>
+    }
+  }
+
+  @Override
+  public Result&lt;ReimbursementRequest&gt; findByWhereNoPage(ReimbursementRequest reimbursementRequest) {
+    try {
+<span class="fc" id="L56">      List&lt;ReimbursementRequest&gt; reimbursementRequests = mapper</span>
+<span class="fc" id="L57">          .findByWhereNoPage(reimbursementRequest);</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">      if (reimbursementRequests.size() &gt;= 0) {</span>
+<span class="fc" id="L59">        Result&lt;ReimbursementRequest&gt; result = ResultUtil.success(reimbursementRequests);</span>
+<span class="fc" id="L60">        result.setMsg(&quot;Fetch data successfully&quot;);</span>
+<span class="fc" id="L61">        return result;</span>
+      } else {
+<span class="nc" id="L63">        return ResultUtil.unSuccess(&quot;No satisfied conditions found!&quot;);</span>
+      }
+<span class="nc" id="L65">    } catch (Exception e) {</span>
+<span class="nc" id="L66">      return ResultUtil.error(e);</span>
+    }
+  }
+
+  @Override
+  public List&lt;Map&lt;String, Float&gt;&gt; getMonthlyInfo(PageModel&lt;ReimbursementRequest&gt; model) {
+<span class="fc" id="L72">    return mapper.getMonthlyInfo(model);</span>
+  }
+
+  @Override
+  public ReimbursementRequest getReimRequestById(Integer id) {
+<span class="fc" id="L77">    return mapper.getReimRequestById(id);</span>
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

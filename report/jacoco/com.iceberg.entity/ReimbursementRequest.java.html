@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReimbursementRequest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">iceberg</a> &gt; <a href="index.source.html" class="el_package">com.iceberg.entity</a> &gt; <span class="el_source">ReimbursementRequest.java</span></div><h1>ReimbursementRequest.java</h1><pre class="source lang-java linenums">package com.iceberg.entity;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.util.HashMap;
+import java.util.Map;
+
+<span class="fc" id="L8">public class ReimbursementRequest {</span>
+
+  // basic fields discussed before
+  private Integer id;
+  private Integer userid;
+  private String requestdate;
+  private Status typeid;
+  private String imageid;
+  private String title;
+  private Float money;
+  private Remark remark;
+  private String groupid;
+  private String groupname;
+  private Integer paywayid;
+  private String receiveraccount;
+  private String startTime;
+  private String endTime;
+  private String realname;
+  private String time;
+  private String comments;
+
+  // For ocr
+  private String vendorname;
+  private String vendoraddr;
+  private String duedate;
+
+  public String getVendorname() {
+<span class="fc" id="L35">    return vendorname;</span>
+  }
+
+  public void setVendorname(String vendorname) {
+<span class="fc" id="L39">    this.vendorname = vendorname;</span>
+<span class="fc" id="L40">  }</span>
+
+  public String getVendoraddr() {
+<span class="fc" id="L43">    return vendoraddr;</span>
+  }
+
+  public void setVendoraddr(String vendoraddr) {
+<span class="fc" id="L47">    this.vendoraddr = vendoraddr;</span>
+<span class="fc" id="L48">  }</span>
+
+  public String getDuedate() {
+<span class="fc" id="L51">    return duedate;</span>
+  }
+
+  public void setDuedate(String duedate) {
+<span class="fc" id="L55">    this.duedate = duedate;</span>
+<span class="fc" id="L56">  }</span>
+
+  public String getComments() {
+<span class="fc" id="L59">    return comments;</span>
+  }
+
+  public void setComments(String comments) {
+<span class="fc" id="L63">    this.comments = comments;</span>
+<span class="fc" id="L64">  }</span>
+
+  public String getStartTime() {
+<span class="fc" id="L67">    return startTime;</span>
+  }
+
+  /**
+   * start time setter.
+   *
+   * @param startTime start time.
+   */
+  public void setStartTime(String startTime) {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">    if (&quot;&quot;.equals(startTime.trim())) {</span>
+<span class="nc" id="L77">      return;</span>
+    }
+<span class="nc" id="L79">    this.startTime = startTime;</span>
+<span class="nc" id="L80">  }</span>
+
+  public String getEndTime() {
+<span class="fc" id="L83">    return endTime;</span>
+  }
+
+  /**
+   * end time setter.
+   *
+   * @param endTime end time.
+   */
+  public void setEndTime(String endTime) {
+<span class="nc bnc" id="L92" title="All 2 branches missed.">    if (&quot;&quot;.equals(endTime.trim())) {</span>
+<span class="nc" id="L93">      return;</span>
+    }
+    ;
+<span class="nc" id="L96">    this.endTime = endTime;</span>
+<span class="nc" id="L97">  }</span>
+
+  public String getReceiveraccount() {
+<span class="fc" id="L100">    return receiveraccount;</span>
+  }
+
+  public void setReceiveraccount(String receiveraccount) {
+<span class="fc" id="L104">    this.receiveraccount = receiveraccount;</span>
+<span class="fc" id="L105">  }</span>
+
+  public Integer getId() {
+<span class="fc" id="L108">    return id;</span>
+  }
+
+  public void setId(Integer id) {
+<span class="fc" id="L112">    this.id = id;</span>
+<span class="fc" id="L113">  }</span>
+
+  public Integer getUserid() {
+<span class="fc" id="L116">    return userid;</span>
+  }
+
+  public void setUserid(Integer userid) {
+<span class="fc" id="L120">    this.userid = userid;</span>
+<span class="fc" id="L121">  }</span>
+
+  public String getRequestdate() {
+<span class="fc" id="L124">    return requestdate;</span>
+  }
+
+  public void setRequestdate(String requestdate) {
+<span class="nc" id="L128">    this.requestdate = requestdate;</span>
+<span class="nc" id="L129">  }</span>
+
+  public Status getTypeid() {
+<span class="fc" id="L132">    return typeid;</span>
+  }
+
+  public void setTypeid(int typeid) {
+<span class="fc" id="L136">    this.typeid = Status.valueOf(typeid);</span>
+<span class="fc" id="L137">  }</span>
+
+  public String getImageid() {
+<span class="fc" id="L140">    return imageid;</span>
+  }
+
+  public void setImageid(String imageid) {
+<span class="fc" id="L144">    this.imageid = imageid;</span>
+<span class="fc" id="L145">  }</span>
+
+  public String getTitle() {
+<span class="fc" id="L148">    return title;</span>
+  }
+
+  public void setTitle(String title) {
+<span class="fc" id="L152">    this.title = title;</span>
+<span class="fc" id="L153">  }</span>
+
+  public Float getMoney() {
+<span class="fc" id="L156">    return money;</span>
+  }
+
+  public void setMoney(Float money) {
+<span class="fc" id="L160">    this.money = money;</span>
+<span class="fc" id="L161">  }</span>
+
+  public String getGroupid() {
+<span class="fc" id="L164">    return groupid;</span>
+  }
+
+  public void setGroupid(String groupid) {
+<span class="fc" id="L168">    this.groupid = groupid;</span>
+<span class="fc" id="L169">  }</span>
+
+  public Integer getPaywayid() {
+<span class="fc" id="L172">    return this.paywayid;</span>
+  }
+
+  public void setPaywayid(Integer paywayid) {
+<span class="fc" id="L176">    this.paywayid = paywayid;</span>
+<span class="fc" id="L177">  }</span>
+
+  public String getTime() {
+<span class="fc" id="L180">    return time;</span>
+  }
+
+  public void setTime(String time) {
+<span class="fc" id="L184">    this.time = time;</span>
+<span class="fc" id="L185">  }</span>
+
+  public String getRealname() {
+<span class="fc" id="L188">    return realname;</span>
+  }
+
+  public Remark getRemark() {
+<span class="fc" id="L192">    return remark;</span>
+  }
+
+  public void setRemark(Remark remark) {
+<span class="fc" id="L196">    this.remark = remark;</span>
+<span class="fc" id="L197">  }</span>
+  /**
+   * real name setter.
+   *
+   * @param realname real name.
+   */
+  public void setRealname(String realname) {
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">    if (&quot;&quot;.equals(realname.trim())) {</span>
+<span class="nc" id="L205">      return;</span>
+    }
+<span class="fc" id="L207">    this.realname = realname;</span>
+<span class="fc" id="L208">  }</span>
+
+  public String getGroupname() {
+<span class="fc" id="L211">    return this.groupname;</span>
+  }
+
+  public void setGroupname(String groupname) {
+<span class="fc" id="L215">    this.groupname = groupname;</span>
+<span class="fc" id="L216">  }</span>
+
+  @Override
+  public boolean equals(Object obj) {
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">    if (this.getClass() != obj.getClass()) {</span>
+<span class="nc" id="L221">      return false;</span>
+    }
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">    if (this == obj) {</span>
+<span class="nc" id="L224">      return true;</span>
+    }
+<span class="fc" id="L226">    return this.toString().equals(obj.toString());</span>
+  }
+
+  @Override
+  public String toString() {
+<span class="fc" id="L231">    Gson gson = new GsonBuilder().setPrettyPrinting().create();</span>
+<span class="fc" id="L232">    return gson.toJson(this);</span>
+  }
+
+<span class="fc" id="L235">  public enum Status {</span>
+<span class="fc" id="L236">    PROCESSING(0), MISSING_INFO(1), DENIED(2), APPROVED(3);</span>
+
+<span class="fc" id="L238">    private static Map map = new HashMap&lt;&gt;();</span>
+
+    static {
+<span class="fc bfc" id="L241" title="All 2 branches covered.">      for (Status type : Status.values()) {</span>
+<span class="fc" id="L242">        map.put(type.value, type);</span>
+      }
+<span class="fc" id="L244">    }</span>
+
+    public int value;
+
+<span class="fc" id="L248">    Status(int value) {</span>
+<span class="fc" id="L249">      this.value = value;</span>
+<span class="fc" id="L250">    }</span>
+
+    public static Status valueOf(int pageType) {
+<span class="fc" id="L253">      return (Status) map.get(pageType);</span>
+    }
+
+    public int getValue() {
+<span class="fc" id="L257">      return value;</span>
+    }
+
+  }
+
+<span class="fc" id="L262">  public enum Remark {</span>
+<span class="fc" id="L263">    HOTELORTRAVEL(0), CATERING(1), TRANSPORT(2), HEALTH(3), COMMS(4), LIFE(5), OTHERS(6);</span>
+
+<span class="fc" id="L265">    private static Map map = new HashMap&lt;&gt;();</span>
+
+    static {
+<span class="fc bfc" id="L268" title="All 2 branches covered.">      for (Remark remark1 : Remark.values()) {</span>
+<span class="fc" id="L269">        map.put(remark1.value, remark1);</span>
+      }
+<span class="fc" id="L271">    }</span>
+
+    public int value;
+
+<span class="fc" id="L275">    Remark(int value) {</span>
+<span class="fc" id="L276">      this.value = value;</span>
+<span class="fc" id="L277">    }</span>
+
+    public static Remark valueOf(int pageRemark) {
+<span class="nc" id="L280">      return (Remark) map.get(pageRemark);</span>
+    }
+
+    public int getValue() {
+<span class="nc" id="L284">      return value;</span>
+    }
+
+  }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
