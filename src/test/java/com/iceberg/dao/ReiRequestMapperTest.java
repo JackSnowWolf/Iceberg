@@ -31,7 +31,7 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setGroupid("1");
     reimbursementRequest.setRemark(Remark.TRANSPORT);
     reimbursementRequest.setTypeid(APPROVED.value);
-    reimbursementRequest.setMoney((float) 100.0);
+    reimbursementRequest.setMoney((float) 1.0);
     reimbursementRequest.setTitle("Test Usage");
     reimbursementRequest.setPaywayid(1);
     reimbursementRequest.setImageid("test.png");
@@ -50,7 +50,7 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setGroupid("2");
     reimbursementRequest.setRemark(Remark.TRANSPORT);
     reimbursementRequest.setTypeid(APPROVED.value);
-    reimbursementRequest.setMoney((float) 100.0);
+    reimbursementRequest.setMoney((float) 1.0);
     reimbursementRequest.setReceiveraccount("test@paypal.com");
     reimbursementRequest.setTitle("Test Usage: findByWhereNoPage");
     reimbursementRequest.setPaywayid(1);
@@ -77,7 +77,7 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setUserid(123);
     reimbursementRequest.setRemark(Remark.TRANSPORT);
     reimbursementRequest.setTypeid(APPROVED.value);
-    reimbursementRequest.setMoney((float) 100.0);
+    reimbursementRequest.setMoney((float) 1.0);
     reimbursementRequest.setTitle("Test Usage");
     reimbursementRequest.setPaywayid(1);
 
@@ -100,7 +100,7 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setUserid(123);
     reimbursementRequest.setRemark(Remark.TRANSPORT);
     reimbursementRequest.setTypeid(APPROVED.value);
-    reimbursementRequest.setMoney((float) 100.0);
+    reimbursementRequest.setMoney((float) 1.0);
     reimbursementRequest.setTitle("Test Usage");
     reimbursementRequest.setImageid("test.png");
     reimbursementRequest.setPaywayid(1);
@@ -127,7 +127,7 @@ public class ReiRequestMapperTest {
     reimbursementRequest.setRemark(Remark.TRANSPORT);
     reimbursementRequest.setTypeid(APPROVED.value);
     reimbursementRequest.setRemark(Remark.TRANSPORT);
-    reimbursementRequest.setMoney((float) 100.0);
+    reimbursementRequest.setMoney((float) 1.0);
     reimbursementRequest.setTitle("Test Usage");
     reimbursementRequest.setPaywayid(1);
 

@@ -57,6 +57,7 @@ public class HttpClientUtils {
     // create request
     HttpPost httpPost = new HttpPost(url);
     CloseableHttpResponse response = null;
+    String result1=null;
     try {
       if (paramMap != null) {
         List<BasicNameValuePair> list = new ArrayList<>();
@@ -69,19 +70,13 @@ public class HttpClientUtils {
       response = httpClient.execute(httpPost);
       if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
         HttpEntity entity = response.getEntity();
-        String result1 = EntityUtils.toString(entity, "utf-8");
+        result1 = EntityUtils.toString(entity, "utf-8");
         EntityUtils.consume(entity);
-        httpClient.close();
-        return result1;
       }
       httpClient.close();
-    } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
-    } catch (ClientProtocolException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
-    return null;
+    return result1;
   }
 }
