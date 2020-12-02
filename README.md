@@ -8,6 +8,7 @@ You can check our back-end API document at [https://jacksnowwolf.github.io/Icebe
 ![Java CI with Maven](https://github.com/JackSnowWolf/Iceberg/workflows/Java%20CI%20with%20Maven/badge.svg)
 ![CodeQL](https://github.com/JackSnowWolf/Iceberg/workflows/CodeQL/badge.svg)
 ![CheckStyle](https://github.com/JackSnowWolf/Iceberg/workflows/CheckStyle/badge.svg)
+[![codecov](https://codecov.io/gh/JackSnowWolf/Iceberg/branch/master/graph/badge.svg?token=UYUKY06UP6)](https://codecov.io/gh/JackSnowWolf/Iceberg)
 
 ## Introduction
 
