@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProcessingImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">iceberg</a> &gt; <a href="index.source.html" class="el_package">com.iceberg.externalapi.impl</a> &gt; <span class="el_source">ProcessingImpl.java</span></div><h1>ProcessingImpl.java</h1><pre class="source lang-java linenums">package com.iceberg.externalapi.impl;
+
+import com.iceberg.externalapi.ProcessingApi;
+import org.json.JSONObject;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+@Service
+<span class="fc" id="L10">public class ProcessingImpl implements ProcessingApi {</span>
+<span class="fc" id="L11">    private final String clientId = &quot;vrf9AXE1sCrpn0G8nonehgPcBPBnf74LZ4REixK&quot;;</span>
+<span class="fc" id="L12">    private final String apiKey = &quot;apikey 229054463:43088d557fcef244e31d34829440abde&quot;;</span>
+<span class="fc" id="L13">    private final String URL = &quot;https://api.veryfi.com/api/v7/partner/documents/&quot;;</span>
+
+    @Override
+    public ResponseEntity&lt;String&gt; processDocumentBase64(String filedata) {
+<span class="nc" id="L17">        String fileName = &quot;example.png&quot;;</span>
+<span class="nc" id="L18">        RestTemplate restTemplate = new RestTemplate();</span>
+<span class="nc" id="L19">        JSONObject requestBody = new JSONObject();</span>
+<span class="nc" id="L20">        requestBody.put(&quot;file_name&quot;, fileName);</span>
+<span class="nc" id="L21">        requestBody.put(&quot;file_data&quot;, filedata);</span>
+<span class="nc" id="L22">        HttpHeaders headers = new HttpHeaders();</span>
+<span class="nc" id="L23">        headers.setContentType(MediaType.APPLICATION_JSON);</span>
+<span class="nc" id="L24">        headers.add(&quot;CLIENT-ID&quot;, clientId);</span>
+<span class="nc" id="L25">        headers.add(&quot;AUTHORIZATION&quot;, apiKey);</span>
+<span class="nc" id="L26">        HttpEntity&lt;String&gt; entity = new HttpEntity&lt;&gt;(requestBody.toString(), headers);</span>
+<span class="nc" id="L27">        return restTemplate.postForEntity(URL, entity, String.class);</span>
+    }
+
+    @Override
+    public ResponseEntity&lt;String&gt; processDocumentURL(String fileurl) {
+<span class="nc" id="L32">        String fileName = &quot;invoice.png&quot;;</span>
+<span class="nc" id="L33">        RestTemplate restTemplate = new RestTemplate();</span>
+<span class="nc" id="L34">        JSONObject requestBody = new JSONObject();</span>
+<span class="nc" id="L35">        requestBody.put(&quot;file_name&quot;, fileName);</span>
+<span class="nc" id="L36">        requestBody.put(&quot;file_url&quot;, fileurl);</span>
+<span class="nc" id="L37">        HttpHeaders headers = new HttpHeaders();</span>
+<span class="nc" id="L38">        headers.setContentType(MediaType.APPLICATION_JSON);</span>
+<span class="nc" id="L39">        headers.add(&quot;CLIENT-ID&quot;, clientId);</span>
+<span class="nc" id="L40">        headers.add(&quot;AUTHORIZATION&quot;, apiKey);</span>
+<span class="nc" id="L41">        HttpEntity&lt;String&gt; entity = new HttpEntity&lt;&gt;(requestBody.toString(), headers);</span>
+<span class="nc" id="L42">        return restTemplate.postForEntity(URL, entity, String.class);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
