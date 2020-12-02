@@ -50,8 +50,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 <span class="fc" id="L50">        response.sendRedirect(&quot;/pages/index&quot;);</span>
 <span class="fc" id="L51">        return null;</span>
 <span class="nc" id="L52">      } catch (IOException e) {</span>
-<span class="nc" id="L53">        e.printStackTrace();</span>
-<span class="nc" id="L54">        return &quot;login&quot;;</span>
+<span class="nc" id="L53">        return &quot;login&quot;;</span>
       }
     }
   }
@@ -67,17 +66,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
   @ResponseBody
   public Result getUserInfo(UserInfo userInfo, HttpServletRequest request,
       HttpServletResponse response) {
-<span class="fc" id="L70">    boolean userIsExisted = userInfoService.userIsExisted(userInfo);</span>
-<span class="fc" id="L71">    System.out.println(userIsExisted + &quot; - &quot; + request.getHeader(&quot;token&quot;));</span>
-<span class="fc" id="L72">    userInfo = getUserInfo(userInfo);</span>
-<span class="pc bpc" id="L73" title="1 of 4 branches missed.">    if (userIsExisted &amp;&amp; userInfo == null) {</span>
-<span class="fc" id="L74">      return ResultUtil.unSuccess(&quot;wrong username or password!&quot;);</span>
+<span class="fc" id="L69">    boolean userIsExisted = userInfoService.userIsExisted(userInfo);</span>
+<span class="fc" id="L70">    System.out.println(userIsExisted + &quot; - &quot; + request.getHeader(&quot;token&quot;));</span>
+<span class="fc" id="L71">    userInfo = getUserInfo(userInfo);</span>
+<span class="pc bpc" id="L72" title="1 of 4 branches missed.">    if (userIsExisted &amp;&amp; userInfo == null) {</span>
+<span class="fc" id="L73">      return ResultUtil.unSuccess(&quot;wrong username or password!&quot;);</span>
     } else {
       // save user info in session
-<span class="fc" id="L77">      userInfo = setSessionUserInfo(userInfo, request.getSession());</span>
+<span class="fc" id="L76">      userInfo = setSessionUserInfo(userInfo, request.getSession());</span>
       // save user info in cookie
       // setCookieUser(request,response);
-<span class="fc" id="L80">      return ResultUtil.success(&quot;login successful&quot;, userInfo);</span>
+<span class="fc" id="L79">      return ResultUtil.success(&quot;login successful&quot;, userInfo);</span>
     }
   }
 
@@ -87,7 +86,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
    * @return user info in the database.
    */
   public UserInfo getUserInfo(UserInfo userInfo) {
-<span class="fc" id="L90">    return userInfoService.getUserInfo(userInfo);</span>
+<span class="fc" id="L89">    return userInfoService.getUserInfo(userInfo);</span>
   }
 
 
@@ -99,10 +98,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
    * @return user info.
    */
   public UserInfo setSessionUserInfo(UserInfo userInfo, HttpSession session) {
-<span class="fc" id="L102">    List&lt;Privilege&gt; privileges = privilegeService.getPrivilegeByRoleid(userInfo.getRoleid());</span>
-<span class="fc" id="L103">    userInfo.setPrivileges(privileges);</span>
-<span class="fc" id="L104">    session.setAttribute(Config.CURRENT_USERNAME, userInfo);</span>
-<span class="fc" id="L105">    return userInfo;</span>
+<span class="fc" id="L101">    List&lt;Privilege&gt; privileges = privilegeService.getPrivilegeByRoleid(userInfo.getRoleid());</span>
+<span class="fc" id="L102">    userInfo.setPrivileges(privileges);</span>
+<span class="fc" id="L103">    session.setAttribute(Config.CURRENT_USERNAME, userInfo);</span>
+<span class="fc" id="L104">    return userInfo;</span>
 
   }
 
@@ -118,22 +117,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
   public @ResponseBody
   Result getUsersByWhere(UserInfo userInfo, @PathVariable int pageNo, @PathVariable int pageSize,
       HttpSession session) {
-<span class="pc bpc" id="L121" title="1 of 2 branches missed.">    if (&quot;&quot;.equals(userInfo.getGroupid())) {</span>
-<span class="nc" id="L122">      userInfo.setGroupid(null);</span>
+<span class="pc bpc" id="L120" title="1 of 4 branches missed.">    if (&quot;&quot;.equals(userInfo.getGroupid()) || userInfo.getGroupid() == null) {</span>
+<span class="fc" id="L121">      userInfo.setGroupid(null);</span>
     }
-<span class="pc bpc" id="L124" title="1 of 2 branches missed.">    if (userInfo.getRoleid() == -1) {</span>
-      //System.out.println(&quot;*****&quot; + Config.getSessionUser(session));
-<span class="nc" id="L126">      userInfo.setRoleid(Config.getSessionUser(session).getRoleid());</span>
-    }
+    //    if (userInfo.getRoleid() == -1) {
+    //      //System.out.println(&quot;*****&quot; + Config.getSessionUser(session));
+    //      userInfo.setRoleid(Config.getSessionUser(session).getRoleid());
+    //    }
     //group manager cannot search administrator's userinfo.
-<span class="pc bpc" id="L129" title="3 of 4 branches missed.">    if (userInfo.getGroupid() != null &amp;&amp; userInfo.getRoleid() == 1) {</span>
+<span class="pc bpc" id="L128" title="1 of 4 branches missed.">    if (userInfo.getGroupid() != null &amp;&amp; userInfo.getRoleid() == 1) {</span>
       //cannot search user with role 1
-<span class="nc" id="L131">      userInfo.setRoleid(2);</span>
+<span class="fc" id="L130">      userInfo.setRoleid(2);</span>
     }
-<span class="fc" id="L133">    Utils.log(userInfo.toString());</span>
-<span class="fc" id="L134">    PageModel model = new PageModel&lt;&gt;(pageNo, userInfo);</span>
-<span class="fc" id="L135">    model.setPageSize(pageSize);</span>
-<span class="fc" id="L136">    return userInfoService.getUsersByWhere(model);</span>
+<span class="fc" id="L132">    Utils.log(userInfo.toString());</span>
+<span class="fc" id="L133">    PageModel model = new PageModel&lt;&gt;(pageNo, userInfo);</span>
+<span class="fc" id="L134">    model.setPageSize(pageSize);</span>
+<span class="fc" id="L135">    return userInfoService.getUsersByWhere(model);</span>
   }
 
   /**
@@ -144,16 +143,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
   @RequestMapping(&quot;/user/add&quot;)
   public @ResponseBody
   Result addUser(UserInfo userInfo) {
-<span class="fc" id="L147">    System.out.println(userInfo);</span>
+<span class="fc" id="L146">    System.out.println(userInfo);</span>
     try {
-<span class="fc" id="L149">      int num = userInfoService.add(userInfo);</span>
-<span class="pc bpc" id="L150" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
-<span class="fc" id="L151">        return ResultUtil.success();</span>
+<span class="fc" id="L148">      int num = userInfoService.add(userInfo);</span>
+<span class="pc bpc" id="L149" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
+<span class="fc" id="L150">        return ResultUtil.success();</span>
       } else {
-<span class="nc" id="L153">        return ResultUtil.unSuccess();</span>
+<span class="nc" id="L152">        return ResultUtil.unSuccess();</span>
       }
-<span class="nc" id="L155">    } catch (Exception e) {</span>
-<span class="nc" id="L156">      return ResultUtil.error(e);</span>
+<span class="fc" id="L154">    } catch (Exception e) {</span>
+<span class="fc" id="L155">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -166,28 +165,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
   public @ResponseBody
   Result updateUser(UserInfo userInfo, HttpSession session) {
     try {
-<span class="fc" id="L169">      int num = userInfoService.update(userInfo);</span>
+<span class="fc" id="L168">      int num = userInfoService.update(userInfo);</span>
       //if he updates his own info, then update the session user.
-<span class="pc bpc" id="L171" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
-<span class="fc" id="L172">        System.out.println();</span>
-<span class="fc" id="L173">        UserInfo sessionUser = Config.getSessionUser(session);</span>
-<span class="fc" id="L174">        System.out.println(&quot;sessionUser is null?&quot; + sessionUser);</span>
-<span class="fc" id="L175">        System.out.println(sessionUser.getId());</span>
-<span class="fc" id="L176">        System.out.println(userInfo.getId());</span>
-<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (sessionUser.getId().equals(userInfo.getId())) {</span>
-<span class="fc" id="L178">          System.out.println(&quot;same user update&quot;);</span>
-<span class="fc" id="L179">          sessionUser.setUsername(userInfo.getUsername());</span>
-<span class="fc" id="L180">          sessionUser.setRealname(userInfo.getRealname());</span>
-<span class="fc" id="L181">          sessionUser.setEmail(userInfo.getEmail());</span>
-<span class="fc" id="L182">          sessionUser.setPassword(userInfo.getPassword());</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L171">        System.out.println();</span>
+<span class="fc" id="L172">        UserInfo sessionUser = Config.getSessionUser(session);</span>
+<span class="fc" id="L173">        System.out.println(&quot;sessionUser is null?&quot; + sessionUser);</span>
+<span class="fc" id="L174">        System.out.println(sessionUser.getId());</span>
+<span class="fc" id="L175">        System.out.println(userInfo.getId());</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (sessionUser.getId().equals(userInfo.getId())) {</span>
+<span class="fc" id="L177">          System.out.println(&quot;same user update&quot;);</span>
+<span class="fc" id="L178">          sessionUser.setUsername(userInfo.getUsername());</span>
+<span class="fc" id="L179">          sessionUser.setRealname(userInfo.getRealname());</span>
+<span class="fc" id="L180">          sessionUser.setEmail(userInfo.getEmail());</span>
+<span class="fc" id="L181">          sessionUser.setPassword(userInfo.getPassword());</span>
         }
-<span class="fc" id="L184">        System.out.println(&quot;SessionUser now is :&quot; + sessionUser);</span>
-<span class="fc" id="L185">        return ResultUtil.success();</span>
+<span class="fc" id="L183">        System.out.println(&quot;SessionUser now is :&quot; + sessionUser);</span>
+<span class="fc" id="L184">        return ResultUtil.success();</span>
       } else {
-<span class="nc" id="L187">        return ResultUtil.unSuccess();</span>
+<span class="fc" id="L186">        return ResultUtil.unSuccess();</span>
       }
-<span class="nc" id="L189">    } catch (Exception e) {</span>
-<span class="nc" id="L190">      return ResultUtil.error(e);</span>
+<span class="nc" id="L188">    } catch (Exception e) {</span>
+<span class="nc" id="L189">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -200,14 +199,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
   public @ResponseBody
   Result deleteUser(@PathVariable String id) {
     try {
-<span class="fc" id="L203">      int num = userInfoService.delete(id);</span>
-<span class="pc bpc" id="L204" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
-<span class="fc" id="L205">        return ResultUtil.success();</span>
+<span class="fc" id="L202">      int num = userInfoService.delete(id);</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L204">        return ResultUtil.success();</span>
       } else {
-<span class="nc" id="L207">        return ResultUtil.unSuccess();</span>
+<span class="fc" id="L206">        return ResultUtil.unSuccess();</span>
       }
-<span class="nc" id="L209">    } catch (Exception e) {</span>
-<span class="nc" id="L210">      return ResultUtil.error(e);</span>
+<span class="nc" id="L208">    } catch (Exception e) {</span>
+<span class="nc" id="L209">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -219,9 +218,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
   @RequestMapping(&quot;/getSessionUser&quot;)
   @ResponseBody
   public UserInfo getSessionUser(HttpSession session) {
-<span class="fc" id="L222">    UserInfo sessionUser = (UserInfo) session.getAttribute(Config.CURRENT_USERNAME);</span>
-<span class="fc" id="L223">    sessionUser.setPassword(null);</span>
-<span class="fc" id="L224">    return sessionUser;</span>
+<span class="fc" id="L221">    UserInfo sessionUser = (UserInfo) session.getAttribute(Config.CURRENT_USERNAME);</span>
+<span class="fc" id="L222">    sessionUser.setPassword(null);</span>
+<span class="fc" id="L223">    return sessionUser;</span>
   }
 
   /**
@@ -233,8 +232,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
   @RequestMapping(&quot;/logout&quot;)
   public String logout(HttpServletRequest request, HttpServletResponse response) {
     //  delCookieUser(request, response);
-<span class="fc" id="L236">    request.getSession().removeAttribute(Config.CURRENT_USERNAME);</span>
-<span class="fc" id="L237">    return &quot;login&quot;;</span>
+<span class="fc" id="L235">    request.getSession().removeAttribute(Config.CURRENT_USERNAME);</span>
+<span class="fc" id="L236">    return &quot;login&quot;;</span>
   }
 
   /**
@@ -244,7 +243,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
    */
   @RequestMapping(&quot;/pages/{page}&quot;)
   public String toPage(@PathVariable String page) {
-<span class="fc" id="L247">    return page.replace(&quot;_&quot;, &quot;/&quot;);</span>
+<span class="fc" id="L246">    return page.replace(&quot;_&quot;, &quot;/&quot;);</span>
   }
 
   /**
@@ -255,14 +254,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
   public @ResponseBody
   Result&lt;Role&gt; getAllRoles() {
     try {
-<span class="fc" id="L258">      List&lt;Role&gt; roles = userInfoService.getAllRoles();</span>
-<span class="pc bpc" id="L259" title="1 of 2 branches missed.">      if (roles.size() &gt; 0) {</span>
-<span class="fc" id="L260">        return ResultUtil.success(roles);</span>
-      } else {
-<span class="nc" id="L262">        return ResultUtil.unSuccess();</span>
-      }
-<span class="nc" id="L264">    } catch (Exception e) {</span>
-<span class="nc" id="L265">      return ResultUtil.error(e);</span>
+<span class="fc" id="L257">      List&lt;Role&gt; roles = userInfoService.getAllRoles();</span>
+<span class="fc" id="L258">      return ResultUtil.success(roles);</span>
+<span class="nc" id="L259">    } catch (Exception e) {</span>
+<span class="nc" id="L260">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -275,15 +270,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
   public @ResponseBody
   Result addRole(Role role) {
     try {
-<span class="fc" id="L278">      int num = userInfoService.addRole(role);</span>
-<span class="pc bpc" id="L279" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
-<span class="fc" id="L280">        privilegeService.addDefaultPrivilegesWhenAddRole(role.getRoleid().toString());</span>
-<span class="fc" id="L281">        return ResultUtil.success();</span>
+<span class="fc" id="L273">      int num = userInfoService.addRole(role);</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
+<span class="fc" id="L275">        privilegeService.addDefaultPrivilegesWhenAddRole(role.getRoleid().toString());</span>
+<span class="fc" id="L276">        return ResultUtil.success();</span>
       } else {
-<span class="nc" id="L283">        return ResultUtil.unSuccess();</span>
+<span class="nc" id="L278">        return ResultUtil.unSuccess();</span>
       }
-<span class="nc" id="L285">    } catch (Exception e) {</span>
-<span class="nc" id="L286">      return ResultUtil.error(e);</span>
+<span class="fc" id="L280">    } catch (Exception e) {</span>
+<span class="fc" id="L281">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -296,14 +291,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
   public @ResponseBody
   Result updateRole(Role role) {
     try {
-<span class="fc" id="L299">      int num = userInfoService.updateRole(role);</span>
-<span class="pc bpc" id="L300" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
-<span class="nc" id="L301">        return ResultUtil.success();</span>
+<span class="fc" id="L294">      int num = userInfoService.updateRole(role);</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L296">        return ResultUtil.success();</span>
       } else {
-<span class="fc" id="L303">        return ResultUtil.unSuccess();</span>
+<span class="fc" id="L298">        return ResultUtil.unSuccess();</span>
       }
-<span class="nc" id="L305">    } catch (Exception e) {</span>
-<span class="nc" id="L306">      return ResultUtil.error(e);</span>
+<span class="nc" id="L300">    } catch (Exception e) {</span>
+<span class="nc" id="L301">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -316,16 +311,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
   public @ResponseBody
   Result deleteRole(@PathVariable String roleid) {
     try {
-<span class="fc" id="L319">      privilegeService.delPrivilegesWenDelRole(roleid);</span>
-<span class="fc" id="L320">      int num = userInfoService.deleteRole(roleid);</span>
-<span class="pc bpc" id="L321" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
-<span class="fc" id="L322">        return ResultUtil.success();</span>
+<span class="fc" id="L314">      privilegeService.delPrivilegesWenDelRole(roleid);</span>
+<span class="fc" id="L315">      int num = userInfoService.deleteRole(roleid);</span>
+<span class="fc bfc" id="L316" title="All 2 branches covered.">      if (num &gt; 0) {</span>
+<span class="fc" id="L317">        return ResultUtil.success();</span>
       } else {
-<span class="nc" id="L324">        privilegeService.addDefaultPrivilegesWhenAddRole(roleid);</span>
-<span class="nc" id="L325">        return ResultUtil.unSuccess();</span>
+<span class="nc" id="L319">        privilegeService.addDefaultPrivilegesWhenAddRole(roleid);</span>
+<span class="nc" id="L320">        return ResultUtil.unSuccess();</span>
       }
-<span class="nc" id="L327">    } catch (Exception e) {</span>
-<span class="nc" id="L328">      return ResultUtil.error(e);</span>
+<span class="fc" id="L322">    } catch (Exception e) {</span>
+<span class="fc" id="L323">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -338,14 +333,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
   public @ResponseBody
   Result getRoleById(@PathVariable String id) {
     try {
-<span class="fc" id="L341">      Role role = userInfoService.getRoleById(id);</span>
-<span class="pc bpc" id="L342" title="1 of 2 branches missed.">      if (role != null) {</span>
-<span class="fc" id="L343">        return ResultUtil.success(role);</span>
+<span class="fc" id="L336">      Role role = userInfoService.getRoleById(id);</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">      if (role != null) {</span>
+<span class="fc" id="L338">        return ResultUtil.success(role);</span>
       } else {
-<span class="nc" id="L345">        return ResultUtil.unSuccess();</span>
+<span class="fc" id="L340">        return ResultUtil.unSuccess();</span>
       }
-<span class="nc" id="L347">    } catch (Exception e) {</span>
-<span class="nc" id="L348">      return ResultUtil.error(e);</span>
+<span class="nc" id="L342">    } catch (Exception e) {</span>
+<span class="nc" id="L343">      return ResultUtil.error(e);</span>
     }
   }
 }
