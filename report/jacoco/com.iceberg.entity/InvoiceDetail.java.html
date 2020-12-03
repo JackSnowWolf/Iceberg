@@ -1,50 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InvoiceDetail.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">iceberg</a> &gt; <a href="index.source.html" class="el_package">com.iceberg.entity</a> &gt; <span class="el_source">InvoiceDetail.java</span></div><h1>InvoiceDetail.java</h1><pre class="source lang-java linenums">package com.iceberg.entity;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import lombok.Data;
 
-<span class="fc" id="L6">public class InvoiceDetail {</span>
-    private Float money;
-    private String vendorname;
-    private String vendoraddr;
-    private String duedate;
-
-    public Float getMoney() {
-<span class="fc" id="L13">        return money;</span>
-    }
-
-    public void setMoney(Float money) {
-<span class="fc" id="L17">        this.money = money;</span>
-<span class="fc" id="L18">    }</span>
-
-    public String getVendorname() {
-<span class="fc" id="L21">        return vendorname;</span>
-    }
-
-    public void setVendorname(String vendorname) {
-<span class="fc" id="L25">        this.vendorname = vendorname;</span>
-<span class="fc" id="L26">    }</span>
-
-    public String getVendoraddr() {
-<span class="fc" id="L29">        return vendoraddr;</span>
-    }
-
-    public void setVendoraddr(String vendoraddr) {
-<span class="fc" id="L33">        this.vendoraddr = vendoraddr;</span>
-<span class="fc" id="L34">    }</span>
-
-    public String getDuedate() {
-<span class="fc" id="L37">        return duedate;</span>
-    }
-
-    public void setDuedate(String duedate) {
-<span class="fc" id="L41">        this.duedate = duedate;</span>
-<span class="fc" id="L42">    }</span>
-
-    @Override
-    public String toString() {
-<span class="nc" id="L46">        Gson gson = new GsonBuilder().setPrettyPrinting().create();</span>
-<span class="nc" id="L47">        return gson.toJson(this);</span>
-    }
+<span class="pc bnc" id="L5" title="All 38 branches missed.">@Data</span>
+public class InvoiceDetail {
+<span class="fc" id="L7">    private Float money;</span>
+<span class="fc" id="L8">    private String vendorname;</span>
+<span class="fc" id="L9">    private String vendoraddr;</span>
+<span class="fc" id="L10">    private String duedate;</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
