@@ -1,6 +1,7 @@
 package com.iceberg.service;
 
 
+import com.iceberg.entity.Group;
 import com.iceberg.entity.Role;
 import com.iceberg.entity.UserInfo;
 import com.iceberg.utils.PageModel;
@@ -244,6 +245,23 @@ public class UserInfoServiceImplTest {
         assertEquals(true,result2);
 
         logger.info("role add test success");
+    }
+
+    @Test
+    public void testGroup() {
+        Group group = new Group();
+        group.setManagerid(100);
+        group.setId(123);
+        group.setGroupname("abcd");
+        int id = group.getId();
+        String name = group.getGroupname();
+        int id2 = group.getManagerid();
+    }
+
+    @Test
+    public void testSetNullUserName() {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUsername("");
     }
 
     @Test

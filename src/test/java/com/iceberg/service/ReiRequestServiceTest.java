@@ -172,4 +172,15 @@ public class ReiRequestServiceTest {
     logger.info("getReimRequestByIdtest success");
   }
 
+  @Test
+  public void requestSetStartDate() {
+    ReimbursementRequest request = new ReimbursementRequest();
+    request.setStartTime("");
+    request.setEndTime("");
+    request.setRealname("");
+    request.setStartTime("123");
+    request.setEndTime("123");
+    request.equals(new Integer(1));
+    request.equals(request);
+  }
 }
