@@ -26,16 +26,16 @@ public class PageModel&lt;T&gt; {
 <span class="fc" id="L26">  }</span>
 
   public void setBeginIndex(int beginIndex) {
-<span class="nc" id="L29">    this.beginIndex = beginIndex;</span>
-<span class="nc" id="L30">  }</span>
+<span class="fc" id="L29">    this.beginIndex = beginIndex;</span>
+<span class="fc" id="L30">  }</span>
 
   public int getCurrentPageNo() {
-<span class="nc" id="L33">    return currentPageNo;</span>
+<span class="fc" id="L33">    return currentPageNo;</span>
   }
 
   public void setCurrentPageNo(int currentPageNo) {
-<span class="nc" id="L37">    this.currentPageNo = currentPageNo;</span>
-<span class="nc" id="L38">  }</span>
+<span class="fc" id="L37">    this.currentPageNo = currentPageNo;</span>
+<span class="fc" id="L38">  }</span>
 
   public int getPageSize() {
 <span class="fc" id="L41">    return pageSize;</span>
@@ -46,8 +46,8 @@ public class PageModel&lt;T&gt; {
   }
 
   public void setData(T data) {
-<span class="nc" id="L49">    this.data = data;</span>
-<span class="nc" id="L50">  }</span>
+<span class="fc" id="L49">    this.data = data;</span>
+<span class="fc" id="L50">  }</span>
 
   public int getBeginIndex() {
 <span class="fc" id="L53">    return beginIndex = (currentPageNo - 1) * pageSize;</span>
@@ -64,8 +64,8 @@ public class PageModel&lt;T&gt; {
 <span class="pc bpc" id="L64" title="1 of 2 branches missed.">    if (this.getClass() != obj.getClass()) {</span>
 <span class="nc" id="L65">      return false;</span>
     }
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">    if (this == obj) {</span>
-<span class="nc" id="L68">      return true;</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">    if (this == obj) {</span>
+<span class="fc" id="L68">      return true;</span>
     }
 <span class="fc" id="L70">    return this.toString().equals(obj.toString());</span>
   }

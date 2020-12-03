@@ -95,8 +95,8 @@ import org.springframework.web.multipart.MultipartFile;
       } else {
 <span class="fc" id="L96">        return ResultUtil.unSuccess();</span>
       }
-<span class="fc" id="L98">    } catch (Exception e) {</span>
-<span class="fc" id="L99">      return ResultUtil.error(e);</span>
+<span class="nc" id="L98">    } catch (Exception e) {</span>
+<span class="nc" id="L99">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -212,8 +212,8 @@ import org.springframework.web.multipart.MultipartFile;
 <span class="fc" id="L212">      System.out.println(&quot;requestUserInfo is null ? &quot; + requestUserInfo);</span>
 <span class="fc" id="L213">      String email = requestUserInfo.getEmail();</span>
 <span class="fc" id="L214">      MailUtils.sendMail(email, content);</span>
-<span class="fc" id="L215">    } catch (Exception e) {</span>
-<span class="fc" id="L216">      e.printStackTrace();</span>
+<span class="nc" id="L215">    } catch (Exception e) {</span>
+<span class="nc" id="L216">      e.printStackTrace();</span>
 <span class="fc" id="L217">    }</span>
 <span class="fc" id="L218">  }</span>
 
