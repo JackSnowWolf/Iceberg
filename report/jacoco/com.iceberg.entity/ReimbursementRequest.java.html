@@ -73,11 +73,11 @@ import java.util.Map;
    * @param startTime start time.
    */
   public void setStartTime(String startTime) {
-<span class="nc bnc" id="L76" title="All 2 branches missed.">    if (&quot;&quot;.equals(startTime.trim())) {</span>
-<span class="nc" id="L77">      return;</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">    if (&quot;&quot;.equals(startTime.trim())) {</span>
+<span class="fc" id="L77">      return;</span>
     }
-<span class="nc" id="L79">    this.startTime = startTime;</span>
-<span class="nc" id="L80">  }</span>
+<span class="fc" id="L79">    this.startTime = startTime;</span>
+<span class="fc" id="L80">  }</span>
 
   public String getEndTime() {
 <span class="fc" id="L83">    return endTime;</span>
@@ -89,12 +89,12 @@ import java.util.Map;
    * @param endTime end time.
    */
   public void setEndTime(String endTime) {
-<span class="nc bnc" id="L92" title="All 2 branches missed.">    if (&quot;&quot;.equals(endTime.trim())) {</span>
-<span class="nc" id="L93">      return;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">    if (&quot;&quot;.equals(endTime.trim())) {</span>
+<span class="fc" id="L93">      return;</span>
     }
     ;
-<span class="nc" id="L96">    this.endTime = endTime;</span>
-<span class="nc" id="L97">  }</span>
+<span class="fc" id="L96">    this.endTime = endTime;</span>
+<span class="fc" id="L97">  }</span>
 
   public String getReceiveraccount() {
 <span class="fc" id="L100">    return receiveraccount;</span>
@@ -201,8 +201,8 @@ import java.util.Map;
    * @param realname real name.
    */
   public void setRealname(String realname) {
-<span class="pc bpc" id="L204" title="1 of 2 branches missed.">    if (&quot;&quot;.equals(realname.trim())) {</span>
-<span class="nc" id="L205">      return;</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">    if (&quot;&quot;.equals(realname.trim())) {</span>
+<span class="fc" id="L205">      return;</span>
     }
 <span class="fc" id="L207">    this.realname = realname;</span>
 <span class="fc" id="L208">  }</span>
@@ -217,11 +217,11 @@ import java.util.Map;
 
   @Override
   public boolean equals(Object obj) {
-<span class="pc bpc" id="L220" title="1 of 2 branches missed.">    if (this.getClass() != obj.getClass()) {</span>
-<span class="nc" id="L221">      return false;</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">    if (this.getClass() != obj.getClass()) {</span>
+<span class="fc" id="L221">      return false;</span>
     }
-<span class="pc bpc" id="L223" title="1 of 2 branches missed.">    if (this == obj) {</span>
-<span class="nc" id="L224">      return true;</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">    if (this == obj) {</span>
+<span class="fc" id="L224">      return true;</span>
     }
 <span class="fc" id="L226">    return this.toString().equals(obj.toString());</span>
   }
