@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class ReiRequestServiceTest {
@@ -182,5 +183,19 @@ public class ReiRequestServiceTest {
     request.setEndTime("123");
     request.equals(new Integer(1));
     request.equals(request);
+  }
+
+  @Test
+  public void exceptionTest(){
+    try{
+      reiRequestService.findByWhere(null);
+    }catch (Exception e){
+      assertNotNull(e);
+    }
+    try{
+      reiRequestService.findByWhereNoPage(null);
+    }catch (Exception e){
+      assertNotNull(e);
+    }
   }
 }

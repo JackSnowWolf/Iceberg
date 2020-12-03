@@ -84,7 +84,7 @@ public class MailUtils {
 
       result= "success";
 
-    } catch (MessagingException mex) {
+    } catch (Exception mex) {
       mex.printStackTrace();
     }
     return result;

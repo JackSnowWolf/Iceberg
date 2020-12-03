@@ -38,7 +38,7 @@ public class HttpClientUtils {
       if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
         status = response.getStatusLine().getStatusCode();
       }
-    } catch (IOException e) {
+    } catch (Exception e) {
       System.out.println("get request failed:" + url);
     }
     return status;

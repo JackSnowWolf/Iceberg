@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class UserInfoServiceImplTest {
@@ -344,5 +345,14 @@ public class UserInfoServiceImplTest {
         PageModel model1 = new PageModel<>(1, userInfo3);
         Result res1 = userInfoService.getUsersByWhere(model1);
         assertEquals(res1.getMsg(), "No related data");
+    }
+
+    @Test
+    public void exceptionTest(){
+        try{
+            userInfoService.getUsersByWhere(null);
+        }catch (Exception e){
+            assertNotNull(e);
+        }
     }
 }
