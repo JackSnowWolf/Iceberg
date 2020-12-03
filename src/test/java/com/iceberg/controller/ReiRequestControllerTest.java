@@ -271,7 +271,8 @@ public class ReiRequestControllerTest {
             .params(paramsMap)
             .session(session))
         .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk())
-        .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(500));
+            //original code by chong: 500
+        .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(400));
   }
 
   @Test
