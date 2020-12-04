@@ -146,10 +146,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 <span class="fc" id="L146">    System.out.println(userInfo);</span>
     try {
 <span class="fc" id="L148">      int num = userInfoService.add(userInfo);</span>
-<span class="pc bpc" id="L149" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">      if (num &gt; 0) {</span>
 <span class="fc" id="L150">        return ResultUtil.success();</span>
       } else {
-<span class="nc" id="L152">        return ResultUtil.unSuccess();</span>
+<span class="fc" id="L152">        return ResultUtil.unSuccess();</span>
       }
 <span class="fc" id="L154">    } catch (Exception e) {</span>
 <span class="fc" id="L155">      return ResultUtil.error(e);</span>
@@ -205,8 +205,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
       } else {
 <span class="fc" id="L206">        return ResultUtil.unSuccess();</span>
       }
-<span class="nc" id="L208">    } catch (Exception e) {</span>
-<span class="nc" id="L209">      return ResultUtil.error(e);</span>
+<span class="fc" id="L208">    } catch (Exception e) {</span>
+<span class="fc" id="L209">      return ResultUtil.error(e);</span>
     }
   }
 
