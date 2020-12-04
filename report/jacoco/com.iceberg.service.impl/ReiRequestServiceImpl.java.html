@@ -21,7 +21,7 @@ import java.util.Map;
   @Override
   public int add(ReimbursementRequest reimbursementRequest) {
 <span class="fc" id="L23">    Float money = reimbursementRequest.getMoney();</span>
-<span class="pc bpc" id="L24" title="1 of 4 branches missed.">    if(money &gt; (float)0 &amp;&amp; money &lt;= (float)1000) {</span>
+<span class="fc bfc" id="L24" title="All 4 branches covered.">    if(money &gt; (float)0 &amp;&amp; money &lt;= (float)1000) {</span>
 <span class="fc" id="L25">      return mapper.add(reimbursementRequest);</span>
     } else {
 <span class="fc" id="L27">      return 0;</span>
@@ -66,13 +66,13 @@ import java.util.Map;
     try {
 <span class="fc" id="L67">      List&lt;ReimbursementRequest&gt; reimbursementRequests = mapper</span>
 <span class="fc" id="L68">          .findByWhereNoPage(reimbursementRequest);</span>
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">      if (reimbursementRequests.size() &gt;= 0) {</span>
-<span class="fc" id="L70">        Result&lt;ReimbursementRequest&gt; result = ResultUtil.success(reimbursementRequests);</span>
-<span class="fc" id="L71">        result.setMsg(&quot;Fetch data successfully&quot;);</span>
-<span class="fc" id="L72">        return result;</span>
-      } else {
-<span class="nc" id="L74">        return ResultUtil.unSuccess(&quot;No satisfied conditions found!&quot;);</span>
-      }
+//      if (reimbursementRequests.size() &gt;= 0) {
+<span class="fc" id="L70">      Result&lt;ReimbursementRequest&gt; result = ResultUtil.success(reimbursementRequests);</span>
+<span class="fc" id="L71">      result.setMsg(&quot;Fetch data successfully&quot;);</span>
+<span class="fc" id="L72">      return result;</span>
+//      } else {
+//        return ResultUtil.unSuccess(&quot;No satisfied conditions found!&quot;);
+//      }
 <span class="fc" id="L76">    } catch (Exception e) {</span>
 <span class="fc" id="L77">      return ResultUtil.error(e);</span>
     }

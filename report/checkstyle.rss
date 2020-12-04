@@ -27,7 +27,7 @@ under the License.
     <item>
       <title>File: 38,
              Errors: 0,
-             Warnings: 106,
+             Warnings: 108,
              Infos: 0
       </title>
             <link>https://projects.spring.io/spring-boot/#/spring-boot-starter-parent/reimbursement/checkstyle.html</link>
@@ -80,7 +80,7 @@ under the License.
                   0
                 </td>
                 <td>
-                  6
+                  8
                 </td>
                 <td>
                   0
