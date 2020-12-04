@@ -23,10 +23,10 @@ public interface ImageStorageService {
 <span class="fc" id="L23">      bytesArray = new byte[(int) file.length()];</span>
 <span class="fc" id="L24">      fileInputStream = new FileInputStream(file);</span>
 <span class="fc" id="L25">      fileInputStream.read(bytesArray);</span>
-<span class="nc" id="L26">    } catch (IOException e) {</span>
-<span class="nc" id="L27">      e.printStackTrace();</span>
+<span class="fc" id="L26">    } catch (IOException e) {</span>
+<span class="fc" id="L27">      e.printStackTrace();</span>
     } finally {
-<span class="pc bpc" id="L29" title="1 of 2 branches missed.">      if (fileInputStream != null) {</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">      if (fileInputStream != null) {</span>
         try {
 <span class="fc" id="L31">          fileInputStream.close();</span>
 <span class="nc" id="L32">        } catch (IOException e) {</span>
@@ -47,8 +47,8 @@ public interface ImageStorageService {
     try {
       // Write the data to a local file
 <span class="fc" id="L49">      File myFile = new File(filePath);</span>
-<span class="pc bpc" id="L50" title="1 of 2 branches missed.">      if (!myFile.createNewFile()) {</span>
-<span class="nc" id="L51">        System.out.println(&quot;file exists.&quot;);</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">      if (!myFile.createNewFile()) {</span>
+<span class="fc" id="L51">        System.out.println(&quot;file exists.&quot;);</span>
       }
 <span class="fc" id="L53">      OutputStream os = new FileOutputStream(myFile);</span>
 <span class="fc" id="L54">      os.write(data);</span>
