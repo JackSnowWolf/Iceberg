@@ -70,11 +70,12 @@ public class UserInfoControllerMockTest {
   @Test
   public void testAddUser1() throws Exception {
     MockHttpSession session = getDefaultSession();
-    String URI = "/role/add";
+    String URI = "/user/add";
+    String randomUserName = "randomUUIDForEveryTimeRunTest";
     given(userInfoService.addRole(any())).willReturn(1);
     mockMvc
         .perform(MockMvcRequestBuilders.post(URI).contentType(MediaType.APPLICATION_JSON)
-            .param("username", "test" + "abcd")
+            .param("username", "test" + randomUserName)
             .param("password", "123456")
             .param("roleid", "3")
             .session(session))
@@ -84,11 +85,12 @@ public class UserInfoControllerMockTest {
   @Test
   public void testAddUser2() throws Exception {
     MockHttpSession session = getDefaultSession();
-    String URI = "/role/add";
+    String URI = "/user/add";
+    String randomUserName = "randomUUIDForEveryTimeRunTest";
     given(userInfoService.addRole(any())).willReturn(-1);
     mockMvc
         .perform(MockMvcRequestBuilders.post(URI).contentType(MediaType.APPLICATION_JSON)
-            .param("username", "test" + "abcd")
+            .param("username", "test" + randomUserName)
             .param("password", "123456")
             .param("roleid", "3")
             .session(session))
@@ -98,11 +100,12 @@ public class UserInfoControllerMockTest {
   @Test
   public void testAddUser3() throws Exception {
     MockHttpSession session = getDefaultSession();
-    String URI = "/role/add";
+    String URI = "/user/add";
+    String randomUserName = "randomUUIDForEveryTimeRunTest";
     given(userInfoService.addRole(any())).willThrow(new RuntimeException(""));
     mockMvc
         .perform(MockMvcRequestBuilders.post(URI).contentType(MediaType.APPLICATION_JSON)
-            .param("username", "test" + "abcd")
+            .param("username", "test" + randomUserName)
             .param("password", "123456")
             .param("roleid", "3")
             .session(session))
@@ -138,15 +141,10 @@ public class UserInfoControllerMockTest {
   @Test
   public void testDelUser1() throws Exception {
     MockHttpSession session = getDefaultSession();
-    String URI = "/user/update";
-    String randomPassword = "123456";
+    String URI2 = "/user/del/{id}";
     given(userInfoService.delete(any())).willThrow(new RuntimeException(""));
     mockMvc
-        .perform(MockMvcRequestBuilders.post(URI).contentType(MediaType.APPLICATION_JSON)
-            .param("id", "10000")
-            .param("username", "test" + "123")
-            .param("password", "123456")
-            .param("roleid", "3")
+        .perform(MockMvcRequestBuilders.post(URI2, 10000).contentType(MediaType.APPLICATION_JSON)
             .session(session))
         .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
   }
@@ -185,6 +183,8 @@ public class UserInfoControllerMockTest {
             .session(session))
         .andDo(print()).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
   }
+
+
 
   private MockHttpSession getDefaultSession() {
     UserInfo userInfo = new UserInfo();
