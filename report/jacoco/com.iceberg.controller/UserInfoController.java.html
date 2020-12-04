@@ -185,8 +185,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
       } else {
 <span class="fc" id="L186">        return ResultUtil.unSuccess();</span>
       }
-<span class="nc" id="L188">    } catch (Exception e) {</span>
-<span class="nc" id="L189">      return ResultUtil.error(e);</span>
+<span class="fc" id="L188">    } catch (Exception e) {</span>
+<span class="fc" id="L189">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -256,8 +256,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
     try {
 <span class="fc" id="L257">      List&lt;Role&gt; roles = userInfoService.getAllRoles();</span>
 <span class="fc" id="L258">      return ResultUtil.success(roles);</span>
-<span class="nc" id="L259">    } catch (Exception e) {</span>
-<span class="nc" id="L260">      return ResultUtil.error(e);</span>
+<span class="fc" id="L259">    } catch (Exception e) {</span>
+<span class="fc" id="L260">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -271,11 +271,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
   Result addRole(Role role) {
     try {
 <span class="fc" id="L273">      int num = userInfoService.addRole(role);</span>
-<span class="pc bpc" id="L274" title="1 of 2 branches missed.">      if (num &gt; 0) {</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">      if (num &gt; 0) {</span>
 <span class="fc" id="L275">        privilegeService.addDefaultPrivilegesWhenAddRole(role.getRoleid().toString());</span>
 <span class="fc" id="L276">        return ResultUtil.success();</span>
       } else {
-<span class="nc" id="L278">        return ResultUtil.unSuccess();</span>
+<span class="fc" id="L278">        return ResultUtil.unSuccess();</span>
       }
 <span class="fc" id="L280">    } catch (Exception e) {</span>
 <span class="fc" id="L281">      return ResultUtil.error(e);</span>
@@ -297,8 +297,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
       } else {
 <span class="fc" id="L298">        return ResultUtil.unSuccess();</span>
       }
-<span class="nc" id="L300">    } catch (Exception e) {</span>
-<span class="nc" id="L301">      return ResultUtil.error(e);</span>
+<span class="fc" id="L300">    } catch (Exception e) {</span>
+<span class="fc" id="L301">      return ResultUtil.error(e);</span>
     }
   }
 
@@ -339,8 +339,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
       } else {
 <span class="fc" id="L340">        return ResultUtil.unSuccess();</span>
       }
-<span class="nc" id="L342">    } catch (Exception e) {</span>
-<span class="nc" id="L343">      return ResultUtil.error(e);</span>
+<span class="fc" id="L342">    } catch (Exception e) {</span>
+<span class="fc" id="L343">      return ResultUtil.error(e);</span>
     }
   }
 }
