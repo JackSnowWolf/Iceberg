@@ -33,10 +33,10 @@ import java.util.List;
 <span class="fc" id="L33">        int r = userInfoMapper.addGroupId(newGroup);</span>
 
         // successful, then bind members to this user
-<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        if (r == 1) {</span>
-<span class="fc" id="L37">          userInfo.setGroupid(newGroup.getId().toString());</span>
-<span class="fc" id="L38">          result = userInfoMapper.update(userInfo);</span>
-        }
+//        if (r == 1) {
+<span class="fc" id="L37">        userInfo.setGroupid(newGroup.getId().toString());</span>
+<span class="fc" id="L38">        result = userInfoMapper.update(userInfo);</span>
+//        }
       }
 <span class="fc" id="L41">      return result;</span>
     } else {

@@ -31,7 +31,7 @@ public class ReiRequestServiceImpl implements ReiRequestService {
   @Override
   public int update(ReimbursementRequest reimbursementRequest) throws Exception {
     Float money = reimbursementRequest.getMoney();
-    if(money > 0 && money <= 1000) {
+    if(money > (float)0 && money <= (float)1000) {
       return mapper.update(reimbursementRequest);
     } else {
       return 0;
