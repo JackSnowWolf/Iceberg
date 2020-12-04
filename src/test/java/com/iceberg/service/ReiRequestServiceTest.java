@@ -27,6 +27,8 @@ public class ReiRequestServiceTest {
   ReiRequestService reiRequestService;
   private static ReimbursementRequest request;
   private static ReimbursementRequest invalidRequest;
+  private static ReimbursementRequest invalidRequest2;
+
 
   @BeforeAll
   public static void init() throws Exception{
@@ -44,6 +46,11 @@ public class ReiRequestServiceTest {
     invalidRequest.setUserid(7777);
     invalidRequest.setMoney((float)-1);
     invalidRequest.setTypeid(0);
+    invalidRequest2 = new ReimbursementRequest();
+    invalidRequest2.setTitle("Invalid2");
+    invalidRequest2.setUserid(98765);
+    invalidRequest2.setMoney((float)1500);
+    invalidRequest2.setTypeid(0);
 
   }
 
@@ -56,6 +63,7 @@ public class ReiRequestServiceTest {
     assertEquals(1, add);
     add = reiRequestService.add(invalidRequest);
     assertEquals(0, add);
+    reiRequestService.add(invalidRequest2);
     logger.info("add test success");
 
   }
@@ -71,6 +79,7 @@ public class ReiRequestServiceTest {
     assertEquals(1, update);
     update = reiRequestService.update(invalidRequest);
     assertEquals(0, update);
+    reiRequestService.add(invalidRequest2);
     logger.info("test success");
   }
 
