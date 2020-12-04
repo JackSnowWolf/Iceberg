@@ -13,8 +13,8 @@ public class PageModel&lt;T&gt; {
    * @param data data.
    */
 <span class="fc" id="L15">  public PageModel(int currentPageNo, T data) {</span>
-<span class="pc bpc" id="L16" title="1 of 2 branches missed.">    if (currentPageNo &lt; 1) {</span>
-<span class="nc" id="L17">      throw new IllegalArgumentException(&quot;currentPageNo can not less than one&quot;);</span>
+<span class="fc bfc" id="L16" title="All 2 branches covered.">    if (currentPageNo &lt; 1) {</span>
+<span class="fc" id="L17">      throw new IllegalArgumentException(&quot;currentPageNo can not less than one&quot;);</span>
     } else {
 <span class="fc" id="L19">      this.currentPageNo = currentPageNo;</span>
 <span class="fc" id="L20">      this.data = data;</span>
@@ -61,8 +61,8 @@ public class PageModel&lt;T&gt; {
 
   @Override
   public boolean equals(Object obj) {
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">    if (this.getClass() != obj.getClass()) {</span>
-<span class="nc" id="L65">      return false;</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">    if (this.getClass() != obj.getClass()) {</span>
+<span class="fc" id="L65">      return false;</span>
     }
 <span class="fc bfc" id="L67" title="All 2 branches covered.">    if (this == obj) {</span>
 <span class="fc" id="L68">      return true;</span>

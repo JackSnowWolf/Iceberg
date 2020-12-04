@@ -28,91 +28,91 @@ import org.springframework.stereotype.Service;
 
   @Override
   public HttpResponse&lt;PayoutItemResponse&gt; cancelPayoutItem(String itemId) throws IOException {
-<span class="fc" id="L31">    PayoutsItemCancelRequest request = new PayoutsItemCancelRequest(itemId);</span>
-<span class="fc" id="L32">    HttpResponse&lt;PayoutItemResponse&gt; response = client().execute(request);</span>
-<span class="fc" id="L33">    System.out.println(&quot;Response Body:&quot;);</span>
-<span class="fc" id="L34">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
-<span class="fc" id="L35">    return response;</span>
+<span class="nc" id="L31">    PayoutsItemCancelRequest request = new PayoutsItemCancelRequest(itemId);</span>
+<span class="nc" id="L32">    HttpResponse&lt;PayoutItemResponse&gt; response = client().execute(request);</span>
+<span class="nc" id="L33">    System.out.println(&quot;Response Body:&quot;);</span>
+<span class="nc" id="L34">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
+<span class="nc" id="L35">    return response;</span>
   }
 
   @Override
   public HttpResponse&lt;CreatePayoutResponse&gt; createPayout(String receiver, String currency,
       String value)
       throws IOException {
-<span class="fc" id="L42">    PayoutsPostRequest request = buildRequestBody(receiver, currency, value);</span>
-<span class="fc" id="L43">    HttpResponse&lt;CreatePayoutResponse&gt; response = client().execute(request);</span>
-<span class="fc" id="L44">    System.out.println(&quot;Response Body:&quot;);</span>
-<span class="fc" id="L45">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
-<span class="fc" id="L46">    return response;</span>
+<span class="nc" id="L42">    PayoutsPostRequest request = buildRequestBody(receiver, currency, value);</span>
+<span class="nc" id="L43">    HttpResponse&lt;CreatePayoutResponse&gt; response = client().execute(request);</span>
+<span class="nc" id="L44">    System.out.println(&quot;Response Body:&quot;);</span>
+<span class="nc" id="L45">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
+<span class="nc" id="L46">    return response;</span>
   }
 
   // TODO
   // This is an example for viewing the function.
   @Override
   public PayoutsPostRequest buildRequestBody() {
-<span class="fc" id="L53">    List&lt;PayoutItem&gt; items = IntStream.range(1, 6)</span>
-<span class="fc" id="L54">        .mapToObj(</span>
-<span class="fc" id="L55">            index -&gt; new PayoutItem().senderItemId(&quot;Test_txn_&quot; + index).note(&quot;Your 5$ Payout!&quot;)</span>
-<span class="fc" id="L56">                .receiver(&quot;payout-sdk-&quot; + index + &quot;@paypal.com&quot;)</span>
-<span class="fc" id="L57">                .amount(new Currency().currency(&quot;USD&quot;).value(&quot;1.00&quot;)))</span>
-<span class="fc" id="L58">        .collect(Collectors.toList());</span>
+<span class="nc" id="L53">    List&lt;PayoutItem&gt; items = IntStream.range(1, 6)</span>
+<span class="nc" id="L54">        .mapToObj(</span>
+<span class="nc" id="L55">            index -&gt; new PayoutItem().senderItemId(&quot;Test_txn_&quot; + index).note(&quot;Your 5$ Payout!&quot;)</span>
+<span class="nc" id="L56">                .receiver(&quot;payout-sdk-&quot; + index + &quot;@paypal.com&quot;)</span>
+<span class="nc" id="L57">                .amount(new Currency().currency(&quot;USD&quot;).value(&quot;1.00&quot;)))</span>
+<span class="nc" id="L58">        .collect(Collectors.toList());</span>
 
-<span class="fc" id="L60">    CreatePayoutRequest payoutBatch = new CreatePayoutRequest()</span>
-<span class="fc" id="L61">        .senderBatchHeader(new SenderBatchHeader()</span>
-<span class="fc" id="L62">            .senderBatchId(&quot;IceBerg_PayPal_&quot; + RandomStringUtils.randomAlphanumeric(7))</span>
-<span class="fc" id="L63">            .emailMessage(&quot;SDK payouts test txn&quot;)</span>
-<span class="fc" id="L64">            .emailSubject(&quot;This is a transaction from IceBerg&quot;).note(&quot;Enjoy your Payout!!&quot;)</span>
-<span class="fc" id="L65">            .recipientType(&quot;EMAIL&quot;))</span>
-<span class="fc" id="L66">        .items(items);</span>
+<span class="nc" id="L60">    CreatePayoutRequest payoutBatch = new CreatePayoutRequest()</span>
+<span class="nc" id="L61">        .senderBatchHeader(new SenderBatchHeader()</span>
+<span class="nc" id="L62">            .senderBatchId(&quot;IceBerg_PayPal_&quot; + RandomStringUtils.randomAlphanumeric(7))</span>
+<span class="nc" id="L63">            .emailMessage(&quot;SDK payouts test txn&quot;)</span>
+<span class="nc" id="L64">            .emailSubject(&quot;This is a transaction from IceBerg&quot;).note(&quot;Enjoy your Payout!!&quot;)</span>
+<span class="nc" id="L65">            .recipientType(&quot;EMAIL&quot;))</span>
+<span class="nc" id="L66">        .items(items);</span>
 
-<span class="fc" id="L68">    return new PayoutsPostRequest().requestBody(payoutBatch);</span>
+<span class="nc" id="L68">    return new PayoutsPostRequest().requestBody(payoutBatch);</span>
   }
 
   @Override
   public PayoutsPostRequest buildRequestBody(String receiver, String currency, String value) {
-<span class="fc" id="L73">    List&lt;PayoutItem&gt; items = IntStream</span>
-<span class="fc" id="L74">        .range(1, 2).mapToObj(index -&gt; new PayoutItem().senderItemId(&quot;Test_IceBerg_&quot; + index)</span>
-<span class="fc" id="L75">            .note(&quot;Your&quot; + value + &quot;Payout!&quot;).receiver(receiver)</span>
-<span class="fc" id="L76">            .amount(new Currency().currency(currency).value(value)))</span>
-<span class="fc" id="L77">        .collect(Collectors.toList());</span>
+<span class="nc" id="L73">    List&lt;PayoutItem&gt; items = IntStream</span>
+<span class="nc" id="L74">        .range(1, 2).mapToObj(index -&gt; new PayoutItem().senderItemId(&quot;Test_IceBerg_&quot; + index)</span>
+<span class="nc" id="L75">            .note(&quot;Your&quot; + value + &quot;Payout!&quot;).receiver(receiver)</span>
+<span class="nc" id="L76">            .amount(new Currency().currency(currency).value(value)))</span>
+<span class="nc" id="L77">        .collect(Collectors.toList());</span>
 
-<span class="fc" id="L79">    CreatePayoutRequest payoutBatch = new CreatePayoutRequest()</span>
-<span class="fc" id="L80">        .senderBatchHeader(new SenderBatchHeader()</span>
-<span class="fc" id="L81">            .senderBatchId(&quot;IceBerg_PayPal_&quot; + RandomStringUtils.randomAlphanumeric(7))</span>
-<span class="fc" id="L82">            .emailMessage(&quot;SDK payouts test txn&quot;)</span>
-<span class="fc" id="L83">            .emailSubject(&quot;This is a transaction from IceBerg&quot;).note(&quot;Enjoy your Payout!!&quot;)</span>
-<span class="fc" id="L84">            .recipientType(&quot;EMAIL&quot;))</span>
-<span class="fc" id="L85">        .items(items);</span>
+<span class="nc" id="L79">    CreatePayoutRequest payoutBatch = new CreatePayoutRequest()</span>
+<span class="nc" id="L80">        .senderBatchHeader(new SenderBatchHeader()</span>
+<span class="nc" id="L81">            .senderBatchId(&quot;IceBerg_PayPal_&quot; + RandomStringUtils.randomAlphanumeric(7))</span>
+<span class="nc" id="L82">            .emailMessage(&quot;SDK payouts test txn&quot;)</span>
+<span class="nc" id="L83">            .emailSubject(&quot;This is a transaction from IceBerg&quot;).note(&quot;Enjoy your Payout!!&quot;)</span>
+<span class="nc" id="L84">            .recipientType(&quot;EMAIL&quot;))</span>
+<span class="nc" id="L85">        .items(items);</span>
 
-<span class="fc" id="L87">    return new PayoutsPostRequest().requestBody(payoutBatch);</span>
+<span class="nc" id="L87">    return new PayoutsPostRequest().requestBody(payoutBatch);</span>
   }
 
   // TODO
   // This is an example for viewing the function.
   @Override
   public HttpResponse&lt;CreatePayoutResponse&gt; createPayoutBatch() throws IOException {
-<span class="fc" id="L94">    PayoutsPostRequest request = buildRequestBody();</span>
-<span class="fc" id="L95">    HttpResponse&lt;CreatePayoutResponse&gt; response = client().execute(request);</span>
-<span class="fc" id="L96">    System.out.println(&quot;Response Body:&quot;);</span>
-<span class="fc" id="L97">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
-<span class="fc" id="L98">    return response;</span>
+<span class="nc" id="L94">    PayoutsPostRequest request = buildRequestBody();</span>
+<span class="nc" id="L95">    HttpResponse&lt;CreatePayoutResponse&gt; response = client().execute(request);</span>
+<span class="nc" id="L96">    System.out.println(&quot;Response Body:&quot;);</span>
+<span class="nc" id="L97">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
+<span class="nc" id="L98">    return response;</span>
   }
 
   @Override
   public HttpResponse&lt;PayoutBatch&gt; getPayoutBatch(String batchId) throws IOException {
-<span class="fc" id="L103">    PayoutsGetRequest request = new PayoutsGetRequest(batchId)</span>
+<span class="nc" id="L103">    PayoutsGetRequest request = new PayoutsGetRequest(batchId)</span>
         // Optional parameters, maximum of 1000 items are retrieved by default.
-<span class="fc" id="L105">        .page(1).pageSize(10).totalRequired(true);</span>
+<span class="nc" id="L105">        .page(1).pageSize(10).totalRequired(true);</span>
 
-<span class="fc" id="L107">    HttpResponse&lt;PayoutBatch&gt; response = client().execute(request);</span>
-<span class="fc" id="L108">    System.out.println(&quot;Response Body:&quot;);</span>
-<span class="fc" id="L109">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
-<span class="fc" id="L110">    return response;</span>
+<span class="nc" id="L107">    HttpResponse&lt;PayoutBatch&gt; response = client().execute(request);</span>
+<span class="nc" id="L108">    System.out.println(&quot;Response Body:&quot;);</span>
+<span class="nc" id="L109">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
+<span class="nc" id="L110">    return response;</span>
   }
 
   @Override
   public HttpResponse&lt;PayoutItemResponse&gt; getPayoutItem(String itemId) throws IOException {
-<span class="fc" id="L115">    PayoutsItemGetRequest request = new PayoutsItemGetRequest(itemId);</span>
+<span class="nc" id="L115">    PayoutsItemGetRequest request = new PayoutsItemGetRequest(itemId);</span>
 <span class="nc" id="L116">    HttpResponse&lt;PayoutItemResponse&gt; response = client().execute(request);</span>
 <span class="nc" id="L117">    System.out.println(&quot;Response Body:&quot;);</span>
 <span class="nc" id="L118">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>

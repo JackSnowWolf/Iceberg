@@ -35,7 +35,7 @@ import org.apache.http.util.EntityUtils;
 <span class="fc" id="L35">      HttpGet request = new HttpGet(url);</span>
 <span class="fc" id="L36">      HttpResponse response = client.execute(request);</span>
 
-<span class="pc bpc" id="L38" title="1 of 2 branches missed.">      if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">      if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {</span>
 <span class="fc" id="L39">        status = response.getStatusLine().getStatusCode();</span>
       }
 <span class="fc" id="L41">    } catch (Exception e) {</span>
@@ -59,7 +59,7 @@ import org.apache.http.util.EntityUtils;
 <span class="fc" id="L59">    CloseableHttpResponse response = null;</span>
 <span class="fc" id="L60">    String result1=null;</span>
     try {
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">      if (paramMap != null) {</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">      if (paramMap != null) {</span>
 <span class="fc" id="L63">        List&lt;BasicNameValuePair&gt; list = new ArrayList&lt;&gt;();</span>
 <span class="fc bfc" id="L64" title="All 2 branches covered.">        for (Map.Entry&lt;String, String&gt; entry : paramMap.entrySet()) {</span>
 <span class="fc" id="L65">          list.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));</span>
@@ -68,14 +68,14 @@ import org.apache.http.util.EntityUtils;
 <span class="fc" id="L68">        httpPost.setEntity(httpEntity);</span>
       }
 <span class="fc" id="L70">      response = httpClient.execute(httpPost);</span>
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">      if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">      if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {</span>
 <span class="fc" id="L72">        HttpEntity entity = response.getEntity();</span>
 <span class="fc" id="L73">        result1 = EntityUtils.toString(entity, &quot;utf-8&quot;);</span>
 <span class="fc" id="L74">        EntityUtils.consume(entity);</span>
       }
 <span class="fc" id="L76">      httpClient.close();</span>
-<span class="nc" id="L77">    } catch (Exception e) {</span>
-<span class="nc" id="L78">      e.printStackTrace();</span>
+<span class="fc" id="L77">    } catch (Exception e) {</span>
+<span class="fc" id="L78">      e.printStackTrace();</span>
 <span class="fc" id="L79">    }</span>
 <span class="fc" id="L80">    return result1;</span>
   }

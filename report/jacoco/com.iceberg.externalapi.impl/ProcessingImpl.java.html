@@ -14,32 +14,32 @@ import org.springframework.web.client.RestTemplate;
 
     @Override
     public ResponseEntity&lt;String&gt; processDocumentBase64(String filedata) {
-<span class="fc" id="L17">        String fileName = &quot;example.png&quot;;</span>
-<span class="fc" id="L18">        RestTemplate restTemplate = new RestTemplate();</span>
-<span class="fc" id="L19">        JSONObject requestBody = new JSONObject();</span>
-<span class="fc" id="L20">        requestBody.put(&quot;file_name&quot;, fileName);</span>
-<span class="fc" id="L21">        requestBody.put(&quot;file_data&quot;, filedata);</span>
-<span class="fc" id="L22">        HttpHeaders headers = new HttpHeaders();</span>
-<span class="fc" id="L23">        headers.setContentType(MediaType.APPLICATION_JSON);</span>
-<span class="fc" id="L24">        headers.add(&quot;CLIENT-ID&quot;, clientId);</span>
-<span class="fc" id="L25">        headers.add(&quot;AUTHORIZATION&quot;, apiKey);</span>
-<span class="fc" id="L26">        HttpEntity&lt;String&gt; entity = new HttpEntity&lt;&gt;(requestBody.toString(), headers);</span>
-<span class="fc" id="L27">        return restTemplate.postForEntity(URL, entity, String.class);</span>
+<span class="nc" id="L17">        String fileName = &quot;example.png&quot;;</span>
+<span class="nc" id="L18">        RestTemplate restTemplate = new RestTemplate();</span>
+<span class="nc" id="L19">        JSONObject requestBody = new JSONObject();</span>
+<span class="nc" id="L20">        requestBody.put(&quot;file_name&quot;, fileName);</span>
+<span class="nc" id="L21">        requestBody.put(&quot;file_data&quot;, filedata);</span>
+<span class="nc" id="L22">        HttpHeaders headers = new HttpHeaders();</span>
+<span class="nc" id="L23">        headers.setContentType(MediaType.APPLICATION_JSON);</span>
+<span class="nc" id="L24">        headers.add(&quot;CLIENT-ID&quot;, clientId);</span>
+<span class="nc" id="L25">        headers.add(&quot;AUTHORIZATION&quot;, apiKey);</span>
+<span class="nc" id="L26">        HttpEntity&lt;String&gt; entity = new HttpEntity&lt;&gt;(requestBody.toString(), headers);</span>
+<span class="nc" id="L27">        return restTemplate.postForEntity(URL, entity, String.class);</span>
     }
 
     @Override
     public ResponseEntity&lt;String&gt; processDocumentURL(String fileurl) {
-<span class="fc" id="L32">        String fileName = &quot;invoice.png&quot;;</span>
-<span class="fc" id="L33">        RestTemplate restTemplate = new RestTemplate();</span>
-<span class="fc" id="L34">        JSONObject requestBody = new JSONObject();</span>
-<span class="fc" id="L35">        requestBody.put(&quot;file_name&quot;, fileName);</span>
-<span class="fc" id="L36">        requestBody.put(&quot;file_url&quot;, fileurl);</span>
-<span class="fc" id="L37">        HttpHeaders headers = new HttpHeaders();</span>
-<span class="fc" id="L38">        headers.setContentType(MediaType.APPLICATION_JSON);</span>
-<span class="fc" id="L39">        headers.add(&quot;CLIENT-ID&quot;, clientId);</span>
-<span class="fc" id="L40">        headers.add(&quot;AUTHORIZATION&quot;, apiKey);</span>
-<span class="fc" id="L41">        HttpEntity&lt;String&gt; entity = new HttpEntity&lt;&gt;(requestBody.toString(), headers);</span>
-<span class="fc" id="L42">        return restTemplate.postForEntity(URL, entity, String.class);</span>
+<span class="nc" id="L32">        String fileName = &quot;invoice.png&quot;;</span>
+<span class="nc" id="L33">        RestTemplate restTemplate = new RestTemplate();</span>
+<span class="nc" id="L34">        JSONObject requestBody = new JSONObject();</span>
+<span class="nc" id="L35">        requestBody.put(&quot;file_name&quot;, fileName);</span>
+<span class="nc" id="L36">        requestBody.put(&quot;file_url&quot;, fileurl);</span>
+<span class="nc" id="L37">        HttpHeaders headers = new HttpHeaders();</span>
+<span class="nc" id="L38">        headers.setContentType(MediaType.APPLICATION_JSON);</span>
+<span class="nc" id="L39">        headers.add(&quot;CLIENT-ID&quot;, clientId);</span>
+<span class="nc" id="L40">        headers.add(&quot;AUTHORIZATION&quot;, apiKey);</span>
+<span class="nc" id="L41">        HttpEntity&lt;String&gt; entity = new HttpEntity&lt;&gt;(requestBody.toString(), headers);</span>
+<span class="nc" id="L42">        return restTemplate.postForEntity(URL, entity, String.class);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
