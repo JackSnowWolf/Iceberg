@@ -66,13 +66,13 @@ public class ReiRequestServiceImpl implements ReiRequestService {
     try {
       List<ReimbursementRequest> reimbursementRequests = mapper
           .findByWhereNoPage(reimbursementRequest);
-      if (reimbursementRequests.size() >= 0) {
-        Result<ReimbursementRequest> result = ResultUtil.success(reimbursementRequests);
-        result.setMsg("Fetch data successfully");
-        return result;
-      } else {
-        return ResultUtil.unSuccess("No satisfied conditions found!");
-      }
+//      if (reimbursementRequests.size() >= 0) {
+      Result<ReimbursementRequest> result = ResultUtil.success(reimbursementRequests);
+      result.setMsg("Fetch data successfully");
+      return result;
+//      } else {
+//        return ResultUtil.unSuccess("No satisfied conditions found!");
+//      }
     } catch (Exception e) {
       return ResultUtil.error(e);
     }
