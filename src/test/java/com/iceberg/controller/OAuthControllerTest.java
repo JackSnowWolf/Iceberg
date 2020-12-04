@@ -1,6 +1,7 @@
 package com.iceberg.controller;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import com.iceberg.utils.HttpClientUtils;
 import java.util.Map;
@@ -33,6 +34,11 @@ public class OAuthControllerTest {
   }
 
   @Test
+  public void testParseAccessTokenForNullValue() throws Exception {
+    assertNull(OAuthController.parseAccessTokenResponse(null));
+  }
+
+  @Test
   public void testparseGithubObject() throws Exception {
     String githubResponse =
         "''login'':mark2447',''id:54239290,node_id:MDQ6VXNlcjU0MjM5Mjkw,avatar_url"
@@ -52,5 +58,10 @@ public class OAuthControllerTest {
     Map<String, String> userMap = OAuthController.parseGithubObject(githubResponse);
     assertEquals("54239290", userMap.get("id"));
     assertEquals("mark2447", userMap.get("username"));
+  }
+
+  @Test
+  public void testparseGithubObjectForNull() throws Exception {
+    assertNull(OAuthController.parseGithubObject(null));
   }
 }
