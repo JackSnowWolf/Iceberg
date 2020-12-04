@@ -71,7 +71,7 @@ public class ReiRequestServiceTest {
   @Test
   @Order(2)
   public void updateTest() throws Exception {
-    logger.info("test");
+    logger.info("update test");
     request.setId(600);
     reiRequestService.add(request);
     request.setTypeid(1);
@@ -79,8 +79,8 @@ public class ReiRequestServiceTest {
     assertEquals(1, update);
     update = reiRequestService.update(invalidRequest);
     assertEquals(0, update);
-    reiRequestService.add(invalidRequest2);
-    logger.info("test success");
+    reiRequestService.update(invalidRequest2);
+    logger.info("update test success");
   }
 
   @Test
