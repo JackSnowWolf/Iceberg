@@ -18,6 +18,11 @@ public class PageModelTest {
         pageModel.setData(2);
         assertFalse(pageModel.equals(pageModel1));
         assertTrue(pageModel.equals(pageModel));
-
+        assertFalse(pageModel.equals(1));
+        try{
+            PageModel pageModel2=new PageModel(0,1);
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
 }

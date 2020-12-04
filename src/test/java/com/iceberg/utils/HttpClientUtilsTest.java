@@ -3,7 +3,6 @@ package com.iceberg.utils;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +15,10 @@ public class HttpClientUtilsTest {
         String URL = "https://example.com";
         Integer status = HttpClientUtils.doGet(URL);
         Assert.assertEquals("200", String.valueOf(status));
+        String URL2="https://httpbin.org/status/:code";
+        Integer status2 = HttpClientUtils.doGet(URL2);
+        System.out.println(status2);
+        assertNotNull(status2);
     }
 
     @Test
@@ -25,13 +28,16 @@ public class HttpClientUtilsTest {
         paramMap.put("key", "value");
         String result = HttpClientUtils.doPost(URL, paramMap);
         assertNotNull(result);
+        String result2=HttpClientUtils.doPost(URL, null);
+        assertNotNull(result2);
+
+        String URL2="https://httpbin.org/status/:code";
+        String result3=HttpClientUtils.doPost(URL2, null);
+        System.out.println(result3);
     }
 
     @Test
     public void exceptionTest() throws Exception{
-//        Throwable throwable1=assertThrows(Exception.class,()->{
-//            HttpClientUtils.doGet("not a url");
-//        });
         try{
             HttpClientUtils.doGet(null);
         }catch(Exception e){
@@ -43,6 +49,12 @@ public class HttpClientUtilsTest {
         }catch(Exception e2){
             System.out.print(e2);
             assertNotNull(e2);
+        }
+        try{
+            HttpClientUtils.doPost("null",null);
+        }catch(Exception e3){
+            System.out.print(e3);
+            assertNotNull(e3);
         }
     }
 }
