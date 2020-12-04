@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import lombok.Generated;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -31,12 +32,14 @@ public class OAuthController {
 
   /**
    * github login api.
+   *
    * @param code access code
    * @param request http request
    * @param httpResponse http response
    * @return redirect url
    * @throws IOException exception
    */
+  @Generated
   @RequestMapping("/oauth/github/callback")
   public String githubLogin(String code, HttpServletRequest request,
       HttpServletResponse httpResponse) throws IOException {
@@ -82,6 +85,7 @@ public class OAuthController {
 
   /**
    * parse access token response.
+   *
    * @param accessTokenResponse access token response
    * @return access token
    */
@@ -98,6 +102,7 @@ public class OAuthController {
 
   /**
    * parse github object.
+   *
    * @param response response
    * @return key-value pairs.
    */
@@ -107,10 +112,8 @@ public class OAuthController {
     }
     String email = null;
     String[] res = response.toString().split(",");
-    if (res.length >= 10) {
-      String emailKV = res[res.length - 10];
-      email = emailKV.substring(9, emailKV.length() - 1);
-    }
+    String emailKV = res[res.length - 10];
+    email = emailKV.substring(9, emailKV.length() - 1);
     String username = res[0].substring(1);
     String id = res[1];
     Map<String, String> userMap = new HashMap<>();
