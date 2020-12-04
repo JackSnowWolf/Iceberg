@@ -78,9 +78,15 @@ public class UserInfoServiceImplTest {
     public void testUserIsExisted() {
         logger.info("user existed test");
 
-        boolean result=false;
-        result=userInfoService.userIsExisted(userInfo);
+        boolean result = false;
+        result = userInfoService.userIsExisted(userInfo);
         assertEquals(true,result);
+        System.out.println(result);
+        UserInfo notExistUserInfo = new UserInfo();
+        notExistUserInfo.setUsername("notexist");
+        result = userInfoService.userIsExisted(notExistUserInfo);
+        System.out.println(result);
+        assertEquals(false, result);
 
         logger.info("user existed test success");
     }
@@ -106,6 +112,15 @@ public class UserInfoServiceImplTest {
         if(output == 0){
             result = false;
         }
+        System.out.println(result);
+        assertEquals(false,result);
+
+        invalidUserInfo.setRoleid(-1);
+        output = userInfoService.add(invalidUserInfo);
+        if(output == 0){
+            result = false;
+        }
+        System.out.println(result);
         assertEquals(false,result);
 
         logger.info("user add test success");

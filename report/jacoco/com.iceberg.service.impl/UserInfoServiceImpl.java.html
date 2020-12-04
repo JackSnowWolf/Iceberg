@@ -23,7 +23,7 @@ import java.util.List;
   public int add(UserInfo userInfo) {
     // add user
 <span class="fc" id="L25">    Integer roleid = userInfo.getRoleid();</span>
-<span class="pc bpc" id="L26" title="1 of 4 branches missed.">    if (roleid &gt; 0 &amp;&amp; roleid &lt; 4) {</span>
+<span class="fc bfc" id="L26" title="All 4 branches covered.">    if (roleid &gt; 0 &amp;&amp; roleid &lt; 4) {</span>
 <span class="fc" id="L27">      int result = userInfoMapper.add(userInfo);</span>
 <span class="fc" id="L28">      System.out.println(userInfo);</span>
 <span class="fc bfc" id="L29" title="All 2 branches covered.">      if (userInfo.getRoleid() == 2) {</span>
@@ -51,7 +51,7 @@ import java.util.List;
 
   @Override
   public boolean userIsExisted(UserInfo userInfo) {
-<span class="pc bpc" id="L54" title="1 of 2 branches missed.">    return userInfoMapper.userIsExisted(userInfo) &gt; 0 ? true : false;</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">    return userInfoMapper.userIsExisted(userInfo) &gt; 0 ? true : false;</span>
   }
 
   @Override
