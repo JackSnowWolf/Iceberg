@@ -33,10 +33,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         int r = userInfoMapper.addGroupId(newGroup);
 
         // successful, then bind members to this user
-        if (r == 1) {
-          userInfo.setGroupid(newGroup.getId().toString());
-          result = userInfoMapper.update(userInfo);
-        }
+//        if (r == 1) {
+        userInfo.setGroupid(newGroup.getId().toString());
+        result = userInfoMapper.update(userInfo);
+//        }
       }
       return result;
     } else {
