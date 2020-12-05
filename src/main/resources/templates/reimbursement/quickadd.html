@@ -134,6 +134,7 @@
   // getAllPayways();
   var imageid;
   var url = location.href;
+  var vendoraddr;
   if (url.indexOf("#2") != -1) {
     $("button[lay-filter=update]").css("display", "block");
     var index = getQueryString("index");
@@ -173,6 +174,7 @@
           // ocrFillTable(res.data)
           console.log(res.data);
           imageid=res.data.imageid;
+          vendoraddr=res.data.vendoraddr;
           initForm(res.data)
         }
       }
@@ -188,6 +190,7 @@
       console.log(data.field);
       data.field["imageFile"] = null;
       data.field.imageid = imageid;
+      data.field.vendoraddr=vendoraddr;
       console.log("imageId" + data.field.imageid);
       $.post("/reirequest/addRequest", data.field, function (res) {
         if (res.code === 200) {
