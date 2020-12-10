@@ -28,11 +28,11 @@ import org.springframework.stereotype.Service;
 
   @Override
   public HttpResponse&lt;PayoutItemResponse&gt; cancelPayoutItem(String itemId) throws IOException {
-<span class="fc" id="L31">    PayoutsItemCancelRequest request = new PayoutsItemCancelRequest(itemId);</span>
-<span class="fc" id="L32">    HttpResponse&lt;PayoutItemResponse&gt; response = client().execute(request);</span>
-<span class="fc" id="L33">    System.out.println(&quot;Response Body:&quot;);</span>
-<span class="fc" id="L34">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
-<span class="fc" id="L35">    return response;</span>
+<span class="nc" id="L31">    PayoutsItemCancelRequest request = new PayoutsItemCancelRequest(itemId);</span>
+<span class="nc" id="L32">    HttpResponse&lt;PayoutItemResponse&gt; response = client().execute(request);</span>
+<span class="nc" id="L33">    System.out.println(&quot;Response Body:&quot;);</span>
+<span class="nc" id="L34">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
+<span class="nc" id="L35">    return response;</span>
   }
 
   @Override
@@ -104,15 +104,15 @@ import org.springframework.stereotype.Service;
         // Optional parameters, maximum of 1000 items are retrieved by default.
 <span class="fc" id="L105">        .page(1).pageSize(10).totalRequired(true);</span>
 
-<span class="fc" id="L107">    HttpResponse&lt;PayoutBatch&gt; response = client().execute(request);</span>
-<span class="fc" id="L108">    System.out.println(&quot;Response Body:&quot;);</span>
-<span class="fc" id="L109">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
-<span class="fc" id="L110">    return response;</span>
+<span class="nc" id="L107">    HttpResponse&lt;PayoutBatch&gt; response = client().execute(request);</span>
+<span class="nc" id="L108">    System.out.println(&quot;Response Body:&quot;);</span>
+<span class="nc" id="L109">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>
+<span class="nc" id="L110">    return response;</span>
   }
 
   @Override
   public HttpResponse&lt;PayoutItemResponse&gt; getPayoutItem(String itemId) throws IOException {
-<span class="fc" id="L115">    PayoutsItemGetRequest request = new PayoutsItemGetRequest(itemId);</span>
+<span class="nc" id="L115">    PayoutsItemGetRequest request = new PayoutsItemGetRequest(itemId);</span>
 <span class="nc" id="L116">    HttpResponse&lt;PayoutItemResponse&gt; response = client().execute(request);</span>
 <span class="nc" id="L117">    System.out.println(&quot;Response Body:&quot;);</span>
 <span class="nc" id="L118">    System.out.println(new JSONObject(new Json().serialize(response.result())).toString(4));</span>

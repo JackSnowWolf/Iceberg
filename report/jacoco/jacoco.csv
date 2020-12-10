@@ -1,7 +1,7 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 iceberg,com.iceberg.externalapi.impl,ImageStorageServiceImpl,14,97,0,0,4,37,0,5,0,5
 iceberg,com.iceberg.externalapi.impl,ProcessingForRequestImpl,0,83,0,0,0,17,0,3,0,3
-iceberg,com.iceberg.externalapi.impl,PayPalServiceImpl,23,285,0,0,4,50,0,10,0,10
+iceberg,com.iceberg.externalapi.impl,PayPalServiceImpl,79,229,0,0,14,40,2,8,2,8
 iceberg,com.iceberg.externalapi.impl,ProcessingImpl,0,112,0,0,0,26,0,3,0,3
 iceberg,com.iceberg.service.impl,ReiRequestServiceImpl,4,101,0,10,2,26,0,13,0,8
 iceberg,com.iceberg.service.impl,PrivilegeServiceImpl,0,28,0,4,0,8,0,6,0,4
