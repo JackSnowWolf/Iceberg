@@ -99,25 +99,31 @@ mvn surefire:test
 - Back-End Framework: https://spring.io/projects/spring-boot
 
 ## TODO
-- [ ] TODO1
-- [ ] TODO2
+- [ ] Optimize backend controller structure.
+- [ ] Beatify frontend code.
+- [ ] Decouple frontend and backend.
 
 ## Documentation
 
-- Preliminary Proposal: [preliminary proposal pdf](doc/Preliminary%20Project%20Proposal.pdf)
-- Revised Proposal: [revised proposal pdf](doc/Revised%20Project%20Proposal.pdf)
-- First Iteration Report: [first iteration report pdf](doc/First%20Iteration%20Report.pdf)
-
+- Preliminary Proposal: [preliminary proposal pdf](docs/Preliminary%20Project%20Proposal.pdf)
+- Revised Proposal: [revised proposal pdf](docs/Revised%20Project%20Proposal.pdf)
+- First Iteration Report: [first iteration report pdf](docs/First%20Iteration%20Report.pdf)
+- First Demo Report: [first demo report pdf](docs/Initial%20Demo.pdf)
+- Second Iteration Report: [second iteration report pdf](docs/Second%20Iteration%20Report.pdf)
+- Final Demo Report: [final demo report pdf](docs/Final%20Demo.pdf)
+- Demo Video: [Demo Video For Reimbursement System(Team Iceberg From COMS 4156)](https://www.youtube.com/watch?v=4-8oI7-U4Xw)
 
 ## [Contribution](CONTRIBUTING.md)
 
-- 
-- 
+All Four of our team try our best to contribute to this project.
 
 ## Acknowledgements
 
-## Contact
+Thanks to Professor Gail Kaiser, the instructor of our course, who brought us to the Software Development world and let us realize the importance of the workflow processes, techniques and "best practices" software engineers need to know to develop consumer and business software.
 
+Thanks to Rennah Weng, TA of our course, who provided very inspiring and helpful ideas about our reimbursement system.
+
+## Contact
 
 - Weijie Huang `wh2447`: [email](mailto:wh2447@columbia.edu.com)
 - Zeyang Chen `zc2483`: [email](mailto:zc2483@columbia.edu.com)
